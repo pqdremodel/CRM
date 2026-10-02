@@ -117,7 +117,7 @@
                     </div>
                 </div>
                 
-                <div id="picker-container" style="display: none; position: absolute; bottom: 80px; left: 24px; width: 320px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-direction: column; overflow: hidden; z-index: 100;">
+                <div id="picker-container" style="display: none; width: 100%; height: 300px; background: white; flex-direction: column; overflow: hidden; border-top: 1px solid var(--border-color); flex-shrink: 0; z-index: 10;">
                     <div style="display: flex; border-bottom: 1px solid var(--border-color);">
                         <button id="tab-emoji" style="flex: 1; padding: 12px; border: none; background: white; font-weight: 600; cursor: pointer; border-bottom: 2px solid var(--primary-color); color: var(--primary-color);">Emojis</button>
                         <button id="tab-gif" style="flex: 1; padding: 12px; border: none; background: white; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; color: var(--text-muted);">GIFs</button>
@@ -129,7 +129,7 @@
                     
                     <div id="gif-view" style="flex: 1; display: none; flex-direction: column; padding: 8px; overflow: hidden;">
                         <input type="text" id="gif-search" placeholder="Search GIFs..." style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 8px;">
-                        <div id="gif-results" style="flex: 1; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                        <div id="gif-results" style="flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; padding: 0 8px;">
                             <!-- GIF results populate here -->
                         </div>
                     </div>
