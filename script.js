@@ -1,5 +1,4 @@
-// Load clients from localStorage or initialize empty array
-let clients = JSON.parse(localStorage.getItem('crm_clients')) || [];
+let clients = [];
 
 // Auth Setup
 let currentUser = null;
@@ -19,10 +18,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 const tbody = document.getElementById('clients-body');
 
+async function fetchClients() {
+    const { data, error } = await supabaseClient
+        .from('clients')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+    if (!error && data) {
+        clients = data;
+        renderClients();
+    } else {
+        console.error("Error fetching clients:", error);
+    }
+}
+
 function renderClients() {
     tbody.innerHTML = '';
     
-    clients.forEach((client, index) => {
+    clients.forEach((client) => {
         const tr = document.createElement('tr');
         
         const statusClass = client.status.toLowerCase() === 'ongoing' ? 'status-ongoing' : 'status-complete';
@@ -41,13 +54,13 @@ function renderClients() {
             <td style="cursor: pointer;">${client.location}</td>
             <td style="cursor: pointer;">${client.price}</td>
             <td style="cursor: pointer;"><span class="status-badge ${statusClass}">${client.status}</span></td>
-            <td class="col-actions"><i class="fa-solid fa-trash more-action delete-btn" data-index="${index}" style="color: #ff4d4f;"></i></td>
+            <td class="col-actions"><i class="fa-solid fa-trash more-action delete-btn" data-id="${client.id}" style="color: #ff4d4f;"></i></td>
         `;
         
         // Add click listener to row cells except checkbox and actions
         tr.querySelectorAll('td:not(.col-checkbox):not(.col-actions)').forEach(td => {
             td.addEventListener('click', () => {
-                window.location.href = `project.html?id=${index}`;
+                window.location.href = `project.html?id=${client.id}`;
             });
         });
         
@@ -56,21 +69,23 @@ function renderClients() {
 
     // Add event listeners to delete buttons
     document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const index = this.getAttribute('data-index');
-            clients.splice(index, 1);
-            saveClients();
-            renderClients();
+        btn.addEventListener('click', async function(e) {
+            e.stopPropagation(); // prevent row click
+            const id = this.getAttribute('data-id');
+            const { error } = await supabaseClient.from('clients').delete().eq('id', id);
+            if (!error) {
+                clients = clients.filter(c => c.id !== id);
+                renderClients();
+            } else {
+                console.error("Delete error:", error);
+                alert("Failed to delete client.");
+            }
         });
     });
 }
 
-function saveClients() {
-    localStorage.setItem('crm_clients', JSON.stringify(clients));
-}
-
-// Initial render
-renderClients();
+// Initial fetch
+fetchClients();
 
 // Modal Logic
 const modal = document.getElementById('add-client-modal');
@@ -100,8 +115,14 @@ modal.addEventListener('click', (e) => {
 });
 
 // Form Submission
-addClientForm.addEventListener('submit', (e) => {
+addClientForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Disable button to prevent double submit
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
     
     const newClient = {
         name: document.getElementById('client-name').value,
@@ -111,8 +132,20 @@ addClientForm.addEventListener('submit', (e) => {
         status: document.getElementById('project-status').value
     };
     
-    clients.unshift(newClient); // Add to the top of the list
-    saveClients();
-    renderClients();
-    closeModal();
+    const { data, error } = await supabaseClient
+        .from('clients')
+        .insert([newClient])
+        .select();
+        
+    btn.textContent = originalText;
+    btn.disabled = false;
+    
+    if (!error && data) {
+        clients.unshift(data[0]); // Add to the top of the list
+        renderClients();
+        closeModal();
+    } else {
+        console.error("Error adding client:", error);
+        alert("Failed to add client. Did you create the clients table?");
+    }
 });

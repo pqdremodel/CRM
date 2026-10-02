@@ -11,16 +11,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'login.html';
     });
     
-    // Get client index from URL query parameter
+    // Get client UUID from URL query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const clientId = urlParams.get('id');
 
-    if (clientId !== null) {
-        // Load clients from localStorage
-        const clients = JSON.parse(localStorage.getItem('crm_clients')) || [];
-        const client = clients[parseInt(clientId)];
+    if (clientId) {
+        // Fetch client from Supabase
+        const { data: client, error } = await supabaseClient
+            .from('clients')
+            .select('*')
+            .eq('id', clientId)
+            .single();
 
-        if (client) {
+        if (client && !error) {
             // Update the DOM with client data
             document.getElementById('client-name-display').textContent = client.name;
             document.getElementById('client-type-display').textContent = `Project Type: ${client.type}`;
@@ -43,6 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('current-date-display').textContent = dateStr;
             
             document.title = `${client.name} - CRM Dashboard`;
+        } else {
+            console.error("Error fetching client details:", error);
+            document.getElementById('client-name-display').textContent = "Client Not Found";
         }
     }
 });
