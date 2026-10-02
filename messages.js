@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('logout-btn').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
         window.location.href = 'login.html';
+    });
+    
     const contactList = document.getElementById('contact-list');
     const chatHistory = document.getElementById('chat-history');
     let activeUser = null;
