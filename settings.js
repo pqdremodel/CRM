@@ -112,7 +112,7 @@ settingsForm.addEventListener('submit', async (e) => {
         
     } catch (error) {
         console.error("Error updating profile:", error);
-        alert("Failed to save settings. Did you create the avatars storage bucket?");
+        alert(`Failed to save settings: ${error.message || error.error_description || "Unknown error"}. Did you run the SQL to add the new columns and update policies?`);
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;
