@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    function setActiveChat(user, displayName, isOnline) {
+    async function setActiveChat(user, displayName, isOnline) {
         activeUser = user;
         document.getElementById('active-chat-name').textContent = displayName;
         document.getElementById('active-chat-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff`;
@@ -86,9 +86,72 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         chatHistory.innerHTML = `
             <div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--text-muted);">
-                Start your conversation with ${displayName}...
+                Loading messages...
             </div>
         `;
+        
+        await loadMessages(user.id);
+    }
+
+    async function loadMessages(otherUserId) {
+        // Fetch messages between currentUser and otherUserId
+        const { data: messages, error } = await supabaseClient
+            .from('messages')
+            .select('*')
+            .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${currentUser.id})`)
+            .order('created_at', { ascending: true });
+            
+        if (error) {
+            console.error("Error loading messages:", error);
+            chatHistory.innerHTML = '<div style="text-align:center; color:#ef4444;">Error loading messages. Did you create the messages table?</div>';
+            return;
+        }
+
+        chatHistory.innerHTML = '';
+        
+        if (messages.length === 0) {
+            chatHistory.innerHTML = `
+                <div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--text-muted);">
+                    Start your conversation with ${document.getElementById('active-chat-name').textContent}...
+                </div>
+            `;
+            return;
+        }
+
+        messages.forEach(msg => appendMessageToUI(msg));
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+    
+    function appendMessageToUI(msg) {
+        // Remove empty state message if it exists
+        const emptyState = chatHistory.querySelector('div[style*="height:100%"]');
+        if (emptyState) emptyState.remove();
+
+        const isSent = msg.sender_id === currentUser.id;
+        const row = document.createElement('div');
+        row.className = `message-row ${isSent ? 'sent' : 'received'}`;
+        
+        const timeStr = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (isSent) {
+            row.innerHTML = `
+                <div class="message-bubble">
+                    <p>${msg.content}</p>
+                    <span class="message-time">${timeStr}</span>
+                </div>
+            `;
+        } else {
+            const activeName = document.getElementById('active-chat-name').textContent;
+            row.innerHTML = `
+                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(activeName)}&background=random&color=fff" class="message-avatar">
+                <div class="message-bubble">
+                    <p>${msg.content}</p>
+                    <span class="message-time">${timeStr}</span>
+                </div>
+            `;
+        }
+        chatHistory.appendChild(row);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
     // Call the function to load users
@@ -99,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sendBtn = document.getElementById('send-btn');
     const messageInput = document.getElementById('message-input');
 
-    function sendMessage() {
+    async function sendMessage() {
         if (!activeUser) {
             alert('Please select a team member to message first.');
             return;
@@ -108,28 +171,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         const text = messageInput.value.trim();
         if (!text) return;
 
-        // Create new message row
-        const row = document.createElement('div');
-        row.className = 'message-row sent';
-
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        row.innerHTML = `
-            <div class="message-bubble">
-                <p>${text}</p>
-                <span class="message-time">${timeStr} <i class="fa-solid fa-check" style="color: #999;"></i></span>
-            </div>
-        `;
-
-        chatHistory.appendChild(row);
-        
-        // Scroll to bottom
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-        
-        // Clear input
+        // Clear input immediately for better UX
         messageInput.value = '';
+
+        // Save to database
+        const { data, error } = await supabaseClient
+            .from('messages')
+            .insert([
+                { 
+                    sender_id: currentUser.id, 
+                    receiver_id: activeUser.id, 
+                    content: text 
+                }
+            ]);
+            
+        if (error) {
+            console.error("Error sending message:", error);
+            alert("Failed to send message. Please ensure the messages table exists.");
+            messageInput.value = text; // restore text
+        }
     }
+    
+    // Set up Realtime listener for incoming messages
+    supabaseClient
+        .channel('public:messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+            const newMsg = payload.new;
+            // Only append if it belongs to the active chat
+            if (activeUser && (
+                (newMsg.sender_id === currentUser.id && newMsg.receiver_id === activeUser.id) ||
+                (newMsg.sender_id === activeUser.id && newMsg.receiver_id === currentUser.id)
+            )) {
+                appendMessageToUI(newMsg);
+            }
+        })
+        .subscribe();
 
     sendBtn.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', (e) => {
