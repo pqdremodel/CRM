@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - CRM Dashboard</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="logo-text">Bernaire</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
+                </div>
+            </div>
+            
+            <div class="sidebar-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search Anything">
+                <span class="shortcut">⌘ K</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-caret-down"></i> General
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="index.html" style="text-decoration:none; color:inherit; display:flex; gap:12px; align-items:center; width:100%;">
+                                <i class="fa-solid fa-building icon"></i>
+                                <span>Clients</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <i class="fa-regular fa-message icon"></i>
+                            <span>Messages</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="footer-nav">
+                    <ul>
+                        <li>
+                            <i class="fa-solid fa-gear icon"></i>
+                            <span>Settings</span>
+                        </li>
+                        <li>
+                            <i class="fa-regular fa-bell icon"></i>
+                            <span>Notifications</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=e0e0e0&color=333" id="profile-avatar" alt="Profile">
+                    </div>
+                    <div class="user-info">
+                        <span class="name">Team Member</span>
+                        <span class="email" id="profile-email">Loading...</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-right-from-bracket more-opts" id="logout-btn" title="Sign Out"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content chat-layout">
+            
+            <!-- Chat Sidebar (Contacts) -->
+            <div class="chat-sidebar">
+                <div class="chat-sidebar-header">
+                    <h2>Messages</h2>
+                    <button class="btn-icon-small"><i class="fa-solid fa-pen-to-square"></i></button>
+                </div>
+                <div class="chat-search">
+                    <div class="search-bar" style="width: 100%;">
+                        <i class="fa-solid fa-magnifying-glass icon"></i>
+                        <input type="text" placeholder="Search messages...">
+                    </div>
+                </div>
+                
+                <div class="contact-list" id="contact-list">
+                    <!-- Dynamic contacts will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Chat Window -->
+            <div class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-header-user">
+                        <img src="https://ui-avatars.com/api/?name=Select+Client&background=e0e0e0&color=333" id="active-chat-avatar" alt="Avatar">
+                        <div>
+                            <h3 id="active-chat-name">Select a client</h3>
+                            <span class="status-text" id="active-chat-status"></span>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button class="btn-icon-small"><i class="fa-solid fa-phone"></i></button>
+                        <button class="btn-icon-small"><i class="fa-solid fa-video"></i></button>
+                        <button class="btn-icon-small"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    </div>
+                </div>
+                
+                <div class="chat-history" id="chat-history">
+                    <div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--text-muted);">
+                        Select a client to start messaging
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <button class="btn-icon-small" style="border: none;"><i class="fa-solid fa-paperclip"></i></button>
+                    <button class="btn-icon-small" style="border: none;"><i class="fa-regular fa-face-smile"></i></button>
+                    <input type="text" id="message-input" placeholder="Type a message...">
+                    <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    
+    <!-- Auth Check & Core Scripts -->
+    <script src="supabase.js?v=2"></script>
+    <script src="messages.js?v=2"></script>
+</body>
+</html>
