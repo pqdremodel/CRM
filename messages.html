@@ -118,7 +118,8 @@
                 </div>
                 
                 <div class="chat-input-area">
-                    <button class="btn-icon-small" style="border: none;"><i class="fa-solid fa-paperclip"></i></button>
+                    <input type="file" id="file-upload-input" style="display: none;">
+                    <button class="btn-icon-small" id="attach-btn" style="border: none;"><i class="fa-solid fa-paperclip"></i></button>
                     <button class="btn-icon-small" style="border: none;"><i class="fa-regular fa-face-smile"></i></button>
                     <input type="text" id="message-input" placeholder="Type a message...">
                     <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
@@ -130,6 +131,6 @@
     
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js?v=2"></script>
-    <script src="messages.js?v=5"></script>
+    <script src="messages.js?v=6"></script>
 </body>
 </html>

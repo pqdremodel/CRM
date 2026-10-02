@@ -176,11 +176,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         row.className = `message-row ${isSent ? 'sent' : 'received'}`;
         
         const timeStr = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        let attachmentHtml = '';
+        if (msg.attachment_url) {
+            attachmentHtml = `
+                <div style="margin-top: 8px; padding: 12px; background: rgba(0,0,0,0.05); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-file" style="font-size: 24px; color: var(--primary-color);"></i>
+                    <div style="flex: 1; overflow: hidden;">
+                        <div style="font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);">${msg.attachment_name || 'Attachment'}</div>
+                    </div>
+                    <a href="${msg.attachment_url}" target="_blank" style="color: var(--primary-color); text-decoration: none; padding: 8px; border-radius: 50%; background: white;"><i class="fa-solid fa-download"></i></a>
+                </div>
+            `;
+        }
 
         if (isSent) {
             row.innerHTML = `
                 <div class="message-bubble">
                     <p>${msg.content}</p>
+                    ${attachmentHtml}
                     <span class="message-time">${timeStr}</span>
                 </div>
             `;
@@ -190,6 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(activeName)}&background=random&color=fff" class="message-avatar">
                 <div class="message-bubble">
                     <p>${msg.content}</p>
+                    ${attachmentHtml}
                     <span class="message-time">${timeStr}</span>
                 </div>
             `;
@@ -235,6 +250,71 @@ document.addEventListener('DOMContentLoaded', async () => {
             messageInput.value = text; // restore text
         }
     }
+    
+    // File Upload Logic
+    const attachBtn = document.getElementById('attach-btn');
+    const fileUploadInput = document.getElementById('file-upload-input');
+    
+    attachBtn.addEventListener('click', () => {
+        if (!activeUser) {
+            alert('Please select a team member to message first.');
+            return;
+        }
+        fileUploadInput.click();
+    });
+    
+    fileUploadInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file || !activeUser) return;
+        
+        // Show loading state on button
+        const originalHtml = attachBtn.innerHTML;
+        attachBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        attachBtn.disabled = true;
+        
+        try {
+            // Create a unique file path
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+            const filePath = `${currentUser.id}/${fileName}`;
+            
+            // Upload to Supabase Storage
+            const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                .from('message_attachments')
+                .upload(filePath, file);
+                
+            if (uploadError) throw uploadError;
+            
+            // Get public URL
+            const { data: { publicUrl } } = supabaseClient.storage
+                .from('message_attachments')
+                .getPublicUrl(filePath);
+                
+            // Send message with attachment
+            const { error: msgError } = await supabaseClient
+                .from('messages')
+                .insert([
+                    { 
+                        sender_id: currentUser.id, 
+                        receiver_id: activeUser.id, 
+                        content: "Sent an attachment",
+                        attachment_url: publicUrl,
+                        attachment_name: file.name
+                    }
+                ]);
+                
+            if (msgError) throw msgError;
+            
+        } catch (err) {
+            console.error("File upload error:", err);
+            alert("Failed to upload file. Did you create the message_attachments storage bucket?");
+        } finally {
+            // Reset button
+            attachBtn.innerHTML = originalHtml;
+            attachBtn.disabled = false;
+            fileUploadInput.value = ''; // clear input
+        }
+    });
     
     // Set up Realtime listener for incoming messages
     supabaseClient
