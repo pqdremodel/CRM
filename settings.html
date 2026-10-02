@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages - CRM Dashboard</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <title>CRM Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -39,7 +38,7 @@
                             <i class="fa-solid fa-building icon"></i>
                             <span>Clients</span>
                         </li>
-                        <li class="active" onclick="window.location.href='#'">
+                        <li onclick="window.location.href='messages.html'">
                             <i class="fa-regular fa-message icon"></i>
                             <span>Messages</span>
                         </li>
@@ -50,7 +49,7 @@
             <div class="sidebar-footer">
                 <div class="footer-nav">
                     <ul>
-                        <li onclick="window.location.href='settings.html'">
+                        <li class="active" onclick="window.location.href='settings.html'">
                             <i class="fa-solid fa-gear icon"></i>
                             <span>Settings</span>
                         </li>
@@ -74,63 +73,35 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content chat-layout">
-            
-            <!-- Chat Sidebar (Contacts) -->
-            <div class="chat-sidebar">
-                <div class="chat-sidebar-header">
-                    <h2>Messages</h2>
-                    <button class="btn-icon-small"><i class="fa-solid fa-pen-to-square"></i></button>
-                </div>
-                <div class="chat-search">
-                    <div class="search-bar" style="width: 100%;">
-                        <i class="fa-solid fa-magnifying-glass icon"></i>
-                        <input type="text" placeholder="Search messages...">
-                    </div>
-                </div>
-                
-                <div class="contact-list" id="contact-list">
-                    <!-- Dynamic contacts will be populated here -->
-                </div>
-            </div>
-            
-            <!-- Chat Window -->
-            <div class="chat-window">
-                <div class="chat-header">
-                    <div class="chat-header-user">
-                        <img src="https://ui-avatars.com/api/?name=Select+Client&background=e0e0e0&color=333" id="active-chat-avatar" alt="Avatar">
-                        <div>
-                            <h3 id="active-chat-name">Select a client</h3>
-                            <span class="status-text" id="active-chat-status"></span>
+        <main class="main-content">
+            <header class="top-bar">
+                <div style="font-size: 20px; font-weight: 600; color: var(--text-main);">Settings</div>
+            </header>
+
+            <div style="padding: 24px; max-width: 600px;">
+                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <h2 style="margin-bottom: 24px; font-size: 18px; color: var(--text-main);">User Profile</h2>
+                    
+                    <form id="settings-form">
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted);">Full Name</label>
+                            <input type="text" id="settings-name" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px;">
                         </div>
-                    </div>
-                    <div class="chat-header-actions">
-                        <button class="btn-icon-small"><i class="fa-solid fa-phone"></i></button>
-                        <button class="btn-icon-small"><i class="fa-solid fa-video"></i></button>
-                        <button class="btn-icon-small"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                    </div>
-                </div>
-                
-                <div class="chat-history" id="chat-history">
-                    <div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--text-muted);">
-                        Select a client to start messaging
-                    </div>
-                </div>
-                
-                <div class="chat-input-area">
-                    <input type="file" id="file-upload-input" style="display: none;">
-                    <button class="btn-icon-small" id="attach-btn" style="border: none;"><i class="fa-solid fa-paperclip"></i></button>
-                    <button class="btn-icon-small" style="border: none;"><i class="fa-regular fa-face-smile"></i></button>
-                    <input type="text" id="message-input" placeholder="Type a message...">
-                    <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
+                        
+                        <div class="form-group" style="margin-bottom: 24px;">
+                            <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted);">Email Address (Read Only)</label>
+                            <input type="email" id="settings-email" disabled style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: #f5f5f5; color: #888;">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="settings-save-btn">Save Changes</button>
+                    </form>
                 </div>
             </div>
-            
         </main>
     </div>
-    
+
     <!-- Auth Check & Core Scripts -->
-    <script src="supabase.js?v=2"></script>
-    <script src="messages.js?v=7"></script>
+    <script src="supabase.js"></script>
+    <script src="settings.js"></script>
 </body>
 </html>
