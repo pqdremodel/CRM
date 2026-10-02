@@ -1,10 +1,18 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check if already logged in
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-        window.location.href = 'index.html';
+    if (!supabaseClient) {
+        document.getElementById('error-message').textContent = 'Invalid Supabase API Key. Please update supabase.js with the correct Anon Key.';
+        document.getElementById('error-message').style.display = 'block';
         return;
     }
+
+    // Check if already logged in
+    try {
+        const { data } = await supabaseClient.auth.getSession();
+        if (data.session) {
+            window.location.href = 'index.html';
+            return;
+        }
+    } catch(e) {}
 
     const loginForm = document.getElementById('login-form');
     const signupBtn = document.getElementById('signup-btn');
@@ -22,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const email = emailInput.value;
         const password = passwordInput.value;
 
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email,
             password
         });
@@ -49,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
             email,
             password
         });
