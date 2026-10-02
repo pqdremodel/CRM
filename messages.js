@@ -179,15 +179,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         let attachmentHtml = '';
         if (msg.attachment_url) {
-            attachmentHtml = `
-                <div style="margin-top: 8px; padding: 12px; background: rgba(0,0,0,0.05); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
-                    <i class="fa-solid fa-file" style="font-size: 24px; color: var(--primary-color);"></i>
-                    <div style="flex: 1; overflow: hidden;">
-                        <div style="font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);">${msg.attachment_name || 'Attachment'}</div>
+            const fileName = (msg.attachment_name || '').toLowerCase();
+            const isImage = fileName.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) != null;
+            const isVideo = fileName.match(/\.(mp4|webm|ogg|mov)$/) != null;
+            
+            if (isImage) {
+                attachmentHtml = `
+                    <div style="margin-top: 8px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.02); padding: 4px;">
+                        <a href="${msg.attachment_url}" target="_blank">
+                            <img src="${msg.attachment_url}" alt="${msg.attachment_name}" style="max-width: 100%; max-height: 250px; display: block; border-radius: 6px; object-fit: contain;">
+                        </a>
                     </div>
-                    <a href="${msg.attachment_url}" target="_blank" style="color: var(--primary-color); text-decoration: none; padding: 8px; border-radius: 50%; background: white;"><i class="fa-solid fa-download"></i></a>
-                </div>
-            `;
+                `;
+            } else if (isVideo) {
+                attachmentHtml = `
+                    <div style="margin-top: 8px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.02); padding: 4px;">
+                        <video controls style="max-width: 100%; max-height: 250px; display: block; border-radius: 6px; background: #000;">
+                            <source src="${msg.attachment_url}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                `;
+            } else {
+                attachmentHtml = `
+                    <div style="margin-top: 8px; padding: 12px; background: rgba(0,0,0,0.05); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+                        <i class="fa-solid fa-file" style="font-size: 24px; color: var(--primary-color);"></i>
+                        <div style="flex: 1; overflow: hidden;">
+                            <div style="font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);">${msg.attachment_name || 'Attachment'}</div>
+                        </div>
+                        <a href="${msg.attachment_url}" target="_blank" style="color: var(--primary-color); text-decoration: none; padding: 8px; border-radius: 50%; background: white;"><i class="fa-solid fa-download"></i></a>
+                    </div>
+                `;
+            }
         }
 
         if (isSent) {
