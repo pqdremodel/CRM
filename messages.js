@@ -28,8 +28,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             contactList.innerHTML = '<div style="padding:24px; text-align:center; color:#ef4444; font-size:14px;">Error loading users. Please ensure the profiles table exists.</div>';
             return;
         }
+        
+        // Fetch unread counts per sender
+        const { data: unreadData } = await supabaseClient
+            .from('messages')
+            .select('sender_id')
+            .eq('receiver_id', currentUser.id)
+            .eq('is_read', false);
+            
+        // Count unread messages grouped by sender_id
+        const unreadCounts = {};
+        if (unreadData) {
+            unreadData.forEach(msg => {
+                unreadCounts[msg.sender_id] = (unreadCounts[msg.sender_id] || 0) + 1;
+            });
+        }
+        
+        // Merge unread count into profiles
+        const profilesWithUnread = profiles.map(p => ({
+            ...p,
+            unreadCount: unreadCounts[p.id] || 0
+        }));
 
-        renderContacts(profiles || []);
+        renderContacts(profilesWithUnread || []);
     }
 
     function renderContacts(users) {
@@ -51,6 +72,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Use their email as their name if they haven't set a name
             const displayName = user.full_name || user.email || 'Unknown User';
             
+            const badgeHtml = user.unreadCount > 0 
+                ? `<span class="unread-badge">${user.unreadCount}</span>` 
+                : '';
+            
             item.innerHTML = `
                 <div class="contact-avatar">
                     <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff" alt="${displayName}">
@@ -63,6 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                     <div class="contact-bottom">
                         <p>Team Member</p>
+                        ${badgeHtml}
                     </div>
                 </div>
             `;
@@ -70,6 +96,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
                 item.classList.add('active');
+                
+                // Optimistically remove badge
+                const badge = item.querySelector('.unread-badge');
+                if (badge) badge.remove();
+                
                 setActiveChat(user, displayName, isOnline);
             });
             
@@ -94,6 +125,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function loadMessages(otherUserId) {
+        // Mark messages as read
+        await supabaseClient
+            .from('messages')
+            .update({ is_read: true })
+            .eq('sender_id', otherUserId)
+            .eq('receiver_id', currentUser.id)
+            .eq('is_read', false);
+            
+        // Update global counter in sidebar
+        if (typeof updateGlobalUnreadCount === 'function') {
+            updateGlobalUnreadCount(currentUser.id);
+        }
+
         // Fetch messages between currentUser and otherUserId
         const { data: messages, error } = await supabaseClient
             .from('messages')
@@ -203,6 +247,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 (newMsg.sender_id === activeUser.id && newMsg.receiver_id === currentUser.id)
             )) {
                 appendMessageToUI(newMsg);
+                
+                // If it's a received message in the active chat, instantly mark it as read
+                if (newMsg.receiver_id === currentUser.id) {
+                    supabaseClient
+                        .from('messages')
+                        .update({ is_read: true })
+                        .eq('id', newMsg.id)
+                        .then(() => {
+                            if (typeof updateGlobalUnreadCount === 'function') {
+                                updateGlobalUnreadCount(currentUser.id);
+                            }
+                        });
+                }
+            } else if (newMsg.receiver_id === currentUser.id) {
+                // Not the active chat, refresh contact list to show badge
+                loadRealUsers();
             }
         })
         .subscribe();

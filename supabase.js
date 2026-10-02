@@ -70,9 +70,53 @@ function setupGlobalNotifications(currentUser) {
                 
                 // Show Toast Notification
                 showToast(senderName, msg.content);
+                
+                // Update global unread badge
+                updateGlobalUnreadCount(currentUser.id);
             }
         })
         .subscribe();
+        
+    // Initial fetch for unread count
+    updateGlobalUnreadCount(currentUser.id);
+}
+
+async function updateGlobalUnreadCount(userId) {
+    const { count, error } = await supabaseClient
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('receiver_id', userId)
+        .eq('is_read', false);
+        
+    if (!error) {
+        // Find all "Messages" links in the sidebar navigation
+        const navLinks = document.querySelectorAll('.sidebar-nav a, .sidebar-nav li');
+        navLinks.forEach(link => {
+            if (link.textContent.includes('Messages')) {
+                // Check if badge exists
+                let badge = link.querySelector('.badge');
+                if (count > 0) {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'badge';
+                        // In index.html the structure might be different, so append carefully
+                        const spanTitle = link.querySelector('span:not(.badge)');
+                        if (spanTitle && spanTitle.parentNode === link) {
+                            link.appendChild(badge);
+                        } else if (spanTitle) {
+                            spanTitle.parentNode.appendChild(badge);
+                        } else {
+                            link.appendChild(badge);
+                        }
+                    }
+                    badge.textContent = count;
+                    badge.style.display = 'inline-flex';
+                } else if (badge) {
+                    badge.style.display = 'none';
+                }
+            }
+        });
+    }
 }
 
 function showToast(title, message) {
