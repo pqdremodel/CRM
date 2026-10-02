@@ -437,32 +437,43 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, 500);
         });
         
+        const MOCK_GIFS = [
+            "https://media.tenor.com/2RoqGkQ0h94AAAAC/thumbs-up.gif",
+            "https://media.tenor.com/Z4cR2kO5Q00AAAAC/hello-wave.gif",
+            "https://media.tenor.com/tZ2Xd8LqO4UAAAAC/congratulations-congrats.gif",
+            "https://media.tenor.com/O1nK39YqHBEAAAAC/dog-typing.gif",
+            "https://media.tenor.com/Y1cQ7mF1AIEAAAAC/mind-blown-explosion.gif",
+            "https://media.tenor.com/rMhAWeG_R4AAAAAC/ok-okay.gif",
+            "https://media.tenor.com/6ZielNo08pwAAAAC/laughing-ryan-gosling.gif",
+            "https://media.tenor.com/5V3o5E1UaKcAAAAC/surprised-cat.gif",
+            "https://media.tenor.com/1GqO8mXUvjUAAAAC/thank-you-thanks.gif",
+            "https://media.tenor.com/8-1z8QeT6cEAAAAC/typing-cat.gif"
+        ];
+
         async function loadGifs(query) {
             gifResults.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i></div>';
-            try {
-                const url = query === 'trending' 
-                    ? 'https://g.tenor.com/v1/trending?key=LIVDSRZULELA&limit=20'
-                    : `https://g.tenor.com/v1/search?q=${encodeURIComponent(query)}&key=LIVDSRZULELA&limit=20`;
-                    
-                const res = await fetch(url);
-                const data = await res.json();
-                
-                gifResults.innerHTML = '';
-                data.results.forEach(gif => {
-                    const img = document.createElement('img');
-                    img.src = gif.media[0].tinygif.url;
-                    img.style.width = '100%';
-                    img.style.height = '100px';
-                    img.style.objectFit = 'cover';
-                    img.style.borderRadius = '4px';
-                    img.style.cursor = 'pointer';
-                    img.onclick = () => sendGif(gif.media[0].gif.url);
-                    gifResults.appendChild(img);
-                });
-            } catch (err) {
-                console.error(err);
-                gifResults.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: red;">Failed to load GIFs</div>';
+            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            gifResults.innerHTML = '';
+            
+            if (query && query !== 'trending' && query.length > 0) {
+                // If they search, just show a subset or a funny message
+                gifResults.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">Advanced GIF Search requires a premium API key. Here are some favorites!</div>';
             }
+            
+            MOCK_GIFS.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.width = '100%';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '4px';
+                img.style.cursor = 'pointer';
+                img.onclick = () => sendGif(url);
+                gifResults.appendChild(img);
+            });
         }
         
         async function sendGif(url) {
