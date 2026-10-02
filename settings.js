@@ -75,7 +75,10 @@ settingsForm.addEventListener('submit', async (e) => {
                 .from('avatars')
                 .upload(fileName, selectedAvatarFile, { upsert: true });
                 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                console.error("Storage Error:", uploadError);
+                throw new Error("Storage Error: " + uploadError.message);
+            }
             
             const { data: { publicUrl } } = supabaseClient.storage
                 .from('avatars')
@@ -95,7 +98,10 @@ settingsForm.addEventListener('submit', async (e) => {
             })
             .eq('id', currentUser.id);
             
-        if (error) throw error;
+        if (error) {
+            console.error("DB Error:", error);
+            throw new Error("Database Error: " + error.message);
+        }
         
         alert("Settings saved successfully!");
         
@@ -112,7 +118,7 @@ settingsForm.addEventListener('submit', async (e) => {
         
     } catch (error) {
         console.error("Error updating profile:", error);
-        alert(`Failed to save settings: ${error.message || error.error_description || "Unknown error"}. Did you run the SQL to add the new columns and update policies?`);
+        alert(`Failed to save settings: ${error.message}.`);
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;
