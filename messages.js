@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Auth Check
     const currentUser = await requireAuth();
     if (currentUser) {
-        document.getElementById('profile-email').textContent = currentUser.email;
-        document.getElementById('profile-avatar').src = `https://ui-avatars.com/api/?name=${currentUser.email}&background=e0e0e0&color=333`;
+        document.getElementById('profile-email').textContent = currentUser.getDisplayName();
+        document.getElementById('profile-avatar').src = currentUser.getAvatarUrl();
     }
 
     // Logout handling

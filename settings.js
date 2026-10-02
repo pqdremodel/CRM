@@ -4,20 +4,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentUser = await requireAuth();
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.email;
-        document.getElementById('profile-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.email)}&background=e0e0e0&color=333`;
+        document.getElementById('profile-avatar').src = currentUser.getAvatarUrl();
         
         document.getElementById('settings-email').value = currentUser.email;
+        document.getElementById('settings-avatar-preview').src = currentUser.getAvatarUrl();
         
-        // Fetch profile
-        const { data: profile } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', currentUser.id)
-            .single();
-            
-        if (profile && profile.full_name) {
-            document.getElementById('settings-name').value = profile.full_name;
-            document.getElementById('profile-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.full_name)}&background=e0e0e0&color=333`;
+        if (currentUser.profile) {
+            document.getElementById('settings-first-name').value = currentUser.profile.first_name || '';
+            document.getElementById('settings-last-name').value = currentUser.profile.last_name || '';
+        } else {
+            // Fallback for older profiles that only had full_name
+            const parts = (currentUser.profile?.full_name || '').split(' ');
+            document.getElementById('settings-first-name').value = parts[0] || '';
+            document.getElementById('settings-last-name').value = parts.slice(1).join(' ') || '';
         }
     }
 
@@ -28,32 +27,94 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+// Avatar Upload Preview
+const avatarContainer = document.getElementById('avatar-container');
+const avatarInput = document.getElementById('settings-avatar-input');
+const avatarPreview = document.getElementById('settings-avatar-preview');
+let selectedAvatarFile = null;
+
+avatarContainer.addEventListener('click', () => {
+    avatarInput.click();
+});
+
+avatarInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        selectedAvatarFile = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            avatarPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Save Settings
 const settingsForm = document.getElementById('settings-form');
 settingsForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('settings-save-btn');
-    const newName = document.getElementById('settings-name').value.trim();
+    const firstName = document.getElementById('settings-first-name').value.trim();
+    const lastName = document.getElementById('settings-last-name').value.trim();
     
-    if (!newName) return;
+    if (!firstName) return;
     
     const originalText = btn.textContent;
     btn.textContent = 'Saving...';
     btn.disabled = true;
     
-    const { error } = await supabaseClient
-        .from('profiles')
-        .update({ full_name: newName })
-        .eq('id', currentUser.id);
+    try {
+        let avatarUrl = currentUser.profile?.avatar_url;
         
-    btn.textContent = originalText;
-    btn.disabled = false;
+        // Handle avatar upload if a new file was selected
+        if (selectedAvatarFile) {
+            const fileExt = selectedAvatarFile.name.split('.').pop();
+            const fileName = `${currentUser.id}_${Date.now()}.${fileExt}`;
+            
+            const { error: uploadError } = await supabaseClient.storage
+                .from('avatars')
+                .upload(fileName, selectedAvatarFile, { upsert: true });
+                
+            if (uploadError) throw uploadError;
+            
+            const { data: { publicUrl } } = supabaseClient.storage
+                .from('avatars')
+                .getPublicUrl(fileName);
+                
+            avatarUrl = publicUrl;
+        }
     
-    if (error) {
-        console.error("Error updating profile:", error);
-        alert("Failed to save settings. Please try again.");
-    } else {
+        // Update profile in DB
+        const { error } = await supabaseClient
+            .from('profiles')
+            .update({ 
+                first_name: firstName,
+                last_name: lastName,
+                full_name: `${firstName} ${lastName}`.trim(),
+                avatar_url: avatarUrl
+            })
+            .eq('id', currentUser.id);
+            
+        if (error) throw error;
+        
         alert("Settings saved successfully!");
-        // Update avatar globally
-        document.getElementById('profile-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=e0e0e0&color=333`;
+        
+        // Update local session
+        if (!currentUser.profile) currentUser.profile = {};
+        currentUser.profile.first_name = firstName;
+        currentUser.profile.last_name = lastName;
+        currentUser.profile.full_name = `${firstName} ${lastName}`.trim();
+        currentUser.profile.avatar_url = avatarUrl;
+        
+        // Update global UI
+        document.getElementById('profile-avatar').src = currentUser.getAvatarUrl();
+        selectedAvatarFile = null;
+        
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Failed to save settings. Did you create the avatars storage bucket?");
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
     }
 });

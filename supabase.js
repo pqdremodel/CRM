@@ -36,7 +36,41 @@ async function requireAuth() {
             window.notificationsSetup = true;
         }
         
-        return data.session.user;
+        let user = data.session.user;
+        
+        // Fetch profile
+        const { data: profile } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+            
+        if (profile) {
+            user.profile = profile;
+        } else {
+            user.profile = {};
+        }
+        
+        // Helper to get name
+        user.getDisplayName = function() {
+            if (this.profile && this.profile.first_name) {
+                return `${this.profile.first_name} ${this.profile.last_name || ''}`.trim();
+            } else if (this.profile && this.profile.full_name) {
+                return this.profile.full_name;
+            }
+            return this.email;
+        };
+        
+        // Helper to get avatar
+        user.getAvatarUrl = function() {
+            if (this.profile && this.profile.avatar_url) {
+                return this.profile.avatar_url;
+            }
+            const name = this.getDisplayName();
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=e0e0e0&color=333`;
+        };
+        
+        return user;
     } catch (err) {
         console.error("Auth error:", err);
         window.location.href = 'login.html';
