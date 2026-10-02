@@ -376,4 +376,118 @@ document.addEventListener('DOMContentLoaded', async () => {
             sendMessage();
         }
     });
+
+    // Emoji & GIF Picker Logic
+    const pickerContainer = document.getElementById('picker-container');
+    const emojiBtn = document.getElementById('emoji-btn');
+    const tabEmoji = document.getElementById('tab-emoji');
+    const tabGif = document.getElementById('tab-gif');
+    const emojiView = document.getElementById('emoji-view');
+    const gifView = document.getElementById('gif-view');
+    const gifSearch = document.getElementById('gif-search');
+    const gifResults = document.getElementById('gif-results');
+    
+    if (emojiBtn && pickerContainer) {
+        emojiBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            pickerContainer.style.display = pickerContainer.style.display === 'none' ? 'flex' : 'none';
+            if (pickerContainer.style.display === 'flex' && gifResults.innerHTML === '') {
+                loadGifs('trending');
+            }
+        });
+        
+        // Close picker when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!pickerContainer.contains(e.target) && e.target !== emojiBtn && !emojiBtn.contains(e.target)) {
+                pickerContainer.style.display = 'none';
+            }
+        });
+        
+        // Tabs
+        tabEmoji.addEventListener('click', () => {
+            tabEmoji.style.borderBottomColor = 'var(--primary-color)';
+            tabEmoji.style.color = 'var(--primary-color)';
+            tabGif.style.borderBottomColor = 'transparent';
+            tabGif.style.color = 'var(--text-muted)';
+            emojiView.style.display = 'flex';
+            gifView.style.display = 'none';
+        });
+        
+        tabGif.addEventListener('click', () => {
+            tabGif.style.borderBottomColor = 'var(--primary-color)';
+            tabGif.style.color = 'var(--primary-color)';
+            tabEmoji.style.borderBottomColor = 'transparent';
+            tabEmoji.style.color = 'var(--text-muted)';
+            gifView.style.display = 'flex';
+            emojiView.style.display = 'none';
+        });
+        
+        // Emoji click
+        document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+            messageInput.value += event.detail.unicode;
+            messageInput.focus();
+        });
+        
+        // GIF search
+        let gifTimeout = null;
+        gifSearch.addEventListener('input', (e) => {
+            clearTimeout(gifTimeout);
+            gifTimeout = setTimeout(() => {
+                loadGifs(e.target.value.trim() || 'trending');
+            }, 500);
+        });
+        
+        async function loadGifs(query) {
+            gifResults.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+            try {
+                const url = query === 'trending' 
+                    ? 'https://g.tenor.com/v1/trending?key=LIVDSRZULELA&limit=20'
+                    : `https://g.tenor.com/v1/search?q=${encodeURIComponent(query)}&key=LIVDSRZULELA&limit=20`;
+                    
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                gifResults.innerHTML = '';
+                data.results.forEach(gif => {
+                    const img = document.createElement('img');
+                    img.src = gif.media[0].tinygif.url;
+                    img.style.width = '100%';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '4px';
+                    img.style.cursor = 'pointer';
+                    img.onclick = () => sendGif(gif.media[0].gif.url);
+                    gifResults.appendChild(img);
+                });
+            } catch (err) {
+                console.error(err);
+                gifResults.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: red;">Failed to load GIFs</div>';
+            }
+        }
+        
+        async function sendGif(url) {
+            if (!activeUser) {
+                alert('Please select a team member to message first.');
+                return;
+            }
+            pickerContainer.style.display = 'none';
+            
+            const { error } = await supabaseClient
+                .from('messages')
+                .insert([
+                    { 
+                        sender_id: currentUser.id, 
+                        receiver_id: activeUser.id, 
+                        content: "", // No text for pure gif messages
+                        attachment_url: url,
+                        attachment_name: "gif.gif"
+                    }
+                ]);
+                
+            if (error) {
+                console.error("Error sending GIF:", error);
+                alert("Failed to send GIF.");
+            }
+        }
+    }
 });

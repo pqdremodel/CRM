@@ -117,10 +117,28 @@
                     </div>
                 </div>
                 
-                <div class="chat-input-area">
+                <div id="picker-container" style="display: none; position: absolute; bottom: 80px; left: 24px; width: 320px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-direction: column; overflow: hidden; z-index: 100;">
+                    <div style="display: flex; border-bottom: 1px solid var(--border-color);">
+                        <button id="tab-emoji" style="flex: 1; padding: 12px; border: none; background: white; font-weight: 600; cursor: pointer; border-bottom: 2px solid var(--primary-color); color: var(--primary-color);">Emojis</button>
+                        <button id="tab-gif" style="flex: 1; padding: 12px; border: none; background: white; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; color: var(--text-muted);">GIFs</button>
+                    </div>
+                    
+                    <div id="emoji-view" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                        <emoji-picker style="width: 100%; height: 100%; --background: white; --border-color: transparent;"></emoji-picker>
+                    </div>
+                    
+                    <div id="gif-view" style="flex: 1; display: none; flex-direction: column; padding: 8px; overflow: hidden;">
+                        <input type="text" id="gif-search" placeholder="Search GIFs..." style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 8px;">
+                        <div id="gif-results" style="flex: 1; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                            <!-- GIF results populate here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area" style="position: relative;">
                     <input type="file" id="file-upload-input" style="display: none;">
                     <button class="btn-icon-small" id="attach-btn" style="border: none;"><i class="fa-solid fa-paperclip"></i></button>
-                    <button class="btn-icon-small" style="border: none;"><i class="fa-regular fa-face-smile"></i></button>
+                    <button class="btn-icon-small" id="emoji-btn" style="border: none;"><i class="fa-regular fa-face-smile"></i></button>
                     <input type="text" id="message-input" placeholder="Type a message...">
                     <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
                 </div>
@@ -131,6 +149,7 @@
     
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js?v=2"></script>
-    <script src="messages.js?v=7"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <script src="messages.js?v=8"></script>
 </body>
 </html>
