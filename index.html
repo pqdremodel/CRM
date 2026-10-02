@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="logo-text">Bernaire</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
+                </div>
+            </div>
+            
+            <div class="sidebar-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search Anything">
+                <span class="shortcut">⌘ K</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-caret-down"></i> General
+                    </div>
+                    <ul>
+                        <li class="active">
+                            <i class="fa-solid fa-building icon"></i>
+                            <span>Clients</span>
+                            <span class="badge">1</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="footer-nav">
+                    <ul>
+                        <li>
+                            <i class="fa-solid fa-gear icon"></i>
+                            <span>Settings</span>
+                        </li>
+                        <li>
+                            <i class="fa-regular fa-bell icon"></i>
+                            <span>Notifications</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=e0e0e0&color=333" id="profile-avatar" alt="Profile">
+                    </div>
+                    <div class="user-info">
+                        <span class="name">Team Member</span>
+                        <span class="email" id="profile-email">Loading...</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-right-from-bracket more-opts" id="logout-btn" title="Sign Out"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass icon"></i>
+                    <input type="text" placeholder="Search..">
+                </div>
+                <div class="actions">
+                    <button class="btn btn-outline"><i class="fa-solid fa-rotate-right"></i> Update</button>
+                    <button class="btn btn-outline"><i class="fa-solid fa-bars-staggered"></i> Filter</button>
+                    <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-arrow-down"></i> Sort</button>
+                    <button class="btn btn-primary" id="btn-add-client"><i class="fa-solid fa-plus"></i> Add Client</button>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <table class="clients-table">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox"><input type="checkbox"></th>
+                            <th><i class="fa-regular fa-user"></i> Client Name <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-building"></i> Project Type <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-location-dot"></i> Location <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-dollar-sign"></i> Project Price <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-regular fa-sun"></i> Status <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th class="col-actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-body">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <div class="page-controls">
+                    <button><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <span>...</span>
+                    <button>20</button>
+                    <button><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="entries-info">
+                    Showing 1-17 of 883 entries 
+                    <span class="show-dropdown">Show 17 <i class="fa-solid fa-chevron-up"></i></span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="add-client-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Client</h2>
+                <button id="close-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="add-client-form">
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input type="text" id="client-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Type</label>
+                    <select id="project-type" required>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Retail">Retail</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="client-location" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Price</label>
+                    <input type="text" id="project-price" placeholder="$0" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="project-status" required>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Complete">Complete</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-modal" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Auth Check & Core Scripts -->
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

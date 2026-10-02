@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - CRM Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="logo-text">Bernaire</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
+                </div>
+            </div>
+            
+            <div class="sidebar-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search Anything">
+                <span class="shortcut">⌘ K</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-caret-down"></i> General
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="index.html" style="text-decoration:none; color:inherit; display:flex; gap:12px; align-items:center; width:100%;">
+                                <i class="fa-solid fa-building icon"></i>
+                                <span>Clients</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <i class="fa-solid fa-folder-open icon"></i>
+                            <span>Project View</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="footer-nav">
+                    <ul>
+                        <li>
+                            <i class="fa-solid fa-gear icon"></i>
+                            <span>Settings</span>
+                        </li>
+                        <li>
+                            <i class="fa-regular fa-bell icon"></i>
+                            <span>Notifications</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=e0e0e0&color=333" id="profile-avatar" alt="Profile">
+                    </div>
+                    <div class="user-info">
+                        <span class="name">Team Member</span>
+                        <span class="email" id="profile-email">Loading...</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-right-from-bracket more-opts" id="logout-btn" title="Sign Out"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" style="background: transparent; border: none; box-shadow: none;">
+            
+            <div class="project-header">
+                <div class="project-title">
+                    <h1 id="client-name-display">Kim & Alex Park.</h1>
+                    <h2 id="client-type-display">Hot buyers, touring since June.</h2>
+                    <div class="tags">
+                        <span class="tag tag-hot" id="client-status-display"><i class="fa-solid fa-fire"></i> Hot</span>
+                        <span class="tag tag-match">94% match</span>
+                        <span class="tag tag-info"><i class="fa-solid fa-location-dot"></i> <span id="client-location-display">Location</span></span>
+                    </div>
+                </div>
+                <div class="project-actions">
+                    <button class="btn btn-icon"><i class="fa-solid fa-tag"></i></button>
+                    <button class="btn btn-icon"><i class="fa-regular fa-calendar"></i></button>
+                    <button class="btn btn-dark"><i class="fa-regular fa-paper-plane"></i> Send listing <i class="fa-solid fa-chevron-down" style="margin-left: 8px;"></i></button>
+                </div>
+            </div>
+
+            <!-- Pipeline -->
+            <div class="pipeline">
+                <div class="pipeline-step completed">New · Jun 12</div>
+                <div class="pipeline-step completed">Contacted · Jun 14</div>
+                <div class="pipeline-step active">Touring · now</div>
+                <div class="pipeline-step">Offer</div>
+                <div class="pipeline-step">Closing</div>
+            </div>
+
+            <div class="grid-layout">
+                <!-- Top Left: Urgent Task Reminder -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>MOST URGENT TASK</h3>
+                        <span class="status-badge status-ongoing">Due Today</span>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="task-title">Approve Blueprint Revisions</h2>
+                        <p class="task-desc">Review the updated electrical layouts for the second floor before the contractor arrives tomorrow.</p>
+                        
+                        <div class="task-actions" style="margin-top: 20px; display: flex; gap: 10px;">
+                            <button class="btn btn-dark" style="flex: 1;">View Files</button>
+                            <button class="btn btn-outline" style="flex: 1;">Mark Done</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Center: Quote / Financials -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>PROJECT FINANCIALS</h3>
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="price-title" id="client-price-display">$1.15M</h2>
+                        <p class="price-subtitle">Total Project Quote · Last Updated <span id="current-date-display">Sep 30</span></p>
+                        
+                        <div class="financial-stats">
+                            <div class="stat-box">
+                                <span>Paid</span>
+                                <h4>$862K</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Pending</span>
+                                <h4>$288K</h4>
+                            </div>
+                            <div class="stat-box">
+                                <span>Outstanding</span>
+                                <h4>$0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Right: Notes -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>RECENT NOTES</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="note-item">
+                            <div class="note-icon"><i class="fa-regular fa-file-lines"></i></div>
+                            <div class="note-content">
+                                <h4>Material selection approved</h4>
+                                <p>Client chose the oak hardwood for the living room.</p>
+                                <span>Oct 1, 9:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="note-item">
+                            <div class="note-icon"><i class="fa-regular fa-comment"></i></div>
+                            <div class="note-content">
+                                <h4>Client text message</h4>
+                                <p>"Can we add an extra outlet in the kitchen island?"</p>
+                                <span>Sep 29, 2:30 PM</span>
+                            </div>
+                        </div>
+                        <div class="note-item">
+                            <div class="note-icon"><i class="fa-regular fa-calendar"></i></div>
+                            <div class="note-content">
+                                <h4>Site visit summary</h4>
+                                <p>Foundation poured successfully. Curing in progress.</p>
+                                <span>Sep 28, 11:00 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Left: Calendar -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>UPCOMING EVENTS</h3>
+                        <button class="btn btn-outline btn-small"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="calendar-list">
+                            <div class="cal-item">
+                                <div class="cal-date">
+                                    <span class="day">OCT</span>
+                                    <span class="num">05</span>
+                                </div>
+                                <div class="cal-details">
+                                    <h4>Plumbing Inspection</h4>
+                                    <p>City inspector coming at 10 AM.</p>
+                                </div>
+                            </div>
+                            <div class="cal-item">
+                                <div class="cal-date">
+                                    <span class="day">OCT</span>
+                                    <span class="num">12</span>
+                                </div>
+                                <div class="cal-details">
+                                    <h4>Drywall Installation</h4>
+                                    <p>Starting early morning.</p>
+                                </div>
+                            </div>
+                            <div class="cal-item">
+                                <div class="cal-date" style="background:#f0f0f0;">
+                                    <span class="day" style="color:#aaa;">OCT</span>
+                                    <span class="num" style="color:#aaa;">15</span>
+                                </div>
+                                <div class="cal-details">
+                                    <h4 style="color:#888;">Client Walkthrough</h4>
+                                    <p>Pending confirmation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Middle: Project Files -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>PROJECT FILES</h3>
+                        <a href="#" class="view-all">All 12</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="file-list">
+                            <div class="file-item">
+                                <div class="file-icon pdf-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                                <div class="file-info">
+                                    <h4>Floorplan_v2.pdf</h4>
+                                    <span>2.4 MB · Uploaded Sep 28</span>
+                                </div>
+                                <button class="btn-icon-small"><i class="fa-solid fa-download"></i></button>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon doc-icon"><i class="fa-solid fa-file-word"></i></div>
+                                <div class="file-info">
+                                    <h4>Contract_Signed.docx</h4>
+                                    <span>1.1 MB · Uploaded Sep 15</span>
+                                </div>
+                                <button class="btn-icon-small"><i class="fa-solid fa-download"></i></button>
+                            </div>
+                            <div class="file-item">
+                                <div class="file-icon img-icon"><i class="fa-solid fa-file-image"></i></div>
+                                <div class="file-info">
+                                    <h4>Site_Survey.png</h4>
+                                    <span>4.8 MB · Uploaded Sep 10</span>
+                                </div>
+                                <button class="btn-icon-small"><i class="fa-solid fa-download"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 16px;"><i class="fa-solid fa-arrow-up-from-bracket" style="margin-right: 8px;"></i> Upload New File</button>
+                    </div>
+                </div>
+
+                <!-- Bottom Right: Tasks List -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>PROJECT TASKS</h3>
+                        <span style="color: #4caf50; font-size: 13px;">3 open</span>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="task-list">
+                            <label class="task-row">
+                                <input type="checkbox">
+                                <div class="task-info">
+                                    <h4>Order custom windows</h4>
+                                    <span style="color: #ff6b6b; font-size: 11px;">DUE TOMORROW</span>
+                                </div>
+                                <span class="task-time" style="color: var(--text-muted); font-size: 11px;">9:00 AM</span>
+                            </label>
+                            
+                            <label class="task-row">
+                                <input type="checkbox">
+                                <div class="task-info">
+                                    <h4>Pay framing sub-contractor</h4>
+                                    <span style="color: var(--text-muted); font-size: 11px;">Invoice #402</span>
+                                </div>
+                                <span class="task-time" style="color: var(--text-muted); font-size: 11px;">Today</span>
+                            </label>
+                            
+                            <label class="task-row">
+                                <input type="checkbox">
+                                <div class="task-info">
+                                    <h4>Finalize paint colors</h4>
+                                    <span style="color: var(--text-muted); font-size: 11px;">Follow up with Kim</span>
+                                </div>
+                                <span class="task-time" style="color: var(--text-muted); font-size: 11px;">Oct 12</span>
+                            </label>
+                        </div>
+                        <div class="task-actions-footer" style="padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; align-items: center;">
+                            <div class="avatar-sm">
+                                <img src="https://ui-avatars.com/api/?name=Brilliyand+Noval&background=random" style="width: 24px; border-radius: 50%;">
+                            </div>
+                            <span style="color: var(--text-muted); font-size: 12px; margin-left: 8px;">Assigned to Brilliyand</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <!-- Auth Check & Core Scripts -->
+    <script src="supabase.js"></script>
+    <script src="project.js"></script>
+</body>
+</html>

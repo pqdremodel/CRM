@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CRM Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--bg-color);">
+    
+    <div class="card" style="width: 400px; padding: 32px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <div class="logo" style="justify-content: center; margin-bottom: 32px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="32" height="32" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+            <span class="logo-text" style="font-size: 24px;">Bernaire CRM</span>
+        </div>
+        
+        <h2 style="margin-bottom: 24px; font-weight: 600;">Sign In</h2>
+        
+        <form id="login-form">
+            <div class="form-group" style="text-align: left;">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="name@company.com">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            
+            <p id="error-message" style="color: #ef4444; font-size: 12px; margin-bottom: 16px; display: none;"></p>
+            <p id="success-message" style="color: #4caf50; font-size: 12px; margin-bottom: 16px; display: none;"></p>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;">Sign In</button>
+            <button type="button" id="signup-btn" class="btn btn-outline" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px; margin-top: 12px;">Create Account</button>
+        </form>
+    </div>
+
+    <script src="supabase.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>
