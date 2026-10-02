@@ -31,6 +31,10 @@ async function requireAuth() {
             window.location.href = 'login.html';
             return null;
         }
+        if (!window.notificationsSetup) {
+            setupGlobalNotifications(data.session.user);
+            window.notificationsSetup = true;
+        }
         
         return data.session.user;
     } catch (err) {
@@ -38,4 +42,74 @@ async function requireAuth() {
         window.location.href = 'login.html';
         return null;
     }
+}
+
+function setupGlobalNotifications(currentUser) {
+    // Add toast container to DOM if it doesn't exist
+    if (!document.getElementById('toast-container')) {
+        const container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    supabaseClient
+        .channel('global-notifications')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, async (payload) => {
+            const msg = payload.new;
+            
+            // Only notify if we are the receiver
+            if (msg.receiver_id === currentUser.id) {
+                // Fetch sender info
+                const { data: sender } = await supabaseClient
+                    .from('profiles')
+                    .select('full_name, email')
+                    .eq('id', msg.sender_id)
+                    .single();
+                    
+                const senderName = sender?.full_name || sender?.email || 'A team member';
+                
+                // Show Toast Notification
+                showToast(senderName, msg.content);
+            }
+        })
+        .subscribe();
+}
+
+function showToast(title, message) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <i class="fa-regular fa-message"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">${title} sent a message</div>
+            <p class="toast-desc">${message}</p>
+        </div>
+    `;
+    
+    // Clicking the toast navigates to messages
+    toast.style.cursor = 'pointer';
+    toast.addEventListener('click', () => {
+        window.location.href = 'messages.html';
+    });
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+    });
+    
+    // Remove after 5 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400); // Wait for transition
+    }, 5000);
 }
