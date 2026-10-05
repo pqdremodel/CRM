@@ -141,11 +141,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (autocompleteTimeout) clearTimeout(autocompleteTimeout);
                 autocompleteTimeout = setTimeout(async () => {
                     try {
-                        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(val)}&limit=5`);
+                        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(val)}&limit=15&bbox=-124.8,42.0,-116.4,49.0`);
                         const data = await res.json();
-                        if (data.features && data.features.length > 0) {
+
+                        // Filter specifically for Washington and Oregon
+                        const validStates = ['Washington', 'Oregon', 'WA', 'OR'];
+                        const filteredFeatures = (data.features || []).filter(feat => {
+                            return feat.properties.state && validStates.includes(feat.properties.state);
+                        }).slice(0, 5);
+
+                        if (filteredFeatures.length > 0) {
                             suggestionsBox.innerHTML = '';
-                            data.features.forEach(feat => {
+                            filteredFeatures.forEach(feat => {
                                 const props = feat.properties;
                                 const street = props.street ? `${props.housenumber ? props.housenumber + ' ' : ''}${props.street}` : props.name;
                                 const city = props.city || props.town || props.village || '';
