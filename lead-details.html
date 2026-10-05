@@ -103,7 +103,26 @@
                 <h3>ADDRESS</h3>
             </div>
             <div class="card-body">
-                <input type="text" id="lead-address" placeholder="Enter full address here..." style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Street Address</label>
+                        <input type="text" id="lead-address-street" placeholder="123 Main St" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <div style="flex: 2;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">City</label>
+                            <input type="text" id="lead-address-city" placeholder="City" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">State</label>
+                            <input type="text" id="lead-address-state" placeholder="State" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">ZIP</label>
+                            <input type="text" id="lead-address-zip" placeholder="ZIP" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

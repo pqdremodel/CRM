@@ -51,9 +51,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('current-date-display').textContent = dateStr;
             
             // Populate Address and Notes
-            const addressInput = document.getElementById('client-address');
+            try {
+                const addrObj = JSON.parse(client.address || "{}");
+                const streetEl = document.getElementById('client-address-street');
+                if (streetEl) streetEl.value = addrObj.street || client.address || '';
+                
+                const cityEl = document.getElementById('client-address-city');
+                if (cityEl) cityEl.value = addrObj.city || '';
+                
+                const stateEl = document.getElementById('client-address-state');
+                if (stateEl) stateEl.value = addrObj.state || '';
+                
+                const zipEl = document.getElementById('client-address-zip');
+                if (zipEl) zipEl.value = addrObj.zip || '';
+            } catch(e) {
+                const streetEl = document.getElementById('client-address-street');
+                if (streetEl) streetEl.value = client.address || '';
+            }
+            
             const notesInput = document.getElementById('client-notes');
-            if (addressInput) addressInput.value = client.address || '';
             if (notesInput) notesInput.value = client.notes || '';
 
             document.title = `${client.name} - CRM Dashboard`;
@@ -71,7 +87,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveIndicator.textContent = "Saving...";
             saveIndicator.style.opacity = "1";
 
-            const updatedAddress = document.getElementById('client-address').value;
+            const updatedAddress = JSON.stringify({
+                street: document.getElementById('client-address-street') ? document.getElementById('client-address-street').value : '',
+                city: document.getElementById('client-address-city') ? document.getElementById('client-address-city').value : '',
+                state: document.getElementById('client-address-state') ? document.getElementById('client-address-state').value : '',
+                zip: document.getElementById('client-address-zip') ? document.getElementById('client-address-zip').value : ''
+            });
             const updatedNotes = document.getElementById('client-notes').value;
 
             const { error: updateError } = await supabaseClient
@@ -99,9 +120,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
         }
 
-        const addressEl = document.getElementById('client-address');
+        const addrStreetEl = document.getElementById('client-address-street');
+        const addrCityEl = document.getElementById('client-address-city');
+        const addrStateEl = document.getElementById('client-address-state');
+        const addrZipEl = document.getElementById('client-address-zip');
         const notesEl = document.getElementById('client-notes');
-        if (addressEl) addressEl.addEventListener('input', handleInput);
+        
+        if (addrStreetEl) addrStreetEl.addEventListener('input', handleInput);
+        if (addrCityEl) addrCityEl.addEventListener('input', handleInput);
+        if (addrStateEl) addrStateEl.addEventListener('input', handleInput);
+        if (addrZipEl) addrZipEl.addEventListener('input', handleInput);
         if (notesEl) notesEl.addEventListener('input', handleInput);
     }
 });

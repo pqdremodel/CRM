@@ -38,7 +38,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('lead-phone-display').textContent = lead.phone || 'No phone';
             
             // Populate Address and Notes
-            document.getElementById('lead-address').value = lead.address || '';
+            try {
+                const addrObj = JSON.parse(lead.address || "{}");
+                document.getElementById('lead-address-street').value = addrObj.street || lead.address || '';
+                document.getElementById('lead-address-city').value = addrObj.city || '';
+                document.getElementById('lead-address-state').value = addrObj.state || '';
+                document.getElementById('lead-address-zip').value = addrObj.zip || '';
+            } catch(e) {
+                document.getElementById('lead-address-street').value = lead.address || '';
+            }
             document.getElementById('lead-notes').value = lead.notes || '';
 
             document.title = `${lead.name} - Lead Details`;
@@ -82,7 +90,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveIndicator.textContent = "Saving...";
             saveIndicator.style.opacity = "1";
 
-            const updatedAddress = document.getElementById('lead-address').value;
+            const updatedAddress = JSON.stringify({
+                street: document.getElementById('lead-address-street').value,
+                city: document.getElementById('lead-address-city').value,
+                state: document.getElementById('lead-address-state').value,
+                zip: document.getElementById('lead-address-zip').value
+            });
             const updatedNotes = document.getElementById('lead-notes').value;
 
             const { error: updateError } = await supabaseClient
@@ -109,8 +122,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
         }
 
-        document.getElementById('lead-address').addEventListener('input', handleInput);
-        document.getElementById('lead-notes').addEventListener('input', handleInput);
+        const addrStreetEl = document.getElementById('lead-address-street');
+        const addrCityEl = document.getElementById('lead-address-city');
+        const addrStateEl = document.getElementById('lead-address-state');
+        const addrZipEl = document.getElementById('lead-address-zip');
+        const notesEl = document.getElementById('lead-notes');
+        
+        if (addrStreetEl) addrStreetEl.addEventListener('input', handleInput);
+        if (addrCityEl) addrCityEl.addEventListener('input', handleInput);
+        if (addrStateEl) addrStateEl.addEventListener('input', handleInput);
+        if (addrZipEl) addrZipEl.addEventListener('input', handleInput);
+        if (notesEl) notesEl.addEventListener('input', handleInput);
 
         // Schedule consultation button logic
         const btnSchedule = document.getElementById('btn-schedule');
