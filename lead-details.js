@@ -74,5 +74,48 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btn.disabled = false;
             }
         });
+
+        // Schedule consultation button logic
+        const btnSchedule = document.getElementById('btn-schedule');
+        if (btnSchedule) {
+            btnSchedule.addEventListener('click', async (e) => {
+                const dateVal = document.getElementById('consultation-date').value;
+                const timeVal = document.getElementById('consultation-time').value;
+
+                if (!dateVal || !timeVal) {
+                    alert("Please select both a date and time for the consultation.");
+                    return;
+                }
+
+                const startDateTime = `${dateVal}T${timeVal}:00`;
+                const leadName = document.getElementById('lead-name-display').textContent;
+
+                const newEvent = {
+                    title: `Consultation: ${leadName}`,
+                    start_time: startDateTime,
+                    color: '#2196f3',
+                    lead_id: leadId
+                };
+
+                btnSchedule.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scheduling...';
+                btnSchedule.disabled = true;
+
+                const { error: scheduleError } = await supabaseClient
+                    .from('events')
+                    .insert([newEvent]);
+
+                if (!scheduleError) {
+                    btnSchedule.innerHTML = '<i class="fa-regular fa-calendar-check"></i> Scheduled!';
+                    btnSchedule.style.backgroundColor = '#4caf50';
+                    btnSchedule.style.color = '#fff';
+                    btnSchedule.style.borderColor = '#4caf50';
+                } else {
+                    console.error("Error scheduling consultation:", scheduleError);
+                    alert("Failed to schedule. Did you create the 'events' table?");
+                    btnSchedule.innerHTML = '<i class="fa-regular fa-calendar"></i> Add to Calendar';
+                    btnSchedule.disabled = false;
+                }
+            });
+        }
     }
 });

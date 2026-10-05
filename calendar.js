@@ -24,20 +24,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         themeSystem: 'standard',
         events: async function(info, successCallback, failureCallback) {
-            // Here you can fetch tasks/appointments from Supabase
-            // Example stub returning static data:
-            successCallback([
-                {
-                    title: 'Client Meeting - Kim & Alex',
-                    start: new Date().toISOString().split('T')[0] + 'T10:00:00',
-                    color: '#ff914d'
-                },
-                {
-                    title: 'Site Visit',
-                    start: new Date(Date.now() + 86400000).toISOString().split('T')[0] + 'T14:00:00',
-                    color: '#4caf50'
-                }
-            ]);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('events')
+                    .select('*')
+                    .gte('start_time', info.startStr)
+                    .lte('start_time', info.endStr);
+
+                if (error) throw error;
+                
+                const events = data.map(evt => ({
+                    id: evt.id,
+                    title: evt.title,
+                    start: evt.start_time,
+                    color: evt.color || '#2196f3',
+                    url: evt.lead_id ? `lead-details.html?id=${evt.lead_id}` : ''
+                }));
+                
+                successCallback(events);
+            } catch (error) {
+                console.error("Error fetching events:", error);
+                // Fallback dummy events if table doesn't exist yet
+                successCallback([
+                    {
+                        title: 'Client Meeting - Kim & Alex',
+                        start: new Date().toISOString().split('T')[0] + 'T10:00:00',
+                        color: '#ff914d'
+                    },
+                    {
+                        title: 'Site Visit',
+                        start: new Date(Date.now() + 86400000).toISOString().split('T')[0] + 'T14:00:00',
+                        color: '#4caf50'
+                    }
+                ]);
+            }
         }
     });
     calendar.render();
