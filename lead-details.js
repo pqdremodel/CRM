@@ -40,12 +40,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Populate Address and Notes
             try {
                 const addrObj = JSON.parse(lead.address || "{}");
-                document.getElementById('lead-address-street').value = addrObj.street || lead.address || '';
+                const parsedStreet = addrObj.street || lead.address || '';
+                
+                document.getElementById('lead-address-street').value = parsedStreet;
                 document.getElementById('lead-address-city').value = addrObj.city || '';
                 document.getElementById('lead-address-state').value = addrObj.state || '';
                 document.getElementById('lead-address-zip').value = addrObj.zip || '';
+                
+                // Populate main card inputs
+                const mCard = document.getElementById('main-address-card');
+                if (mCard) {
+                    if (parsedStreet.trim().length > 0) {
+                        mCard.style.display = 'none';
+                    } else {
+                        mCard.style.display = 'block';
+                        document.getElementById('main-address-street').value = parsedStreet;
+                        document.getElementById('main-address-city').value = addrObj.city || '';
+                        document.getElementById('main-address-state').value = addrObj.state || '';
+                        document.getElementById('main-address-zip').value = addrObj.zip || '';
+                    }
+                }
             } catch(e) {
-                document.getElementById('lead-address-street').value = lead.address || '';
+                const parsedStreet = lead.address || '';
+                document.getElementById('lead-address-street').value = parsedStreet;
+                const mCard = document.getElementById('main-address-card');
+                if (mCard) {
+                    if (parsedStreet.trim().length > 0) {
+                        mCard.style.display = 'none';
+                    } else {
+                        mCard.style.display = 'block';
+                        document.getElementById('main-address-street').value = parsedStreet;
+                    }
+                }
             }
             document.getElementById('lead-notes').value = lead.notes || '';
             
@@ -200,10 +226,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveIndicator.style.opacity = "1";
             
             // Sync header display for address
-            const street = document.getElementById('lead-address-street').value.trim();
-            const city = document.getElementById('lead-address-city').value.trim();
-            const state = document.getElementById('lead-address-state').value.trim();
-            const zip = document.getElementById('lead-address-zip').value.trim();
+            let street = document.getElementById('lead-address-street').value.trim();
+            let city = document.getElementById('lead-address-city').value.trim();
+            let state = document.getElementById('lead-address-state').value.trim();
+            let zip = document.getElementById('lead-address-zip').value.trim();
+            
+            // If main card is visible and actively being typed in, use its values
+            const mCard = document.getElementById('main-address-card');
+            if (mCard && mCard.style.display !== 'none') {
+                street = document.getElementById('main-address-street').value.trim();
+                city = document.getElementById('main-address-city').value.trim();
+                state = document.getElementById('main-address-state').value.trim();
+                zip = document.getElementById('main-address-zip').value.trim();
+                
+                // Sync values to modal so it saves correctly
+                document.getElementById('lead-address-street').value = street;
+                document.getElementById('lead-address-city').value = city;
+                document.getElementById('lead-address-state').value = state;
+                document.getElementById('lead-address-zip').value = zip;
+            }
+            
             const full = [street, city, state, zip].filter(Boolean).join(', ');
             const displayEl = document.getElementById('lead-address-display');
             if (displayEl) {
@@ -213,6 +255,51 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (saveTimeout) clearTimeout(saveTimeout);
             saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
         }
+        
+        // Auto-save logic for the main address card inputs
+        async function saveMainAddress() {
+            saveIndicator.textContent = "Saving...";
+            saveIndicator.style.opacity = "1";
+            
+            const mStreet = document.getElementById('main-address-street').value.trim();
+            const mCity = document.getElementById('main-address-city').value.trim();
+            const mState = document.getElementById('main-address-state').value.trim();
+            const mZip = document.getElementById('main-address-zip').value.trim();
+            
+            const newAddressJSON = JSON.stringify({
+                street: mStreet, city: mCity, state: mState, zip: mZip
+            });
+            
+            const { error: updateError } = await supabaseClient
+                .from('leads')
+                .update({ address: newAddressJSON })
+                .eq('id', leadId);
+                
+            if (!updateError) {
+                saveIndicator.textContent = "Saved";
+                setTimeout(() => { saveIndicator.style.opacity = "0"; }, 2000);
+            } else {
+                saveIndicator.textContent = "Error saving";
+            }
+        }
+        
+        let saveMainTimeout = null;
+        function handleMainAddressInput() {
+            handleInput(); // Sync to header and show unsaved
+            
+            if (saveMainTimeout) clearTimeout(saveMainTimeout);
+            saveMainTimeout = setTimeout(saveMainAddress, 1000);
+        }
+        
+        const mAddrStreetEl = document.getElementById('main-address-street');
+        const mAddrCityEl = document.getElementById('main-address-city');
+        const mAddrStateEl = document.getElementById('main-address-state');
+        const mAddrZipEl = document.getElementById('main-address-zip');
+        
+        if (mAddrStreetEl) mAddrStreetEl.addEventListener('input', handleMainAddressInput);
+        if (mAddrCityEl) mAddrCityEl.addEventListener('input', handleMainAddressInput);
+        if (mAddrStateEl) mAddrStateEl.addEventListener('input', handleMainAddressInput);
+        if (mAddrZipEl) mAddrZipEl.addEventListener('input', handleMainAddressInput);
 
         const addrStreetEl = document.getElementById('lead-address-street');
         const addrCityEl = document.getElementById('lead-address-city');
@@ -248,7 +335,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(val)}&limit=15&bbox=-124.8,42.0,-116.4,49.0`);
                         const data = await res.json();
                         
-                        // Filter specifically for Washington and Oregon
                         const validStates = ['Washington', 'Oregon', 'WA', 'OR'];
                         const filteredFeatures = (data.features || []).filter(feat => {
                             return feat.properties.state && validStates.includes(feat.properties.state);
@@ -298,6 +384,76 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.addEventListener('click', (e) => {
                 if (e.target !== addrStreetEl && !document.getElementById('address-suggestions').contains(e.target)) {
                     document.getElementById('address-suggestions').style.display = 'none';
+                }
+            });
+        }
+        
+        let mAutocompleteTimeout = null;
+        if (mAddrStreetEl) {
+            mAddrStreetEl.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const suggestionsBox = document.getElementById('main-address-suggestions');
+                if (val.length < 3) {
+                    suggestionsBox.style.display = 'none';
+                    return;
+                }
+                
+                if (mAutocompleteTimeout) clearTimeout(mAutocompleteTimeout);
+                mAutocompleteTimeout = setTimeout(async () => {
+                    try {
+                        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(val)}&limit=15&bbox=-124.8,42.0,-116.4,49.0`);
+                        const data = await res.json();
+                        
+                        const validStates = ['Washington', 'Oregon', 'WA', 'OR'];
+                        const filteredFeatures = (data.features || []).filter(feat => {
+                            return feat.properties.state && validStates.includes(feat.properties.state);
+                        }).slice(0, 5);
+
+                        if (filteredFeatures.length > 0) {
+                            suggestionsBox.innerHTML = '';
+                            filteredFeatures.forEach(feat => {
+                                const props = feat.properties;
+                                const street = props.street ? `${props.housenumber ? props.housenumber + ' ' : ''}${props.street}` : props.name;
+                                const city = props.city || props.town || props.village || '';
+                                const state = props.state || '';
+                                const zip = props.postcode || '';
+                                
+                                const fullStr = [street, city, state, zip].filter(Boolean).join(', ');
+                                
+                                const div = document.createElement('div');
+                                div.style.padding = '10px 12px';
+                                div.style.cursor = 'pointer';
+                                div.style.borderBottom = '1px solid #eee';
+                                div.textContent = fullStr;
+                                
+                                div.addEventListener('mouseover', () => div.style.background = '#f5f5f5');
+                                div.addEventListener('mouseout', () => div.style.background = 'white');
+                                
+                                div.addEventListener('click', () => {
+                                    mAddrStreetEl.value = street || '';
+                                    if (mAddrCityEl) mAddrCityEl.value = city;
+                                    if (mAddrStateEl) mAddrStateEl.value = state;
+                                    if (mAddrZipEl) mAddrZipEl.value = zip;
+                                    suggestionsBox.style.display = 'none';
+                                    handleMainAddressInput();
+                                });
+                                
+                                suggestionsBox.appendChild(div);
+                            });
+                            suggestionsBox.style.display = 'block';
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    } catch (err) {
+                        console.error('Autocomplete error:', err);
+                    }
+                }, 300); // 300ms debounce
+            });
+            
+            // Hide on click outside
+            document.addEventListener('click', (e) => {
+                if (e.target !== mAddrStreetEl && document.getElementById('main-address-suggestions') && !document.getElementById('main-address-suggestions').contains(e.target)) {
+                    document.getElementById('main-address-suggestions').style.display = 'none';
                 }
             });
         }
