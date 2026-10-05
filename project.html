@@ -93,6 +93,7 @@
                     <h2 id="client-type-display">Hot buyers, touring since June.</h2>
                 </div>
                 <div class="project-actions">
+                    <span id="save-indicator" style="color: var(--text-muted); font-size: 14px; margin-right: 16px; opacity: 0; transition: opacity 0.3s;">Saved</span>
                     <button class="btn btn-icon"><i class="fa-solid fa-tag"></i></button>
                     <button class="btn btn-icon"><i class="fa-regular fa-calendar"></i></button>
                     <button class="btn btn-dark"><i class="fa-regular fa-paper-plane"></i> Send listing <i class="fa-solid fa-chevron-down" style="margin-left: 8px;"></i></button>
@@ -299,6 +300,26 @@
                             </div>
                             <span style="color: var(--text-muted); font-size: 12px; margin-left: 8px;">Assigned to Brilliyand</span>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Client Address -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <h3>ADDRESS</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" id="client-address" placeholder="Enter full address here..." style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                    </div>
+                </div>
+
+                <!-- Client Notes -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <h3>NOTES</h3>
+                    </div>
+                    <div class="card-body">
+                        <textarea id="client-notes" placeholder="Add notes about this client here..." style="width: 100%; height: 200px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; resize: vertical; font-family: inherit;"></textarea>
                     </div>
                 </div>
 

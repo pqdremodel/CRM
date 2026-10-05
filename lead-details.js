@@ -47,11 +47,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('lead-name-display').textContent = "Lead Not Found";
         }
 
-        // Save changes button logic
-        document.getElementById('btn-save-lead').addEventListener('click', async (e) => {
-            const btn = e.target;
-            btn.textContent = "Saving...";
-            btn.disabled = true;
+        // Fetch Scheduled Consultation
+        const { data: events, error: eventsError } = await supabaseClient
+            .from('events')
+            .select('*')
+            .eq('lead_id', leadId)
+            .order('start_time', { ascending: true })
+            .limit(1);
+            
+        if (events && events.length > 0) {
+            const evt = events[0];
+            const evtDate = new Date(evt.start_time);
+            document.getElementById('scheduled-event-display').style.display = 'block';
+            document.getElementById('scheduled-datetime-text').textContent = evtDate.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Auto-save logic with debounce
+        let saveTimeout = null;
+        const saveIndicator = document.getElementById('save-indicator');
+
+        async function saveChanges() {
+            saveIndicator.textContent = "Saving...";
+            saveIndicator.style.opacity = "1";
 
             const updatedAddress = document.getElementById('lead-address').value;
             const updatedNotes = document.getElementById('lead-notes').value;
@@ -62,18 +79,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .eq('id', leadId);
                 
             if (!updateError) {
-                btn.textContent = "Saved!";
+                saveIndicator.textContent = "Saved";
                 setTimeout(() => {
-                    btn.textContent = "Save Changes";
-                    btn.disabled = false;
+                    saveIndicator.style.opacity = "0";
                 }, 2000);
             } else {
                 console.error("Error updating lead:", updateError);
-                btn.textContent = "Error";
-                alert("Failed to save changes. Did you add 'address' and 'notes' columns to the 'leads' table?");
-                btn.disabled = false;
+                saveIndicator.textContent = "Error saving";
             }
-        });
+        }
+
+        function handleInput() {
+            saveIndicator.textContent = "Unsaved changes...";
+            saveIndicator.style.opacity = "1";
+            
+            if (saveTimeout) clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
+        }
+
+        document.getElementById('lead-address').addEventListener('input', handleInput);
+        document.getElementById('lead-notes').addEventListener('input', handleInput);
 
         // Schedule consultation button logic
         const btnSchedule = document.getElementById('btn-schedule');
@@ -109,6 +134,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     btnSchedule.style.backgroundColor = '#4caf50';
                     btnSchedule.style.color = '#fff';
                     btnSchedule.style.borderColor = '#4caf50';
+                    
+                    // Show in UI
+                    const evtDate = new Date(startDateTime);
+                    document.getElementById('scheduled-event-display').style.display = 'block';
+                    document.getElementById('scheduled-datetime-text').textContent = evtDate.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                 } else {
                     console.error("Error scheduling consultation:", scheduleError);
                     alert("Failed to schedule. Did you create the 'events' table?");

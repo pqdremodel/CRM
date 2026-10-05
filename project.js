@@ -50,10 +50,58 @@ document.addEventListener('DOMContentLoaded', async () => {
             const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             document.getElementById('current-date-display').textContent = dateStr;
             
+            // Populate Address and Notes
+            const addressInput = document.getElementById('client-address');
+            const notesInput = document.getElementById('client-notes');
+            if (addressInput) addressInput.value = client.address || '';
+            if (notesInput) notesInput.value = client.notes || '';
+
             document.title = `${client.name} - CRM Dashboard`;
         } else {
             console.error("Error fetching client details:", error);
             document.getElementById('client-name-display').textContent = "Client Not Found";
         }
+
+        // Auto-save logic with debounce
+        let saveTimeout = null;
+        const saveIndicator = document.getElementById('save-indicator');
+
+        async function saveChanges() {
+            if (!saveIndicator) return;
+            saveIndicator.textContent = "Saving...";
+            saveIndicator.style.opacity = "1";
+
+            const updatedAddress = document.getElementById('client-address').value;
+            const updatedNotes = document.getElementById('client-notes').value;
+
+            const { error: updateError } = await supabaseClient
+                .from('clients')
+                .update({ address: updatedAddress, notes: updatedNotes })
+                .eq('id', clientId);
+                
+            if (!updateError) {
+                saveIndicator.textContent = "Saved";
+                setTimeout(() => {
+                    saveIndicator.style.opacity = "0";
+                }, 2000);
+            } else {
+                console.error("Error updating client:", updateError);
+                saveIndicator.textContent = "Error saving";
+            }
+        }
+
+        function handleInput() {
+            if (!saveIndicator) return;
+            saveIndicator.textContent = "Unsaved changes...";
+            saveIndicator.style.opacity = "1";
+            
+            if (saveTimeout) clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
+        }
+
+        const addressEl = document.getElementById('client-address');
+        const notesEl = document.getElementById('client-notes');
+        if (addressEl) addressEl.addEventListener('input', handleInput);
+        if (notesEl) notesEl.addEventListener('input', handleInput);
     }
 });
