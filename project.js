@@ -29,16 +29,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('client-type-display').textContent = `Project Type: ${client.type}`;
             
             const statusDisplay = document.getElementById('client-status-display');
-            statusDisplay.innerHTML = client.status.toLowerCase() === 'ongoing' 
-                ? '<i class="fa-solid fa-fire"></i> ' + client.status
-                : '<i class="fa-solid fa-check"></i> ' + client.status;
-                
-            if (client.status.toLowerCase() !== 'ongoing') {
-                statusDisplay.className = 'tag tag-match'; // Change style for complete
+            if (statusDisplay) {
+                statusDisplay.innerHTML = client.status.toLowerCase() === 'ongoing' 
+                    ? '<i class="fa-solid fa-fire"></i> ' + client.status
+                    : '<i class="fa-solid fa-check"></i> ' + client.status;
+                    
+                if (client.status.toLowerCase() !== 'ongoing') {
+                    statusDisplay.className = 'tag tag-match'; // Change style for complete
+                }
             }
 
-            document.getElementById('client-location-display').textContent = client.location;
-            document.getElementById('client-price-display').textContent = client.price;
+            const locationDisplay = document.getElementById('client-location-display');
+            if (locationDisplay) locationDisplay.textContent = client.location;
+            
+            const priceDisplay = document.getElementById('client-price-display');
+            if (priceDisplay) priceDisplay.textContent = client.price;
             
             // Set current date string
             const today = new Date();
