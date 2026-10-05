@@ -61,6 +61,13 @@ function renderLeads() {
             <td class="col-actions"><i class="fa-solid fa-trash more-action delete-btn" data-id="${lead.id}" style="color: #ff4d4f;"></i></td>
         `;
         
+        // Add click listener to navigate to lead details page
+        tr.querySelectorAll('td:not(.col-checkbox):not(.col-actions)').forEach(td => {
+            td.addEventListener('click', () => {
+                window.location.href = `lead-details.html?id=${lead.id}`;
+            });
+        });
+        
         tbody.appendChild(tr);
     });
 

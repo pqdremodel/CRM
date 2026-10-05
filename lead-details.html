@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - PQD Remodels</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="logo-text">PQD Remodels</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
+                </div>
+            </div>
+            
+            <div class="sidebar-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search Anything">
+                <span class="shortcut">⌘ K</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-caret-down"></i> General
+                    </div>
+                    <ul>
+                        <li onclick="window.location.href='index.html'">
+                            <i class="fa-solid fa-building icon"></i>
+                            <span>Clients</span>
+                        </li>
+                        <li class="active" onclick="window.location.href='leads.html'">
+                            <i class="fa-solid fa-user-plus icon"></i>
+                            <span>Leads</span>
+                        </li>
+                        <li onclick="window.location.href='calendar.html'">
+                            <i class="fa-regular fa-calendar icon"></i>
+                            <span>Calendar</span>
+                        </li>
+                        <li onclick="window.location.href='messages.html'">
+                            <i class="fa-regular fa-message icon"></i>
+                            <span>Messages</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="footer-nav">
+                    <ul>
+                        <li onclick="window.location.href='settings.html'">
+                            <i class="fa-solid fa-gear icon"></i>
+                            <span>Settings</span>
+                        </li>
+                        <li>
+                            <i class="fa-regular fa-bell icon"></i>
+                            <span>Notifications</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=e0e0e0&color=333" id="profile-avatar" alt="Profile">
+                    </div>
+                    <div class="user-info">
+                        <span class="name">Team Member</span>
+                        <span class="email" id="profile-email">Loading...</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-right-from-bracket more-opts" id="logout-btn" title="Sign Out"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" style="background: transparent; border: none; box-shadow: none;">
+    <div class="project-header">
+        <div class="project-title">
+            <h1 id="lead-name-display">Loading...</h1>
+            <h2 id="lead-type-display">...</h2>
+            <div style="margin-top: 10px;">
+                <span class="status-badge" id="lead-status-display">Status</span>
+                <span style="margin-left: 10px; color: var(--text-muted);"><i class="fa-solid fa-envelope"></i> <span id="lead-email-display"></span></span>
+                <span style="margin-left: 10px; color: var(--text-muted);"><i class="fa-solid fa-phone"></i> <span id="lead-phone-display"></span></span>
+            </div>
+        </div>
+        <div class="project-actions">
+            <button class="btn btn-dark" id="btn-save-lead">Save Changes</button>
+        </div>
+    </div>
+
+    <div class="grid-layout" style="grid-template-columns: 1fr;">
+        <div class="card">
+            <div class="card-header">
+                <h3>ADDRESS</h3>
+            </div>
+            <div class="card-body">
+                <input type="text" id="lead-address" placeholder="Enter full address here..." style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>NOTES</h3>
+            </div>
+            <div class="card-body">
+                <textarea id="lead-notes" placeholder="Add notes about this lead here..." style="width: 100%; height: 200px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; resize: vertical; font-family: inherit;"></textarea>
+            </div>
+        </div>
+    </div>
+</main>
+    </div>
+    <!-- Auth Check & Core Scripts -->
+    <script src="supabase.js"></script>
+    <script src="lead-details.js"></script>
+</body>
+</html>
