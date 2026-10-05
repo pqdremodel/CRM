@@ -128,6 +128,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const addrZipEl = document.getElementById('lead-address-zip');
         const notesEl = document.getElementById('lead-notes');
         
+        const btnOpenMap = document.getElementById('btn-open-map');
+        if (btnOpenMap) {
+            btnOpenMap.addEventListener('click', () => {
+                const street = addrStreetEl ? addrStreetEl.value.trim() : '';
+                const city = addrCityEl ? addrCityEl.value.trim() : '';
+                const state = addrStateEl ? addrStateEl.value.trim() : '';
+                const zip = addrZipEl ? addrZipEl.value.trim() : '';
+                
+                const fullAddress = [street, city, state, zip].filter(Boolean).join(', ');
+                if (fullAddress) {
+                    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+                    window.open(url, '_blank');
+                } else {
+                    alert("Please enter an address first.");
+                }
+            });
+        }
+        
         let autocompleteTimeout = null;
         if (addrStreetEl) {
             addrStreetEl.addEventListener('input', (e) => {
