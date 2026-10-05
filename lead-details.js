@@ -92,6 +92,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const newEmail = document.getElementById('edit-lead-email').value.trim();
                     const newPhone = document.getElementById('edit-lead-phone').value.trim();
                     const newStatus = document.getElementById('edit-lead-status').value;
+                    const newAddressJSON = JSON.stringify({
+                        street: document.getElementById('lead-address-street').value.trim(),
+                        city: document.getElementById('lead-address-city').value.trim(),
+                        state: document.getElementById('lead-address-state').value.trim(),
+                        zip: document.getElementById('lead-address-zip').value.trim()
+                    });
                     
                     if (!newName) { alert('Name is required'); return; }
                     
@@ -100,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     
                     const { error: editErr } = await supabaseClient
                         .from('leads')
-                        .update({ name: newName, email: newEmail, phone: newPhone, status: newStatus })
+                        .update({ name: newName, email: newEmail, phone: newPhone, status: newStatus, address: newAddressJSON })
                         .eq('id', leadId);
                         
                     btnSaveEdit.textContent = 'Save Changes';
@@ -111,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         lead.email = newEmail;
                         lead.phone = newPhone;
                         lead.status = newStatus;
+                        lead.address = newAddressJSON;
                         
                         document.getElementById('lead-name-display').textContent = newName;
                         document.getElementById('lead-email-display').textContent = newEmail || 'No email';
@@ -123,6 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         document.getElementById('lead-status-display').className = `status-badge ${sClass}`;
                         
                         document.title = `${newName} - Lead Details`;
+                        updateHeaderAddressDisplay();
                         editModal.style.display = 'none';
                     } else {
                         alert('Error saving lead info');
@@ -169,17 +177,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveIndicator.textContent = "Saving...";
             saveIndicator.style.opacity = "1";
 
-            const updatedAddress = JSON.stringify({
-                street: document.getElementById('lead-address-street').value,
-                city: document.getElementById('lead-address-city').value,
-                state: document.getElementById('lead-address-state').value,
-                zip: document.getElementById('lead-address-zip').value
-            });
             const updatedNotes = document.getElementById('lead-notes').value;
 
             const { error: updateError } = await supabaseClient
                 .from('leads')
-                .update({ address: updatedAddress, notes: updatedNotes })
+                .update({ notes: updatedNotes })
                 .eq('id', leadId);
                 
             if (!updateError) {
@@ -218,20 +220,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const addrZipEl = document.getElementById('lead-address-zip');
         const notesEl = document.getElementById('lead-notes');
         
-        const btnOpenMap = document.getElementById('btn-open-map');
-        if (btnOpenMap) {
-            btnOpenMap.addEventListener('click', () => {
-                const street = addrStreetEl ? addrStreetEl.value.trim() : '';
-                const city = addrCityEl ? addrCityEl.value.trim() : '';
-                const state = addrStateEl ? addrStateEl.value.trim() : '';
-                const zip = addrZipEl ? addrZipEl.value.trim() : '';
-                
-                const fullAddress = [street, city, state, zip].filter(Boolean).join(', ');
-                if (fullAddress) {
-                    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+        const displayEl = document.getElementById('lead-address-display');
+        if (displayEl) {
+            displayEl.style.cursor = 'pointer';
+            displayEl.addEventListener('click', () => {
+                const txt = displayEl.textContent;
+                if (txt && txt !== 'No Address') {
+                    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(txt)}`;
                     window.open(url, '_blank');
-                } else {
-                    alert("Please enter an address first.");
                 }
             });
         }
@@ -239,8 +235,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         let autocompleteTimeout = null;
         if (addrStreetEl) {
             addrStreetEl.addEventListener('input', (e) => {
-                handleInput();
-                
                 const val = e.target.value;
                 const suggestionsBox = document.getElementById('address-suggestions');
                 if (val.length < 3) {
@@ -286,7 +280,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     if (addrStateEl) addrStateEl.value = state;
                                     if (addrZipEl) addrZipEl.value = zip;
                                     suggestionsBox.style.display = 'none';
-                                    handleInput(); // Trigger save
                                 });
                                 
                                 suggestionsBox.appendChild(div);
@@ -309,9 +302,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
-        if (addrCityEl) addrCityEl.addEventListener('input', handleInput);
-        if (addrStateEl) addrStateEl.addEventListener('input', handleInput);
-        if (addrZipEl) addrZipEl.addEventListener('input', handleInput);
         if (notesEl) notesEl.addEventListener('input', handleInput);
 
         // Schedule consultation button logic

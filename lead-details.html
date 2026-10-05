@@ -102,35 +102,7 @@
     </div>
 
     <div class="grid-layout" style="grid-template-columns: 1fr;">
-        <div class="card">
-            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>ADDRESS</h3>
-                <button id="btn-open-map" class="btn btn-outline" style="font-size: 12px; padding: 4px 12px;"><i class="fa-solid fa-map-location-dot" style="margin-right: 4px;"></i> Open in Maps</button>
-            </div>
-            <div class="card-body">
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <div style="position: relative;">
-                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Street Address</label>
-                        <input type="text" id="lead-address-street" placeholder="123 Main St" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;" autocomplete="off">
-                        <div id="address-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
-                    </div>
-                    <div style="display: flex; gap: 12px;">
-                        <div style="flex: 2;">
-                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">City</label>
-                            <input type="text" id="lead-address-city" placeholder="City" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
-                        </div>
-                        <div style="flex: 1;">
-                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">State</label>
-                            <input type="text" id="lead-address-state" placeholder="State" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
-                        </div>
-                        <div style="flex: 1;">
-                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">ZIP</label>
-                            <input type="text" id="lead-address-zip" placeholder="ZIP" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <div class="card">
             <div class="card-header">
@@ -198,6 +170,28 @@
                         <option value="Qualified">Qualified</option>
                         <option value="Lost">Lost</option>
                     </select>
+                </div>
+                </div>
+                
+                <h4 style="margin: 8px 0 0 0; border-top: 1px solid #eee; padding-top: 16px;">Address</h4>
+                <div style="position: relative;">
+                    <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Street Address</label>
+                    <input type="text" id="lead-address-street" placeholder="123 Main St" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;" autocomplete="off">
+                    <div id="address-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 6px; max-height: 150px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div style="flex: 2;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">City</label>
+                        <input type="text" id="lead-address-city" placeholder="City" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">State</label>
+                        <input type="text" id="lead-address-state" placeholder="State" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">ZIP</label>
+                        <input type="text" id="lead-address-zip" placeholder="ZIP" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;">
+                    </div>
                 </div>
                 <button id="btn-save-lead-info" class="btn btn-primary" style="margin-top: 8px; justify-content: center;">Save Changes</button>
             </div>
