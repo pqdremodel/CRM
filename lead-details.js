@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const btnReschedule = document.getElementById('btn-show-reschedule');
         if (btnReschedule) {
             btnReschedule.addEventListener('click', () => {
-                document.getElementById('scheduled-event-display').style.display = 'none';
+                btnReschedule.style.display = 'none';
                 document.getElementById('schedule-form-container').style.display = 'block';
                 document.getElementById('btn-schedule').innerHTML = '<i class="fa-regular fa-calendar"></i> Update Calendar';
             });
@@ -277,6 +277,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         btnSchedule.style.borderColor = '';
                         btnSchedule.disabled = false;
                         document.getElementById('schedule-form-container').style.display = 'none';
+                        if (btnReschedule) btnReschedule.style.display = 'inline-block';
                     }, 1500);
 
                     // Show in UI
