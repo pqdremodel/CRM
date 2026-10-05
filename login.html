@@ -41,5 +41,25 @@
 
     <script src="supabase.js?v=3"></script>
     <script src="login.js?v=3"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.querySelector('.sidebar');
+            if (menuBtn && sidebar) {
+                menuBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('mobile-open');
+                });
+                
+                // Close sidebar when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
+                        sidebar.classList.remove('mobile-open');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
+
 </html>

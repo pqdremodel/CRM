@@ -1398,63 +1398,93 @@ body {
 }
 
 /* Mobile Optimization */
+.mobile-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+}
+
 @media (max-width: 768px) {
     .dashboard-container {
-        flex-direction: column-reverse;
+        flex-direction: column;
+    }
+    
+    .mobile-header {
+        display: flex;
     }
     
     .sidebar {
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        justify-content: space-between;
-        border-right: none;
-        border-top: 1px solid var(--border-color);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: flex-start;
+        border-right: 1px solid var(--border-color);
+        border-top: none;
         padding: 0;
         background: white;
         z-index: 1000;
-        overflow: visible;
+        overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
     }
     
-    .sidebar-header, .sidebar-search, .sidebar-user, .section-title {
-        display: none !important;
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-header {
+        display: flex !important;
+        padding: 24px;
+    }
+    
+    .sidebar-user {
+        display: block !important;
+    }
+    
+    .sidebar-search {
+        display: flex !important;
+        margin: 0 24px 24px 24px;
+    }
+    
+    .section-title {
+        display: block !important;
+        margin: 0 24px 8px 24px;
     }
     
     .sidebar-nav, .sidebar-footer {
-        flex: 1;
-        display: flex;
+        flex: unset;
+        display: block;
         padding: 0;
         margin: 0;
         border: none;
     }
     
-    .sidebar-nav .nav-section {
-        margin: 0;
-        width: 100%;
-    }
-    
     .sidebar-nav ul, .sidebar-footer .footer-nav ul {
-        display: flex;
+        display: block;
         width: 100%;
-        justify-content: space-around;
         margin: 0;
+        padding: 0;
     }
     
     .sidebar-nav li, .sidebar-footer li {
-        flex-direction: column;
-        padding: 8px 0;
-        gap: 4px;
-        font-size: 10px;
-        flex: 1;
-        text-align: center;
+        flex-direction: row;
+        padding: 12px 24px;
+        gap: 12px;
+        font-size: 14px;
+        text-align: left;
         border-radius: 0;
-        margin: 0;
-        justify-content: center;
+        justify-content: flex-start;
     }
     
     .sidebar-nav li i, .sidebar-footer li i {
         font-size: 16px;
-        margin: 0;
+        margin-right: 8px;
     }
     
     .sidebar-nav li .badge {
