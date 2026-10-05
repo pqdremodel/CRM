@@ -256,39 +256,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
         }
         
-        // Auto-save logic for the main address card inputs
-        async function saveMainAddress() {
-            saveIndicator.textContent = "Saving...";
-            saveIndicator.style.opacity = "1";
-            
-            const mStreet = document.getElementById('main-address-street').value.trim();
-            const mCity = document.getElementById('main-address-city').value.trim();
-            const mState = document.getElementById('main-address-state').value.trim();
-            const mZip = document.getElementById('main-address-zip').value.trim();
-            
-            const newAddressJSON = JSON.stringify({
-                street: mStreet, city: mCity, state: mState, zip: mZip
-            });
-            
-            const { error: updateError } = await supabaseClient
-                .from('leads')
-                .update({ address: newAddressJSON })
-                .eq('id', leadId);
-                
-            if (!updateError) {
-                saveIndicator.textContent = "Saved";
-                setTimeout(() => { saveIndicator.style.opacity = "0"; }, 2000);
-            } else {
-                saveIndicator.textContent = "Error saving";
-            }
-        }
-        
-        let saveMainTimeout = null;
         function handleMainAddressInput() {
-            handleInput(); // Sync to header and show unsaved
-            
-            if (saveMainTimeout) clearTimeout(saveMainTimeout);
-            saveMainTimeout = setTimeout(saveMainAddress, 1000);
+            handleInput(); // Sync to header and show unsaved (but don't auto-save to DB for address here)
         }
         
         const mAddrStreetEl = document.getElementById('main-address-street');
@@ -300,6 +269,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (mAddrCityEl) mAddrCityEl.addEventListener('input', handleMainAddressInput);
         if (mAddrStateEl) mAddrStateEl.addEventListener('input', handleMainAddressInput);
         if (mAddrZipEl) mAddrZipEl.addEventListener('input', handleMainAddressInput);
+        
+        const btnAddMainAddress = document.getElementById('btn-add-main-address');
+        if (btnAddMainAddress) {
+            btnAddMainAddress.addEventListener('click', async () => {
+                btnAddMainAddress.disabled = true;
+                btnAddMainAddress.textContent = 'Saving...';
+                
+                const mStreet = mAddrStreetEl.value.trim();
+                const mCity = mAddrCityEl.value.trim();
+                const mState = mAddrStateEl.value.trim();
+                const mZip = mAddrZipEl.value.trim();
+                
+                const newAddressJSON = JSON.stringify({
+                    street: mStreet, city: mCity, state: mState, zip: mZip
+                });
+                
+                const { error: updateError } = await supabaseClient
+                    .from('leads')
+                    .update({ address: newAddressJSON })
+                    .eq('id', leadId);
+                    
+                if (!updateError) {
+                    lead.address = newAddressJSON;
+                    document.getElementById('main-address-card').style.display = 'none';
+                    saveIndicator.textContent = "Saved";
+                    setTimeout(() => { saveIndicator.style.opacity = "0"; }, 2000);
+                } else {
+                    alert("Error saving address");
+                    btnAddMainAddress.disabled = false;
+                    btnAddMainAddress.innerHTML = '<i class="fa-solid fa-location-arrow" style="margin-right: 6px;"></i> Add Address';
+                }
+            });
+        }
 
         const addrStreetEl = document.getElementById('lead-address-street');
         const addrCityEl = document.getElementById('lead-address-city');
