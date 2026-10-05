@@ -48,8 +48,87 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('lead-address-street').value = lead.address || '';
             }
             document.getElementById('lead-notes').value = lead.notes || '';
+            
+            function updateHeaderAddressDisplay() {
+                const street = document.getElementById('lead-address-street').value.trim();
+                const city = document.getElementById('lead-address-city').value.trim();
+                const state = document.getElementById('lead-address-state').value.trim();
+                const zip = document.getElementById('lead-address-zip').value.trim();
+                
+                const full = [street, city, state, zip].filter(Boolean).join(', ');
+                const displayEl = document.getElementById('lead-address-display');
+                if (displayEl) {
+                    displayEl.textContent = full || 'No Address';
+                }
+            }
+            updateHeaderAddressDisplay();
 
             document.title = `${lead.name} - Lead Details`;
+            
+            // Edit Modal Logic
+            const btnEdit = document.getElementById('btn-edit-lead');
+            const editModal = document.getElementById('edit-lead-modal');
+            const btnCloseEdit = document.getElementById('btn-close-edit-modal');
+            const btnSaveEdit = document.getElementById('btn-save-lead-info');
+            
+            if (btnEdit && editModal) {
+                btnEdit.addEventListener('click', () => {
+                    document.getElementById('edit-lead-name').value = document.getElementById('lead-name-display').textContent;
+                    const em = document.getElementById('lead-email-display').textContent;
+                    document.getElementById('edit-lead-email').value = em === 'No email' ? '' : em;
+                    const ph = document.getElementById('lead-phone-display').textContent;
+                    document.getElementById('edit-lead-phone').value = ph === 'No phone' ? '' : ph;
+                    document.getElementById('edit-lead-status').value = lead.status;
+                    
+                    editModal.style.display = 'flex';
+                });
+                
+                btnCloseEdit.addEventListener('click', () => {
+                    editModal.style.display = 'none';
+                });
+                
+                btnSaveEdit.addEventListener('click', async () => {
+                    const newName = document.getElementById('edit-lead-name').value.trim();
+                    const newEmail = document.getElementById('edit-lead-email').value.trim();
+                    const newPhone = document.getElementById('edit-lead-phone').value.trim();
+                    const newStatus = document.getElementById('edit-lead-status').value;
+                    
+                    if (!newName) { alert('Name is required'); return; }
+                    
+                    btnSaveEdit.textContent = 'Saving...';
+                    btnSaveEdit.disabled = true;
+                    
+                    const { error: editErr } = await supabaseClient
+                        .from('leads')
+                        .update({ name: newName, email: newEmail, phone: newPhone, status: newStatus })
+                        .eq('id', leadId);
+                        
+                    btnSaveEdit.textContent = 'Save Changes';
+                    btnSaveEdit.disabled = false;
+                    
+                    if (!editErr) {
+                        lead.name = newName;
+                        lead.email = newEmail;
+                        lead.phone = newPhone;
+                        lead.status = newStatus;
+                        
+                        document.getElementById('lead-name-display').textContent = newName;
+                        document.getElementById('lead-email-display').textContent = newEmail || 'No email';
+                        document.getElementById('lead-phone-display').textContent = newPhone || 'No phone';
+                        document.getElementById('lead-status-display').textContent = newStatus;
+                        
+                        let sClass = 'status-ongoing';
+                        if (newStatus === 'Qualified') sClass = 'status-complete';
+                        if (newStatus === 'Lost') sClass = 'status-lost';
+                        document.getElementById('lead-status-display').className = `status-badge ${sClass}`;
+                        
+                        document.title = `${newName} - Lead Details`;
+                        editModal.style.display = 'none';
+                    } else {
+                        alert('Error saving lead info');
+                    }
+                });
+            }
         } else {
             console.error("Error fetching lead details:", error);
             document.getElementById('lead-name-display').textContent = "Lead Not Found";
@@ -117,6 +196,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         function handleInput() {
             saveIndicator.textContent = "Unsaved changes...";
             saveIndicator.style.opacity = "1";
+            
+            // Sync header display for address
+            const street = document.getElementById('lead-address-street').value.trim();
+            const city = document.getElementById('lead-address-city').value.trim();
+            const state = document.getElementById('lead-address-state').value.trim();
+            const zip = document.getElementById('lead-address-zip').value.trim();
+            const full = [street, city, state, zip].filter(Boolean).join(', ');
+            const displayEl = document.getElementById('lead-address-display');
+            if (displayEl) {
+                displayEl.textContent = full || 'No Address';
+            }
             
             if (saveTimeout) clearTimeout(saveTimeout);
             saveTimeout = setTimeout(saveChanges, 1000); // 1s debounce
