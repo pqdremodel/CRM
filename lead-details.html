@@ -115,18 +115,21 @@
                 <div id="scheduled-event-display" style="display: none; padding: 16px; background: #e3f2fd; border-radius: 8px; margin-bottom: 16px;">
                     <h4 style="margin: 0; color: #1976d2;"><i class="fa-regular fa-calendar-check"></i> Scheduled Consultation</h4>
                     <p id="scheduled-datetime-text" style="margin: 4px 0 0 0; font-size: 14px; color: #1565c0;"></p>
+                    <button id="btn-show-reschedule" class="btn btn-outline" style="margin-top: 12px; font-size: 12px; padding: 6px 12px; border-color: #1976d2; color: #1976d2;">Reschedule</button>
                 </div>
-                <div style="display: flex; gap: 12px; margin-bottom: 12px;">
-                    <div style="flex: 1;">
-                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Date</label>
-                        <input type="date" id="consultation-date" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                <div id="schedule-form-container">
+                    <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Date</label>
+                            <input type="date" id="consultation-date" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Time</label>
+                            <input type="time" id="consultation-time" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
                     </div>
-                    <div style="flex: 1;">
-                        <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Time</label>
-                        <input type="time" id="consultation-time" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
-                    </div>
+                    <button class="btn btn-outline" id="btn-schedule" style="width: 100%; justify-content: center;"><i class="fa-regular fa-calendar"></i> Add to Calendar</button>
                 </div>
-                <button class="btn btn-outline" id="btn-schedule" style="width: 100%; justify-content: center;"><i class="fa-regular fa-calendar"></i> Add to Calendar</button>
             </div>
         </div>
 

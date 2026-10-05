@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Fetch Scheduled Consultation
+        let currentEventId = null;
         const { data: events, error: eventsError } = await supabaseClient
             .from('events')
             .select('*')
@@ -57,9 +58,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             
         if (events && events.length > 0) {
             const evt = events[0];
+            currentEventId = evt.id;
             const evtDate = new Date(evt.start_time);
             document.getElementById('scheduled-event-display').style.display = 'block';
+            document.getElementById('schedule-form-container').style.display = 'none';
             document.getElementById('scheduled-datetime-text').textContent = evtDate.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        const btnReschedule = document.getElementById('btn-show-reschedule');
+        if (btnReschedule) {
+            btnReschedule.addEventListener('click', () => {
+                document.getElementById('scheduled-event-display').style.display = 'none';
+                document.getElementById('schedule-form-container').style.display = 'block';
+                document.getElementById('btn-schedule').innerHTML = '<i class="fa-regular fa-calendar"></i> Update Calendar';
+            });
         }
 
         // Auto-save logic with debounce
@@ -125,9 +137,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnSchedule.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scheduling...';
                 btnSchedule.disabled = true;
 
-                const { error: scheduleError } = await supabaseClient
-                    .from('events')
-                    .insert([newEvent]);
+                let scheduleError;
+                if (currentEventId) {
+                    const { error } = await supabaseClient
+                        .from('events')
+                        .update(newEvent)
+                        .eq('id', currentEventId);
+                    scheduleError = error;
+                } else {
+                    const { data: inserted, error } = await supabaseClient
+                        .from('events')
+                        .insert([newEvent])
+                        .select();
+                    scheduleError = error;
+                    if (inserted && inserted.length > 0) currentEventId = inserted[0].id;
+                }
 
                 if (!scheduleError) {
                     btnSchedule.innerHTML = '<i class="fa-regular fa-calendar-check"></i> Scheduled!';
@@ -135,6 +159,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     btnSchedule.style.color = '#fff';
                     btnSchedule.style.borderColor = '#4caf50';
                     
+                    setTimeout(() => {
+                        btnSchedule.style.backgroundColor = '';
+                        btnSchedule.style.color = '';
+                        btnSchedule.style.borderColor = '';
+                        btnSchedule.disabled = false;
+                        document.getElementById('schedule-form-container').style.display = 'none';
+                    }, 1500);
+
                     // Show in UI
                     const evtDate = new Date(startDateTime);
                     document.getElementById('scheduled-event-display').style.display = 'block';
