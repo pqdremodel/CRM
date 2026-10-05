@@ -310,9 +310,10 @@
                     </div>
                     <div class="card-body">
                         <div style="display: flex; flex-direction: column; gap: 12px;">
-                            <div>
+                            <div style="position: relative;">
                                 <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Street Address</label>
-                                <input type="text" id="client-address-street" placeholder="123 Main St" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                                <input type="text" id="client-address-street" placeholder="123 Main St" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;" autocomplete="off">
+                                <div id="address-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
                             </div>
                             <div style="display: flex; gap: 12px;">
                                 <div style="flex: 2;">

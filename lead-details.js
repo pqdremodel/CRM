@@ -128,7 +128,72 @@ document.addEventListener('DOMContentLoaded', async () => {
         const addrZipEl = document.getElementById('lead-address-zip');
         const notesEl = document.getElementById('lead-notes');
         
-        if (addrStreetEl) addrStreetEl.addEventListener('input', handleInput);
+        let autocompleteTimeout = null;
+        if (addrStreetEl) {
+            addrStreetEl.addEventListener('input', (e) => {
+                handleInput();
+                
+                const val = e.target.value;
+                const suggestionsBox = document.getElementById('address-suggestions');
+                if (val.length < 3) {
+                    suggestionsBox.style.display = 'none';
+                    return;
+                }
+                
+                if (autocompleteTimeout) clearTimeout(autocompleteTimeout);
+                autocompleteTimeout = setTimeout(async () => {
+                    try {
+                        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(val)}&limit=5`);
+                        const data = await res.json();
+                        if (data.features && data.features.length > 0) {
+                            suggestionsBox.innerHTML = '';
+                            data.features.forEach(feat => {
+                                const props = feat.properties;
+                                const street = props.street ? `${props.housenumber ? props.housenumber + ' ' : ''}${props.street}` : props.name;
+                                const city = props.city || props.town || props.village || '';
+                                const state = props.state || '';
+                                const zip = props.postcode || '';
+                                
+                                const fullStr = [street, city, state, zip].filter(Boolean).join(', ');
+                                
+                                const div = document.createElement('div');
+                                div.style.padding = '10px 12px';
+                                div.style.cursor = 'pointer';
+                                div.style.borderBottom = '1px solid #eee';
+                                div.textContent = fullStr;
+                                
+                                div.addEventListener('mouseover', () => div.style.background = '#f5f5f5');
+                                div.addEventListener('mouseout', () => div.style.background = 'white');
+                                
+                                div.addEventListener('click', () => {
+                                    addrStreetEl.value = street || '';
+                                    if (addrCityEl) addrCityEl.value = city;
+                                    if (addrStateEl) addrStateEl.value = state;
+                                    if (addrZipEl) addrZipEl.value = zip;
+                                    suggestionsBox.style.display = 'none';
+                                    handleInput(); // Trigger save
+                                });
+                                
+                                suggestionsBox.appendChild(div);
+                            });
+                            suggestionsBox.style.display = 'block';
+                        } else {
+                            suggestionsBox.style.display = 'none';
+                        }
+                    } catch (err) {
+                        console.error('Autocomplete error:', err);
+                    }
+                }, 300); // 300ms debounce
+            });
+            
+            // Hide on click outside
+            document.addEventListener('click', (e) => {
+                if (e.target !== addrStreetEl && !document.getElementById('address-suggestions').contains(e.target)) {
+                    document.getElementById('address-suggestions').style.display = 'none';
+                }
+            });
+        }
+
         if (addrCityEl) addrCityEl.addEventListener('input', handleInput);
         if (addrStateEl) addrStateEl.addEventListener('input', handleInput);
         if (addrZipEl) addrZipEl.addEventListener('input', handleInput);
