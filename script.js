@@ -1,4 +1,6 @@
 let clients = [];
+let currentClientPage = 1;
+const itemsPerPage = 10;
 
 // Auth Setup
 let currentUser = null;
@@ -35,7 +37,11 @@ async function fetchClients() {
 function renderClients() {
     tbody.innerHTML = '';
     
-    clients.forEach((client) => {
+    const startIndex = (currentClientPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedClients = clients.slice(startIndex, endIndex);
+    
+    paginatedClients.forEach((client) => {
         const tr = document.createElement('tr');
         
         const statusClass = client.status.toLowerCase() === 'ongoing' ? 'status-ongoing' : 'status-complete';
@@ -82,6 +88,73 @@ function renderClients() {
             }
         });
     });
+    
+    renderPagination(clients.length, currentClientPage, itemsPerPage);
+}
+
+function renderPagination(totalItems, currentPage, perPage) {
+    const paginationContainer = document.querySelector('.pagination');
+    if (!paginationContainer) return;
+    
+    const totalPages = Math.ceil(totalItems / perPage);
+    
+    if (totalItems === 0 || totalPages <= 1) {
+        paginationContainer.style.display = 'none';
+        return;
+    }
+    
+    paginationContainer.style.display = 'flex';
+    
+    const controls = paginationContainer.querySelector('.page-controls');
+    const info = paginationContainer.querySelector('.entries-info');
+    
+    if (controls) {
+        let html = '';
+        html += `<button class="page-prev" ${currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                html += `<button class="page-num ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += `<span>...</span>`;
+            }
+        }
+        
+        html += `<button class="page-next" ${currentPage === totalPages ? 'disabled' : ''}><i class="fa-solid fa-chevron-right"></i></button>`;
+        controls.innerHTML = html;
+        
+        controls.querySelectorAll('.page-num').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                currentClientPage = parseInt(e.target.dataset.page);
+                renderClients();
+            });
+        });
+        
+        const prevBtn = controls.querySelector('.page-prev');
+        if (prevBtn) prevBtn.addEventListener('click', () => {
+            if (currentClientPage > 1) {
+                currentClientPage--;
+                renderClients();
+            }
+        });
+        
+        const nextBtn = controls.querySelector('.page-next');
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            if (currentClientPage < totalPages) {
+                currentClientPage++;
+                renderClients();
+            }
+        });
+    }
+    
+    if (info) {
+        const start = (currentPage - 1) * perPage + 1;
+        const end = Math.min(currentPage * perPage, totalItems);
+        info.innerHTML = `
+            Showing ${start}-${end} of ${totalItems} entries 
+            <span class="show-dropdown">Show ${perPage} <i class="fa-solid fa-chevron-up"></i></span>
+        `;
+    }
 }
 
 // Initial fetch
