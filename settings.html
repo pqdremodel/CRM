@@ -156,6 +156,19 @@
                         <button type="submit" class="btn btn-primary" id="settings-save-btn">Save Changes</button>
                     </form>
                 </div>
+                
+                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 24px;">
+                    <h2 style="margin-bottom: 8px; font-size: 18px; color: var(--text-main);">Push Notifications</h2>
+                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Enable notifications to receive alerts when you get new messages or lead updates.</p>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                        <div>
+                            <div style="font-weight: 500; color: var(--text-main); font-size: 14px;">Allow Notifications</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="push-status-text">Currently disabled on this device</div>
+                        </div>
+                        <button class="btn btn-primary" id="enable-push-btn">Enable</button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -182,6 +195,7 @@
             }
         });
     </script>
+    <script src="push.js"></script>
 </body>
 
 </html>

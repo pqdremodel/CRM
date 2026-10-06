@@ -25,6 +25,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         await supabaseClient.auth.signOut();
         window.location.href = 'login.html';
     });
+    
+    // Check Notification Status
+    if (Notification.permission === 'granted') {
+        document.getElementById('push-status-text').textContent = 'Enabled';
+        document.getElementById('enable-push-btn').textContent = 'Enabled';
+        document.getElementById('enable-push-btn').disabled = true;
+    }
 });
 
 // Avatar Upload Preview
@@ -122,5 +129,27 @@ settingsForm.addEventListener('submit', async (e) => {
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;
+    }
+});
+
+// Push Notifications Enable
+document.getElementById('enable-push-btn').addEventListener('click', async () => {
+    if (typeof requestNotificationPermission === 'function') {
+        const granted = await requestNotificationPermission();
+        if (granted) {
+            document.getElementById('push-status-text').textContent = 'Enabled';
+            document.getElementById('enable-push-btn').textContent = 'Enabled';
+            document.getElementById('enable-push-btn').disabled = true;
+            
+            // Subscribes user if granted
+            if (typeof subscribeUserToPush === 'function') {
+                await subscribeUserToPush();
+                alert('Push notifications configured for this device!');
+            }
+        } else {
+            alert('Notification permission was denied. You may need to enable it in your browser settings.');
+        }
+    } else {
+        alert('Push notifications script not loaded.');
     }
 });
