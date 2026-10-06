@@ -1,6 +1,6 @@
 // Push Notifications Logic
 
-const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE'; // We will replace this later
+const VAPID_PUBLIC_KEY = 'BAsf0VKYVggPo_y-p8IR1GAV_qL4X-1-YDMyIxwCVs54U4c_6nKzaFCudxS4liBjB94SjCRGxcfsAJ9MbwBI8Pg';
 
 async function registerServiceWorker() {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
@@ -55,8 +55,19 @@ async function subscribeUserToPush() {
         const pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
         console.log('Received PushSubscription:', JSON.stringify(pushSubscription));
         
-        // Here we would save the pushSubscription to Supabase profiles/subscriptions table
-        // e.g. await supabaseClient.from('push_subscriptions').insert([{ user_id: currentUser.id, subscription: pushSubscription }]);
+        // Save the pushSubscription to Supabase
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (user) {
+            const { error } = await supabaseClient
+                .from('push_subscriptions')
+                .insert([{ user_id: user.id, subscription: pushSubscription }]);
+                
+            if (error) {
+                console.error('Error saving push subscription:', error);
+            } else {
+                console.log('Push subscription saved to database!');
+            }
+        }
         
         return pushSubscription;
     } catch (error) {
