@@ -13,6 +13,18 @@
     
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- iOS PWA Link Fix -->
+    <script>
+        if (("standalone" in window.navigator) && window.navigator.standalone) {
+            document.addEventListener('click', function(e) {
+                var a = e.target.closest('a');
+                if (a && a.href && !a.hasAttribute('download') && a.target !== '_blank') {
+                    e.preventDefault();
+                    window.location = a.href;
+                }
+            }, false);
+        }
+    </script>
 </head>
 <body>
     <div class="dashboard-container">
