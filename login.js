@@ -1,4 +1,4 @@
-document.addEventListener('turbo:load', async () => {
+document.addEventListener('app:init', async () => {
     if (!supabaseClient) {
         document.getElementById('error-message').textContent = 'Invalid Supabase API Key. Please update supabase.js with the correct Anon Key.';
         document.getElementById('error-message').style.display = 'block';

@@ -1,4 +1,4 @@
-document.addEventListener('turbo:load', async () => {
+document.addEventListener('app:init', async () => {
     const currentUser = await requireAuth();
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.getDisplayName();

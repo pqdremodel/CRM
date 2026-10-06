@@ -189,7 +189,7 @@
     <script src="messages.js?v=8"></script>
 
     <script>
-        document.addEventListener('turbo:load', () => {
+        document.addEventListener('app:init', () => {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.querySelector('.sidebar');
             if (menuBtn && sidebar) {
@@ -207,6 +207,7 @@
         });
     </script>
     <script src="push.js"></script>
+<script>document.dispatchEvent(new Event('app:init'));</script>
 </body>
 
 </html>

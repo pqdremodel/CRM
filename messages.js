@@ -1,4 +1,4 @@
-document.addEventListener('turbo:load', async () => {
+document.addEventListener('app:init', async () => {
     // Auth Check
     const currentUser = await requireAuth();
     if (currentUser) {

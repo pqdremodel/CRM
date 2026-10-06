@@ -4,7 +4,7 @@ const itemsPerPage = 10;
 
 // Auth Setup
 let currentUser = null;
-document.addEventListener('turbo:load', async () => {
+document.addEventListener('app:init', async () => {
     currentUser = await requireAuth();
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.getDisplayName();
