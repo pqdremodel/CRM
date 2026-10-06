@@ -1414,6 +1414,10 @@ body {
     display: block !important;
 }
 
+#global-back-btn {
+    display: none;
+}
+
 @media (max-width: 768px) {
     body, html {
         overflow: hidden !important;
@@ -1430,6 +1434,21 @@ body {
         display: flex;
         flex-shrink: 0;
         z-index: 50;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        position: relative;
+    }
+    .mobile-header .logo-text {
+        display: none !important;
+    }
+    .mobile-header .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    #global-back-btn {
+        display: inline-block !important;
     }
     
     .sidebar {
@@ -1551,70 +1570,73 @@ body {
         padding: 0 !important;
     }
 
-    /* Messages Layout */
+    /* Instagram-Style Messages Layout */
     .chat-layout {
-        flex-direction: column;
+        flex-direction: row;
+        position: relative;
     }
     
     .chat-sidebar {
         width: 100%;
-        height: auto;
+        height: 100%;
         border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: none;
         display: flex;
         flex-direction: column;
     }
     
     .chat-sidebar .contact-list {
         display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        align-items: center;
-        padding: 10px;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        align-items: stretch;
+        padding: 0;
     }
     
     .chat-sidebar .contact-item {
-        flex-direction: column;
-        min-width: 80px;
-        border-bottom: none;
-        padding: 10px;
-        text-align: center;
-        gap: 4px;
+        flex-direction: row;
+        min-width: unset;
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 12px;
+        text-align: left;
+        gap: 12px;
     }
     
     .chat-sidebar .contact-item img {
-        margin: 0 auto;
+        margin: 0;
     }
     
     .chat-sidebar .contact-info h4 {
-        font-size: 11px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 70px;
+        font-size: 14px;
+        max-width: none;
     }
     
     .chat-sidebar .contact-info p, .chat-sidebar .contact-time {
-        display: none; /* Hide message preview on mobile to fit horizontal list */
+        display: block; /* Show preview text and time on mobile */
     }
     
     .chat-window {
+        display: none !important; /* Hidden until active */
         flex: 1;
-        height: auto;
+        width: 100%;
+        background: white;
+    }
+    
+    .chat-layout.chat-active .chat-sidebar {
+        display: none !important;
+    }
+    
+    .chat-layout.chat-active .chat-window {
+        display: flex !important;
+        flex-direction: column;
     }
     
     .chat-header-actions button {
         padding: 6px;
     }
     
-    #mobile-contacts-chevron {
-        display: inline-block;
-    }
-    .mobile-contacts-collapsed {
-        display: none !important;
-    }
-    .mobile-contacts-expanded {
+    #mobile-back-btn {
         display: block !important;
     }
     

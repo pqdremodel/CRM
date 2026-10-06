@@ -12,22 +12,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'login.html';
     });
     
-    // Mobile Contacts Toggle
-    const contactsToggle = document.getElementById('mobile-contacts-toggle');
-    const contactsWrapper = document.getElementById('mobile-contacts-wrapper');
-    const chevron = document.getElementById('mobile-contacts-chevron');
-    if (contactsToggle && contactsWrapper) {
-        contactsToggle.addEventListener('click', (e) => {
-            if (e.target.closest('button')) return; // ignore pen button click
-            if (contactsWrapper.classList.contains('mobile-contacts-collapsed')) {
-                contactsWrapper.classList.remove('mobile-contacts-collapsed');
-                contactsWrapper.classList.add('mobile-contacts-expanded');
-                if (chevron) chevron.style.transform = 'rotate(180deg)';
-            } else {
-                contactsWrapper.classList.add('mobile-contacts-collapsed');
-                contactsWrapper.classList.remove('mobile-contacts-expanded');
-                if (chevron) chevron.style.transform = 'rotate(0deg)';
-            }
+    // Mobile Chat Back Button
+    const mobileBackBtn = document.getElementById('mobile-back-btn');
+    if (mobileBackBtn) {
+        mobileBackBtn.addEventListener('click', () => {
+            document.querySelector('.chat-layout').classList.remove('chat-active');
+            // Unselect active user visually
+            document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
         });
     }
     
@@ -119,6 +110,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Optimistically remove badge
                 const badge = item.querySelector('.unread-badge');
                 if (badge) badge.remove();
+                
+                // Show chat window on mobile
+                document.querySelector('.chat-layout').classList.add('chat-active');
                 
                 setActiveChat(user, displayName, isOnline);
             });

@@ -16,6 +16,7 @@
         
         <!-- Mobile Header -->
         <div class="mobile-header">
+            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : window.location.href='index.html'" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
             <div class="logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
                 <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
@@ -96,27 +97,26 @@
             
             <!-- Chat Sidebar (Contacts) -->
             <div class="chat-sidebar">
-                <div class="chat-sidebar-header" id="mobile-contacts-toggle" style="cursor: pointer; user-select: none;">
-                    <h2 style="display: flex; align-items: center; gap: 8px;">Messages <i class="fa-solid fa-chevron-down" id="mobile-contacts-chevron" style="font-size: 14px; transition: transform 0.2s;"></i></h2>
+                <div class="chat-sidebar-header">
+                    <h2>Messages</h2>
                     <button class="btn-icon-small"><i class="fa-solid fa-pen-to-square"></i></button>
                 </div>
-                <div id="mobile-contacts-wrapper" class="mobile-contacts-collapsed">
-                    <div class="chat-search">
-                        <div class="search-bar" style="width: 100%;">
-                            <i class="fa-solid fa-magnifying-glass icon"></i>
-                            <input type="text" placeholder="Search messages...">
-                        </div>
+                <div class="chat-search">
+                    <div class="search-bar" style="width: 100%;">
+                        <i class="fa-solid fa-magnifying-glass icon"></i>
+                        <input type="text" placeholder="Search messages...">
                     </div>
-                    
-                    <div class="contact-list" id="contact-list">
-                        <!-- Dynamic contacts will be populated here -->
-                    </div>
+                </div>
+                
+                <div class="contact-list" id="contact-list">
+                    <!-- Dynamic contacts will be populated here -->
                 </div>
             </div>
             
             <!-- Chat Window -->
             <div class="chat-window" style="position: relative;">
                 <div class="chat-header">
+                    <button id="mobile-back-btn" class="btn-icon-small" style="display: none; margin-right: 12px; flex-shrink: 0;"><i class="fa-solid fa-arrow-left"></i></button>
                     <div class="chat-header-user">
                         <img src="https://ui-avatars.com/api/?name=Select+Client&background=e0e0e0&color=333" id="active-chat-avatar" alt="Avatar">
                         <div>
