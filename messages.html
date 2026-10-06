@@ -96,19 +96,21 @@
             
             <!-- Chat Sidebar (Contacts) -->
             <div class="chat-sidebar">
-                <div class="chat-sidebar-header">
-                    <h2>Messages</h2>
+                <div class="chat-sidebar-header" id="mobile-contacts-toggle" style="cursor: pointer; user-select: none;">
+                    <h2 style="display: flex; align-items: center; gap: 8px;">Messages <i class="fa-solid fa-chevron-down" id="mobile-contacts-chevron" style="font-size: 14px; transition: transform 0.2s;"></i></h2>
                     <button class="btn-icon-small"><i class="fa-solid fa-pen-to-square"></i></button>
                 </div>
-                <div class="chat-search">
-                    <div class="search-bar" style="width: 100%;">
-                        <i class="fa-solid fa-magnifying-glass icon"></i>
-                        <input type="text" placeholder="Search messages...">
+                <div id="mobile-contacts-wrapper" class="mobile-contacts-collapsed">
+                    <div class="chat-search">
+                        <div class="search-bar" style="width: 100%;">
+                            <i class="fa-solid fa-magnifying-glass icon"></i>
+                            <input type="text" placeholder="Search messages...">
+                        </div>
                     </div>
-                </div>
-                
-                <div class="contact-list" id="contact-list">
-                    <!-- Dynamic contacts will be populated here -->
+                    
+                    <div class="contact-list" id="contact-list">
+                        <!-- Dynamic contacts will be populated here -->
+                    </div>
                 </div>
             </div>
             

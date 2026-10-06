@@ -12,6 +12,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'login.html';
     });
     
+    // Mobile Contacts Toggle
+    const contactsToggle = document.getElementById('mobile-contacts-toggle');
+    const contactsWrapper = document.getElementById('mobile-contacts-wrapper');
+    const chevron = document.getElementById('mobile-contacts-chevron');
+    if (contactsToggle && contactsWrapper) {
+        contactsToggle.addEventListener('click', (e) => {
+            if (e.target.closest('button')) return; // ignore pen button click
+            if (contactsWrapper.classList.contains('mobile-contacts-collapsed')) {
+                contactsWrapper.classList.remove('mobile-contacts-collapsed');
+                contactsWrapper.classList.add('mobile-contacts-expanded');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            } else {
+                contactsWrapper.classList.add('mobile-contacts-collapsed');
+                contactsWrapper.classList.remove('mobile-contacts-expanded');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
+    
     const contactList = document.getElementById('contact-list');
     const chatHistory = document.getElementById('chat-history');
     let activeUser = null;
