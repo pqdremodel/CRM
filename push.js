@@ -79,4 +79,9 @@ async function subscribeUserToPush() {
 // Auto-register service worker on load
 document.addEventListener('DOMContentLoaded', () => {
     registerServiceWorker();
+    
+    // Clear the home screen app badge when the user opens the app
+    if ('clearAppBadge' in navigator) {
+        navigator.clearAppBadge().catch(console.error);
+    }
 });

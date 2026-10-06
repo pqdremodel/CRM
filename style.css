@@ -1532,10 +1532,9 @@ body {
     }
     
     .sidebar-nav li .badge {
-        position: absolute;
-        top: 2px;
-        right: 50%;
-        margin-right: -15px;
+        position: static;
+        margin-left: auto;
+        margin-right: 0;
     }
     
     .sidebar-footer {

@@ -10,16 +10,25 @@ self.addEventListener('push', function(event) {
                 data: data.url || '/'
             };
             event.waitUntil(self.registration.showNotification(title, options));
+            if ('setAppBadge' in navigator) {
+                navigator.setAppBadge(1);
+            }
         } catch(e) {
             event.waitUntil(self.registration.showNotification('PQD CRM', {
                 body: event.data.text()
             }));
+            if ('setAppBadge' in navigator) {
+                navigator.setAppBadge(1);
+            }
         }
     }
 });
 
 self.addEventListener('notificationclick', function(event) {
     event.notification.close();
+    if ('clearAppBadge' in navigator) {
+        navigator.clearAppBadge();
+    }
     if (event.notification.data) {
         event.waitUntil(
             clients.openWindow(event.notification.data)
