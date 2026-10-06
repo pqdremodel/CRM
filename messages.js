@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (mobileBackBtn) {
         mobileBackBtn.addEventListener('click', () => {
             document.querySelector('.chat-layout').classList.remove('chat-active');
+            document.body.classList.remove('mobile-chat-active');
             // Unselect active user visually
             document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
         });
@@ -113,6 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 // Show chat window on mobile
                 document.querySelector('.chat-layout').classList.add('chat-active');
+                document.body.classList.add('mobile-chat-active');
                 
                 setActiveChat(user, displayName, isOnline);
             });

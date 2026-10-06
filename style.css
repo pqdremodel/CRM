@@ -1419,6 +1419,9 @@ body {
 }
 
 @media (max-width: 768px) {
+    body.mobile-chat-active .mobile-header {
+        display: none !important;
+    }
     body, html {
         overflow: hidden !important;
         height: 100% !important;
@@ -1583,6 +1586,7 @@ body {
         border-bottom: none;
         display: flex;
         flex-direction: column;
+        padding: 16px 8px;
     }
     
     .chat-sidebar .contact-list {
@@ -1678,6 +1682,11 @@ body {
         flex: 1;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+    }
+    
+    .main-content.chat-layout {
+        padding: 0 !important;
+        overflow: hidden !important;
     }
     
     /* Mobile Table Card Layout */
