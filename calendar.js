@@ -7,11 +7,7 @@ document.addEventListener('app:init', async () => {
         document.getElementById('profile-avatar').src = currentUser.getAvatarUrl();
     }
 
-    // Logout handling
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
-    });
+
 
     // Initialize FullCalendar
     var calendarEl = document.getElementById('calendar');

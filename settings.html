@@ -103,7 +103,7 @@
                         <span class="name">Team Member</span>
                         <span class="email" id="profile-email">Loading...</span>
                     </div>
-                    <i class="fa-solid fa-arrow-right-from-bracket more-opts" id="logout-btn" title="Sign Out"></i>
+                    <i class="fa-solid fa-gear more-opts" id="sidebar-settings-btn" title="Settings" onclick="window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'"></i>
                 </div>
             </div>
         </aside>
@@ -173,6 +173,16 @@
             </div>
         </main>
     </div>
+
+    
+                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 24px;">
+                    <h2 style="margin-bottom: 8px; font-size: 18px; color: var(--text-main);">Account Management</h2>
+                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Sign out of your account on this device.</p>
+                    
+                    <button class="btn btn-outline" id="settings-logout-btn" style="color: #ef4444; border-color: #ef4444;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </button>
+                </div>
 
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js"></script>

@@ -1,6 +1,16 @@
 let currentUser = null;
 
 document.addEventListener('app:init', async () => {
+        // Logout handling
+    const logoutBtn = document.getElementById('settings-logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await supabaseClient.auth.signOut();
+            window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
+        });
+    }
+
+
     currentUser = await requireAuth();
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.email;
@@ -20,11 +30,7 @@ document.addEventListener('app:init', async () => {
         }
     }
 
-    // Logout handling
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
-    });
+
     
     // Check Notification Status
     if (Notification.permission === 'granted') {
@@ -73,7 +79,7 @@ settingsForm.addEventListener('submit', async (e) => {
     try {
         let avatarUrl = currentUser.profile?.avatar_url;
         
-        // Handle avatar upload if a new file was selected
+    // Handle avatar upload if a new file was selected
         if (selectedAvatarFile) {
             const fileExt = selectedAvatarFile.name.split('.').pop();
             const fileName = `${currentUser.id}_${Date.now()}.${fileExt}`;
