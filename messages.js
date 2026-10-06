@@ -95,11 +95,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="contact-info">
                     <div class="contact-top">
                         <h4>${displayName}</h4>
+                        ${badgeHtml}
                         <span class="time"></span>
                     </div>
                     <div class="contact-bottom">
                         <p>Team Member</p>
-                        ${badgeHtml}
                     </div>
                 </div>
             `;
