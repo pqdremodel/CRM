@@ -1820,3 +1820,107 @@ textarea {
 .btn:active {
     transform: scale(0.97);
 }
+/* Google Calendar Styling for FullCalendar */
+.fc {
+    font-family: 'Inter', sans-serif !important;
+}
+
+.fc-toolbar-title {
+    font-size: 22px !important;
+    font-weight: 400 !important;
+    color: #3c4043 !important;
+}
+
+.fc-button-primary {
+    background-color: transparent !important;
+    border: 1px solid #dadce0 !important;
+    color: #3c4043 !important;
+    font-weight: 500 !important;
+    text-transform: capitalize !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+}
+
+.fc-button-primary:hover {
+    background-color: #f1f3f4 !important;
+}
+
+.fc-button-active {
+    background-color: #e8f0fe !important;
+    color: #1a73e8 !important;
+    border-color: #e8f0fe !important;
+}
+
+.fc-today-button {
+    background-color: transparent !important;
+    border: 1px solid #dadce0 !important;
+    color: #3c4043 !important;
+}
+
+.fc-col-header-cell {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px 0 !important;
+}
+
+.fc-col-header-cell-cushion {
+    color: #70757a !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+}
+
+.fc-day-today {
+    background-color: transparent !important;
+}
+
+.fc-daygrid-day-number {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: #3c4043 !important;
+    padding: 8px !important;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+    background-color: #1a73e8 !important;
+    color: white !important;
+    border-radius: 50%;
+}
+
+.fc-event {
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+    border-color: #dadce0 !important;
+}
+
+.fc-view-harness {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    overflow: hidden;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+    .fc-toolbar {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+}
