@@ -1408,12 +1408,21 @@ body {
 }
 
 @media (max-width: 768px) {
+    body, html {
+        overflow: hidden !important;
+        height: 100% !important;
+    }
+
     .dashboard-container {
         flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
     }
     
     .mobile-header {
         display: flex;
+        flex-shrink: 0;
+        z-index: 50;
     }
     
     .sidebar {
@@ -1590,4 +1599,85 @@ body {
     .chat-header-actions button {
         padding: 6px;
     }
+    
+    /* Calendar Mobile Reimagined */
+    .fc .fc-header-toolbar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        align-items: center;
+        justify-content: center !important;
+        margin-bottom: 16px !important;
+    }
+    .fc .fc-toolbar-title {
+        font-size: 1.1em !important;
+        margin: 0 !important;
+        width: 100%;
+        text-align: center;
+        order: -1;
+        margin-bottom: 8px !important;
+    }
+    .fc .fc-button {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        border-radius: 8px !important;
+    }
+    .fc .fc-list-day-cushion {
+        background-color: #fff4ed !important;
+        color: var(--text-main) !important;
+        font-weight: 600;
+        padding: 8px 12px !important;
+    }
+    .fc .fc-list-event:hover td {
+        background-color: #f9f9f9 !important;
+    }
+    .main-content {
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 16px !important;
+        flex: 1;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* --- Smoothness & Performance Enhancements --- */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sidebar-nav li, 
+.footer-nav li,
+.clients-table tr,
+.card,
+.btn,
+.tag,
+.more-action,
+input,
+select,
+textarea {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clients-table tr:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.sidebar-nav li:active,
+.btn:active {
+    transform: scale(0.97);
 }

@@ -15,12 +15,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize FullCalendar
     var calendarEl = document.getElementById('calendar');
+    const isMobile = window.innerWidth < 768;
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
+        initialView: isMobile ? 'listMonth' : 'dayGridMonth',
         headerToolbar: {
-            left: 'prev,next today',
+            left: 'prev,next',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: isMobile ? 'today dayGridMonth,timeGridWeek,timeGridDay,listMonth' : 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+            today: 'today',
+            month: 'month',
+            week: 'week',
+            day: 'day',
+            list: 'list'
+        },
+        views: {
+            listMonth: { buttonText: 'list' }
         },
         themeSystem: 'standard',
         events: async function(info, successCallback, failureCallback) {
