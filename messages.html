@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Messages - PQD Remodels</title>
     <link rel="stylesheet" href="style.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -155,12 +155,11 @@
                     </div>
                 </div>
 
-                <div class="chat-input-area" style="position: relative;">
+                <div class="chat-input-area" style="position: relative; align-items: flex-end;">
                     <input type="file" id="file-upload-input" style="display: none;">
-                    <button class="btn-icon-small" id="attach-btn" style="border: none;"><i class="fa-solid fa-paperclip"></i></button>
-                    <button class="btn-icon-small" id="emoji-btn" style="border: none;"><i class="fa-regular fa-face-smile"></i></button>
-                    <input type="text" id="message-input" placeholder="Type a message...">
-                    <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
+                    <button class="btn-icon-small" id="attach-btn" style="border: none; margin-bottom: 4px;"><i class="fa-solid fa-paperclip"></i></button>
+                    <textarea id="message-input" rows="1" placeholder="Type a message..."></textarea>
+                    <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; flex-shrink: 0;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
                 </div>
             </div>
             

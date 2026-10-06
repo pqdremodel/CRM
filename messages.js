@@ -270,6 +270,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Clear input immediately for better UX
         messageInput.value = '';
+        messageInput.style.height = 'auto';
 
         // Save to database
         const { data, error } = await supabaseClient
@@ -386,8 +387,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         .subscribe();
 
     sendBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+    
+    // Auto-expand textarea
+    messageInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    messageInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
             sendMessage();
         }
     });
