@@ -1501,12 +1501,24 @@ body {
         margin: 0 24px 8px 24px;
     }
     
-    .sidebar-nav, .sidebar-footer {
+    .sidebar-nav {
+        flex: 1;
+        display: block;
+        padding: 0;
+        margin: 0;
+        border: none;
+        overflow-y: auto;
+    }
+    .sidebar-footer {
         flex: unset;
         display: block;
         padding: 0;
         margin: 0;
         border: none;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    .footer-nav {
+        display: none !important;
     }
     
     .sidebar-nav ul, .sidebar-footer .footer-nav ul {
