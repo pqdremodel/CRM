@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('turbo:load', async () => {
     if (!supabaseClient) {
         document.getElementById('error-message').textContent = 'Invalid Supabase API Key. Please update supabase.js with the correct Anon Key.';
         document.getElementById('error-message').style.display = 'block';
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const { data } = await supabaseClient.auth.getSession();
         if (data.session) {
-            window.location.href = 'index.html';
+            window.Turbo ? window.Turbo.visit('index.html') : window.location.href = 'index.html';
             return;
         }
     } catch(e) {}
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             errorMsg.textContent = error.message;
             errorMsg.style.display = 'block';
         } else {
-            window.location.href = 'index.html';
+            window.Turbo ? window.Turbo.visit('index.html') : window.location.href = 'index.html';
         }
     });
 

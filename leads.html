@@ -25,13 +25,14 @@
             }, false);
         }
     </script>
+    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
 </head>
 <body>
     <div class="dashboard-container">
         
         <!-- Mobile Header -->
         <div class="mobile-header">
-            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : window.location.href='index.html'" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
             <div class="logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
                 <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
@@ -61,19 +62,19 @@
                         <i class="fa-solid fa-caret-down"></i> General
                     </div>
                     <ul>
-                        <li onclick="window.location.href='index.html'">
+                        <li onclick="window.Turbo ? window.Turbo.visit(\'index.html\') : window.location.href=\'index.html\'">
                             <i class="fa-solid fa-building icon"></i>
                             <span>Clients</span>
                         </li>
-                        <li class="active" onclick="window.location.href='leads.html'">
+                        <li class="active" onclick="window.Turbo ? window.Turbo.visit(\'leads.html\') : window.location.href=\'leads.html\'">
                             <i class="fa-solid fa-user-plus icon"></i>
                             <span>Leads</span>
                         </li>
-                        <li onclick="window.location.href='calendar.html'">
+                        <li onclick="window.Turbo ? window.Turbo.visit(\'calendar.html\') : window.location.href=\'calendar.html\'">
                             <i class="fa-regular fa-calendar icon"></i>
                             <span>Calendar</span>
                         </li>
-                        <li onclick="window.location.href='messages.html'">
+                        <li onclick="window.Turbo ? window.Turbo.visit(\'messages.html\') : window.location.href=\'messages.html\'">
                             <i class="fa-regular fa-message icon"></i>
                             <span>Messages</span>
                         </li>
@@ -84,7 +85,7 @@
             <div class="sidebar-footer">
                 <div class="footer-nav">
                     <ul>
-                        <li onclick="window.location.href='settings.html'">
+                        <li onclick="window.Turbo ? window.Turbo.visit(\'settings.html\') : window.location.href=\'settings.html\'">
                             <i class="fa-solid fa-gear icon"></i>
                             <span>Settings</span>
                         </li>
@@ -205,7 +206,7 @@
     <script src="leads.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('turbo:load', () => {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.querySelector('.sidebar');
             if (menuBtn && sidebar) {

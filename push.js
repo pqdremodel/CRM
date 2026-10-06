@@ -77,7 +77,7 @@ async function subscribeUserToPush() {
 }
 
 // Auto-register service worker on load
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('turbo:load', () => {
     registerServiceWorker();
     
     // Clear the home screen app badge when the user opens the app

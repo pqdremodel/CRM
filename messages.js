@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('turbo:load', async () => {
     // Auth Check
     const currentUser = await requireAuth();
     if (currentUser) {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Logout handling
     document.getElementById('logout-btn').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
-        window.location.href = 'login.html';
+        window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
     });
     
     // Mobile Chat Back Button

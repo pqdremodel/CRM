@@ -20,7 +20,7 @@ try {
 async function requireAuth() {
     try {
         if (!supabaseClient) {
-            window.location.href = 'login.html';
+            window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
             return null;
         }
         
@@ -28,7 +28,7 @@ async function requireAuth() {
         
         if (error || !data.session) {
             // Not logged in, redirect to login page
-            window.location.href = 'login.html';
+            window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
             return null;
         }
         if (!window.notificationsSetup) {
@@ -73,7 +73,7 @@ async function requireAuth() {
         return user;
     } catch (err) {
         console.error("Auth error:", err);
-        window.location.href = 'login.html';
+        window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
         return null;
     }
 }
@@ -173,7 +173,7 @@ function showToast(title, message) {
     // Clicking the toast navigates to messages
     toast.style.cursor = 'pointer';
     toast.addEventListener('click', () => {
-        window.location.href = 'messages.html';
+        window.Turbo ? window.Turbo.visit('messages.html') : window.location.href = 'messages.html';
     });
     
     container.appendChild(toast);

@@ -1,6 +1,6 @@
 let currentUser = null;
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('turbo:load', async () => {
     currentUser = await requireAuth();
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.email;
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Logout handling
     document.getElementById('logout-btn').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
-        window.location.href = 'login.html';
+        window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
     });
     
     // Check Notification Status

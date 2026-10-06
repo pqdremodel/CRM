@@ -26,6 +26,7 @@
             }, false);
         }
     </script>
+    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
 </head>
 <body style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--bg-color);">
     
@@ -59,7 +60,7 @@
     <script src="login.js?v=3"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('turbo:load', () => {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.querySelector('.sidebar');
             if (menuBtn && sidebar) {
