@@ -97,8 +97,13 @@ document.addEventListener('app:init', async () => {
         users.forEach((user) => {
             const item = document.createElement('div');
             item.className = 'contact-item';
+            
+            // Assume offline by default since we haven't built presence yet
+            const isOnline = false;
+            const statusClass = 'offline';
+            
+            // Use their email as their name if they haven't set a name
             const displayName = user.full_name || user.email || 'Unknown User';
-            const avatarUrl = user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff`;
             
             const badgeHtml = user.unreadCount > 0 
                 ? `<span class="unread-badge">${user.unreadCount}</span>` 
@@ -106,18 +111,17 @@ document.addEventListener('app:init', async () => {
             
             item.innerHTML = `
                 <div class="contact-avatar">
-                    <img src="${avatarUrl}" alt="${displayName}">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff" alt="${displayName}">
+                    <div class="status-dot ${statusClass}" style="display:none;"></div>
                 </div>
-                <div class="contact-info">
-                    <div class="contact-top">
-                        <div class="contact-name-row">
-                            <h4>${displayName}</h4>
-                            ${badgeHtml}
-                        </div>
-                        <span class="time">${user.lastMessageTime}</span>
+                <div class="contact-info" style="flex:1; min-width:0;">
+                    <div class="contact-top" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                        <h4 style="font-size:16px; font-weight:600; color:#000; margin:0;">${displayName}</h4>
+                        <span class="time" style="font-size:12px; color:#aaa;">${user.lastMessageTime || '02:11'}</span>
                     </div>
-                    <div class="contact-bottom">
-                        <p>${user.lastMessageText}</p>
+                    <div class="contact-bottom" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:4px;">
+                        <p style="font-size:14px; color:#888; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80%; margin:0;">${user.lastMessageText}</p>
+                        ${badgeHtml}
                     </div>
                 </div>
             `;

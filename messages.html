@@ -117,24 +117,48 @@
             
             <!-- Chat Sidebar (Contacts) -->
             <div class="chat-sidebar">
-                <div class="chat-sidebar-header" style="display: flex; justify-content: space-between; align-items: center; padding: 24px 24px 16px;">
-                        <h2 style="font-size: 38px; font-weight: 700; letter-spacing: -1px; margin: 0; color: #000; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">Messages</h2>
-                        <div style="display: flex; gap: 16px; align-items: center;">
-                            <i class="fa-solid fa-camera" style="font-size: 22px; color: #000;"></i>
-                            <i class="fa-solid fa-circle-plus" style="font-size: 22px; color: #000;"></i>
-                        </div>
-                    </div>
-                <div class="chat-search" style="display: none;">
-                    <div class="search-bar" style="width: 100%;">
-                        <i class="fa-solid fa-magnifying-glass icon"></i>
-                        <input type="text" placeholder="Search messages...">
-                    </div>
+                <!-- Mobile specific App Header -->
+                <div class="app-title-mobile" style="padding: 16px 24px 0;">
+                    Mengobrol
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
                 
-                <div class="contact-list" id="contact-list">
+                <!-- Stories Container -->
+                <div class="stories-container" style="padding: 0 24px;">
+                    <div class="story-item">
+                        <div class="story-add">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <div class="story-name">Add story</div>
+                    </div>
+                    <!-- Mock stories, can be dynamic later -->
+                    <div class="story-item">
+                        <img src="https://ui-avatars.com/api/?name=Tom&background=random&color=fff" class="story-avatar">
+                        <div class="story-name">Tom</div>
+                    </div>
+                    <div class="story-item">
+                        <img src="https://ui-avatars.com/api/?name=Jennifer&background=random&color=fff" class="story-avatar">
+                        <div class="story-name">Jennifer</div>
+                    </div>
+                    <div class="story-item">
+                        <img src="https://ui-avatars.com/api/?name=David&background=random&color=fff" class="story-avatar">
+                        <div class="story-name">David</div>
+                    </div>
+                    <div class="story-item">
+                        <img src="https://ui-avatars.com/api/?name=John&background=random&color=fff" class="story-avatar">
+                        <div class="story-name">John</div>
+                    </div>
+                </div>
+
+                <div class="section-header-mobile" style="padding: 0 24px;">
+                    Chats
+                    <i class="fa-solid fa-ellipsis"></i>
+                </div>
+
+                <div class="contact-list" id="contact-list" style="padding: 0 24px;">
                     <!-- Dynamic contacts will be populated here -->
                 </div>
-            </div>
+</div>
             
             <!-- Chat Window -->
             <div class="chat-window" style="position: relative;">
@@ -214,6 +238,89 @@
     </script>
     <script src="push.js"></script>
 <script>document.dispatchEvent(new Event('app:init'));</script>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
+            <i class="fa-solid fa-house"></i>
+        </a>
+        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
+            <i class="fa-solid fa-plus"></i> New Chat
+        </a>
+        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
+            <i class="fa-regular fa-user"></i>
+        </a>
+    </nav>
+
+
+    <!-- Bottom Nav Modal -->
+    <div id="new-chat-modal" class="bottom-sheet-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:2000; flex-direction:column; justify-content:flex-end;">
+        <div class="bottom-sheet-content" style="background:transparent; padding:16px; border-radius:24px 24px 0 0; animation: slideUp 0.3s ease-out; margin-bottom: 24px;">
+            <div style="background:white; border-radius:24px; padding:8px 0; margin-bottom:16px;">
+                <div class="sheet-action" style="display:flex; align-items:center; gap:16px; padding:16px 24px; border-bottom:1px solid #f0f0f0;">
+                    <i class="fa-regular fa-message" style="font-size:20px; color:#333;"></i>
+                    <div>
+                        <div style="font-weight:600; color:#000; font-size:16px;">New Chat</div>
+                        <div style="font-size:12px; color:#888;">Send a message to your contact</div>
+                    </div>
+                </div>
+                <div class="sheet-action" style="display:flex; align-items:center; gap:16px; padding:16px 24px; border-bottom:1px solid #f0f0f0;">
+                    <i class="fa-solid fa-address-book" style="font-size:20px; color:#333;"></i>
+                    <div>
+                        <div style="font-weight:600; color:#000; font-size:16px;">New Contact</div>
+                        <div style="font-size:12px; color:#888;">Add a contact to be able to send messages</div>
+                    </div>
+                </div>
+                <div class="sheet-action" style="display:flex; align-items:center; gap:16px; padding:16px 24px;">
+                    <i class="fa-solid fa-user-group" style="font-size:20px; color:#333;"></i>
+                    <div>
+                        <div style="font-weight:600; color:#000; font-size:16px;">New Community</div>
+                        <div style="font-size:12px; color:#888;">Join the community around you</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="close-modal-btn" style="width:100%; background:white; border:none; padding:16px; border-radius:30px; font-size:16px; font-weight:600; color:#000;">Cancel</button>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('app:init', () => {
+            const newChatBtns = document.querySelectorAll('.new-chat-btn');
+            const modal = document.getElementById('new-chat-modal');
+            const closeBtn = document.getElementById('close-modal-btn');
+            
+            if (modal) {
+                newChatBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        modal.style.display = 'flex';
+                    });
+                });
+                
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                }
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 
 </html>
