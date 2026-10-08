@@ -15,38 +15,69 @@
     <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
     <style>
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 16px;
             padding: 24px;
         }
         .dash-card {
             background: white;
             border-radius: 24px;
-            padding: 24px 16px;
+            padding: 24px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
+            gap: 20px;
             text-decoration: none;
             color: #000;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: all 0.2s ease;
-            text-align: center;
             border: 1px solid #f0f0f0;
+            text-align: left;
         }
         .dash-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
+        .dash-card .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
         .dash-card i {
-            font-size: 32px;
+            font-size: 24px;
             color: #000;
         }
-        .dash-card span {
-            font-weight: 600;
+        .dash-card .info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+        .dash-card span.title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .dash-card span.subtitle {
+            font-weight: 400;
             font-size: 14px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .dash-card .badge {
+            background: #fff9e6;
+            color: #e6a23c;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: auto;
         }
     </style>
 </head>
@@ -61,24 +92,45 @@
 
         <div class="dashboard-grid">
             <a href="clients.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
-                <i class="fa-solid fa-building"></i>
-                <span>Clients</span>
+                <div class="icon-wrapper"><i class="fa-solid fa-building"></i></div>
+                <div class="info">
+                    <span class="title">Active Clients</span>
+                    <span class="subtitle">Total 883 Active Clients</span>
+                </div>
             </a>
+            
             <a href="leads.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('leads.html') : window.location.href='leads.html'">
-                <i class="fa-solid fa-user-plus"></i>
-                <span>Leads</span>
+                <div class="icon-wrapper"><i class="fa-solid fa-user-plus"></i></div>
+                <div class="info">
+                    <span class="title">Recent Lead</span>
+                    <span class="subtitle">Sarah Jenkins ($450k Kitchen)</span>
+                </div>
+                <div class="badge">New</div>
             </a>
-            <a href="calendar.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('calendar.html') : window.location.href='calendar.html'">
-                <i class="fa-regular fa-calendar"></i>
-                <span>Calendar</span>
-            </a>
+
             <a href="messages.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-                <i class="fa-regular fa-message"></i>
-                <span>Messages</span>
+                <div class="icon-wrapper"><i class="fa-regular fa-message"></i></div>
+                <div class="info">
+                    <span class="title">Recent Message</span>
+                    <span class="subtitle">David: "Approve blueprint revisions..."</span>
+                </div>
+                <div class="badge" style="background: #ffc9c9; color: #ff6b6b;">Unread</div>
             </a>
+
+            <a href="calendar.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('calendar.html') : window.location.href='calendar.html'">
+                <div class="icon-wrapper"><i class="fa-regular fa-calendar"></i></div>
+                <div class="info">
+                    <span class="title">Up Next</span>
+                    <span class="subtitle">Blueprint Review (10:00 AM)</span>
+                </div>
+            </a>
+            
             <a href="settings.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings</span>
+                <div class="icon-wrapper"><i class="fa-solid fa-gear"></i></div>
+                <div class="info">
+                    <span class="title">Settings</span>
+                    <span class="subtitle">Account management</span>
+                </div>
             </a>
         </div>
     </div>
