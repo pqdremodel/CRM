@@ -2059,7 +2059,7 @@ textarea {
 }
 
 @media (max-width: 768px) {
-    .sidebar { display: none !important; }
+    .sidebar { z-index: 2000 !important; }
     .mobile-header { display: none !important; }
     
     .dashboard-container {
