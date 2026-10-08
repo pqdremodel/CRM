@@ -2068,7 +2068,7 @@ textarea {
 
     .main-content {
         height: calc(100dvh - 80px);
-        padding: 16px !important;
+        padding: 8px !important;
         background: #f9f9f9 !important;
     }
 
@@ -2365,6 +2365,10 @@ table {
         display: block !important;
         margin: 0 !important;
     }
+    .dashboard-grid {
+        padding: 8px !important;
+        gap: 12px !important;
+    }
 }
 
 
@@ -2372,11 +2376,11 @@ table {
 @media (max-width: 768px) {
     .grid-layout {
         grid-template-columns: 1fr !important;
-        padding: 0 16px 16px 16px !important;
+        padding: 0 8px 16px 8px !important;
     }
     .project-header {
         flex-direction: column;
-        padding: 24px 16px 0 16px !important;
+        padding: 24px 8px 0 8px !important;
         gap: 16px;
     }
     .project-actions {
