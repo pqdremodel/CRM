@@ -28,7 +28,7 @@ document.addEventListener('app:init', async () => {
         const { data: profiles, error } = await supabaseClient
             .from('profiles')
             .select('*')
-            .neq('id', currentUser.id); // Don't show yourself in the list
+            .neq('id', currentUser.id);
 
         if (error) {
             console.error("Error fetching profiles:", error);
@@ -43,7 +43,6 @@ document.addEventListener('app:init', async () => {
             .eq('receiver_id', currentUser.id)
             .eq('is_read', false);
             
-        // Count unread messages grouped by sender_id
         const unreadCounts = {};
         if (unreadData) {
             unreadData.forEach(msg => {
@@ -51,11 +50,38 @@ document.addEventListener('app:init', async () => {
             });
         }
         
+        // Fetch last message for each profile
+        const { data: allMessages } = await supabaseClient
+            .from('messages')
+            .select('*')
+            .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+            .order('created_at', { ascending: false });
+            
+        const lastMessages = {};
+        if (allMessages) {
+            allMessages.forEach(msg => {
+                const otherId = msg.sender_id === currentUser.id ? msg.receiver_id : msg.sender_id;
+                if (!lastMessages[otherId]) {
+                    lastMessages[otherId] = msg;
+                }
+            });
+        }
+        
+        // Format time helper
+        const formatTime = (dateString) => {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'}).toLowerCase();
+        };
+
         // Merge unread count into profiles
         const profilesWithUnread = profiles.map(p => ({
             ...p,
-            unreadCount: unreadCounts[p.id] || 0
-        }));
+            unreadCount: unreadCounts[p.id] || 0,
+            lastMessageText: lastMessages[p.id] ? lastMessages[p.id].content : 'Say hello...',
+            lastMessageTime: lastMessages[p.id] ? formatTime(lastMessages[p.id].created_at) : '',
+            lastMessageRawTime: lastMessages[p.id] ? new Date(lastMessages[p.id].created_at).getTime() : 0
+        })).sort((a, b) => b.lastMessageRawTime - a.lastMessageRawTime);
 
         renderContacts(profilesWithUnread || []);
     }
@@ -71,13 +97,8 @@ document.addEventListener('app:init', async () => {
         users.forEach((user) => {
             const item = document.createElement('div');
             item.className = 'contact-item';
-            
-            // Assume offline by default since we haven't built presence yet
-            const isOnline = false;
-            const statusClass = 'offline';
-            
-            // Use their email as their name if they haven't set a name
             const displayName = user.full_name || user.email || 'Unknown User';
+            const avatarUrl = user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff`;
             
             const badgeHtml = user.unreadCount > 0 
                 ? `<span class="unread-badge">${user.unreadCount}</span>` 
@@ -85,17 +106,18 @@ document.addEventListener('app:init', async () => {
             
             item.innerHTML = `
                 <div class="contact-avatar">
-                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff" alt="${displayName}">
-                    <div class="status-dot ${statusClass}"></div>
+                    <img src="${avatarUrl}" alt="${displayName}">
                 </div>
                 <div class="contact-info">
                     <div class="contact-top">
-                        <h4>${displayName}</h4>
-                        ${badgeHtml}
-                        <span class="time"></span>
+                        <div class="contact-name-row">
+                            <h4>${displayName}</h4>
+                            ${badgeHtml}
+                        </div>
+                        <span class="time">${user.lastMessageTime}</span>
                     </div>
                     <div class="contact-bottom">
-                        <p>Team Member</p>
+                        <p>${user.lastMessageText}</p>
                     </div>
                 </div>
             `;

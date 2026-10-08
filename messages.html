@@ -117,10 +117,13 @@
             
             <!-- Chat Sidebar (Contacts) -->
             <div class="chat-sidebar">
-                <div class="chat-sidebar-header">
-                    <h2>Messages</h2>
-                    <button class="btn-icon-small"><i class="fa-solid fa-pen-to-square"></i></button>
-                </div>
+                <div class="chat-sidebar-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px 10px;">
+                        <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -1px; margin: 0;">Messages</h2>
+                        <div style="display: flex; gap: 16px;">
+                            <button class="btn" style="background:none; border:none; padding:0; font-size: 20px; color: #000;"><i class="fa-solid fa-camera"></i></button>
+                            <button class="btn" id="new-msg-btn" style="background:none; border:none; padding:0; font-size: 20px; color: #000;"><i class="fa-solid fa-circle-plus"></i></button>
+                        </div>
+                    </div>
                 <div class="chat-search">
                     <div class="search-bar" style="width: 100%;">
                         <i class="fa-solid fa-magnifying-glass icon"></i>
