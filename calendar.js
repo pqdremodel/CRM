@@ -17,14 +17,14 @@ document.addEventListener('app:init', async () => {
         headerToolbar: {
             left: 'prev,next',
             center: 'title',
-            right: isMobile ? 'today dayGridMonth,timeGridWeek,timeGridDay,listMonth' : 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: isMobile ? 'dayGridMonth,listMonth' : 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         buttonText: {
             today: 'today',
             month: 'month',
             week: 'week',
             day: 'day',
-            list: 'list'
+            list: 'schedule'
         },
         views: {
             listMonth: { buttonText: 'list' }
