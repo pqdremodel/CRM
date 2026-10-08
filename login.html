@@ -83,7 +83,7 @@
 
     <!-- Bottom Navigation (Mobile Only) -->
     <nav class="bottom-nav">
-        <a href="#" class="nav-item" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.sidebar').classList.add('mobile-open');">
+        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
             <i class="fa-solid fa-house"></i>
         </a>
         <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">

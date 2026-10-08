@@ -32,7 +32,7 @@
         
         <!-- Mobile Header -->
         <div class="mobile-header">
-            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
             <div class="logo">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
                 <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
@@ -65,7 +65,7 @@
                         <i class="fa-solid fa-caret-down"></i> General
                     </div>
                     <ul>
-                        <li onclick="window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
+                        <li onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
                             <i class="fa-solid fa-building icon"></i>
                             <span>Clients</span>
                         </li>
@@ -283,7 +283,7 @@
 
     <!-- Bottom Navigation (Mobile Only) -->
     <nav class="bottom-nav">
-        <a href="#" class="nav-item" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.sidebar').classList.add('mobile-open');">
+        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
             <i class="fa-solid fa-house"></i>
         </a>
         <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">

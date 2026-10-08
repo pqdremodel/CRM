@@ -1,4 +1,46 @@
-<!DOCTYPE html>
+import glob
+import os
+import shutil
+
+# 1. Rename index.html to clients.html
+if os.path.exists('/Users/officeassistant/CRM/index.html'):
+    shutil.copy('/Users/officeassistant/CRM/index.html', '/Users/officeassistant/CRM/clients.html')
+
+html_files = glob.glob('/Users/officeassistant/CRM/*.html')
+
+# 2. In all files, change navigation references to 'index.html' (when it meant Clients) to 'clients.html'
+for filepath in html_files:
+    if filepath == '/Users/officeassistant/CRM/index.html':
+        continue # We will overwrite index.html entirely later
+        
+    with open(filepath, 'r') as f:
+        content = f.read()
+
+    # The sidebar link
+    content = content.replace("window.Turbo.visit('index.html')", "window.Turbo.visit('clients.html')")
+    content = content.replace("window.location.href='index.html'", "window.location.href='clients.html'")
+    
+    # But wait! The Home button in bottom-nav SHOULD point to index.html!
+    # Let's fix the bottom-nav Home button back to index.html!
+    # Actually, we made it open the sidebar in a previous step!
+    # The user asked: "instead of opening the the menu place the menu options on the home page"
+    # So the Home button should point to index.html!
+    
+    home_btn_broken = """<a href="#" class="nav-item" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.sidebar').classList.add('mobile-open');">
+            <i class="fa-solid fa-house"></i>
+        </a>"""
+        
+    home_btn_fixed = """<a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
+            <i class="fa-solid fa-house"></i>
+        </a>"""
+        
+    content = content.replace(home_btn_broken, home_btn_fixed)
+
+    with open(filepath, 'w') as f:
+        f.write(content)
+
+# 3. Create a brand new index.html (App Dashboard)
+new_index_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -147,3 +189,9 @@
     </script>
 </body>
 </html>
+"""
+
+with open('/Users/officeassistant/CRM/index.html', 'w') as f:
+    f.write(new_index_html)
+
+print("Created Central Dashboard at index.html and moved Clients to clients.html")

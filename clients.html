@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <!-- iOS PWA Link Fix -->
     <script>
         if (("standalone" in window.navigator) && window.navigator.standalone) {
@@ -66,7 +65,7 @@
                         <i class="fa-solid fa-caret-down"></i> General
                     </div>
                     <ul>
-                        <li onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
+                        <li class="active" onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
                             <i class="fa-solid fa-building icon"></i>
                             <span>Clients</span>
                         </li>
@@ -74,7 +73,7 @@
                             <i class="fa-solid fa-user-plus icon"></i>
                             <span>Leads</span>
                         </li>
-                        <li class="active" onclick="window.Turbo ? window.Turbo.visit('calendar.html') : window.location.href='calendar.html'">
+                        <li onclick="window.Turbo ? window.Turbo.visit('calendar.html') : window.location.href='calendar.html'">
                             <i class="fa-regular fa-calendar icon"></i>
                             <span>Calendar</span>
                         </li>
@@ -113,14 +112,105 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content" style="background: white;" class="main-content cal-container">
-            <div id="calendar"></div>
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass icon"></i>
+                    <input type="text" placeholder="Search..">
+                </div>
+                <div class="actions">
+                    <button class="btn btn-outline"><i class="fa-solid fa-rotate-right"></i> Update</button>
+                    <button class="btn btn-outline"><i class="fa-solid fa-bars-staggered"></i> Filter</button>
+                    <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-arrow-down"></i> Sort</button>
+                    <button class="btn btn-primary" id="btn-add-client"><i class="fa-solid fa-plus"></i> Add Client</button>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <table class="clients-table">
+                    <thead>
+                        <tr>
+                            <th class="col-checkbox"><input type="checkbox"></th>
+                            <th><i class="fa-regular fa-user"></i> Client Name <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-building"></i> Project Type <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-location-dot"></i> Location <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-dollar-sign"></i> Project Price <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-regular fa-sun"></i> Status <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th class="col-actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-body">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <div class="page-controls">
+                    <button><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <span>...</span>
+                    <button>20</button>
+                    <button><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="entries-info">
+                    Showing 1-17 of 883 entries 
+                    <span class="show-dropdown">Show 17 <i class="fa-solid fa-chevron-up"></i></span>
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="add-client-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Client</h2>
+                <button id="close-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="add-client-form">
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input type="text" id="client-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Type</label>
+                    <select id="project-type" required>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Retail">Retail</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="client-location" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Price</label>
+                    <input type="text" id="project-price" placeholder="$0" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="project-status" required>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Complete">Complete</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-modal" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Client</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js"></script>
-    <script src="calendar.js"></script>
+    <script src="script.js"></script>
 
     <script>
         document.addEventListener('app:init', () => {
