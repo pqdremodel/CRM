@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,29 +28,26 @@
             }, false);
         }
     </script>
-    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+    <link rel="stylesheet" href="home.css?v=1">
+    <link rel="stylesheet" href="app-theme.css?v=2">
+    <meta name="theme-color" content="#000000">
 </head>
-<body>
+<body class="crm-page page-calendar">
     <div class="dashboard-container">
         
         <!-- Mobile Header -->
-        <div class="mobile-header">
-            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
-                <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
-            </div>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <i class="fa-regular fa-bell" style="font-size: 22px; color: var(--primary-color);"></i>
-                <button id="mobile-menu-btn"  style="background: none; border: none; font-size: 24px; color: var(--primary-color); cursor: pointer;"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
+        <header class="mobile-header crm-header">
+            <button id="global-back-btn" aria-label="Go back" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <a class="logo" href="index.html" aria-label="PQD Remodels home"><span class="home-monogram" aria-hidden="true">PQD</span><span class="logo-text">PQD Remodels</span></a>
+            <button id="mobile-menu-btn" aria-label="Open navigation" title="Navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+        </header>
+        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1>Calendar</h1></div>
     
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="home-monogram" aria-hidden="true">PQD</span>
                     <span class="logo-text">PQD Remodels</span>
                     <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
                 </div>
@@ -113,7 +112,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content" style="background: white;" class="main-content cal-container">
+        <main class="main-content cal-container">
             <div id="calendar"></div>
         </main>
     </div>
@@ -133,7 +132,7 @@
                 
                 // Close sidebar when clicking outside
                 document.addEventListener('click', (e) => {
-                    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
+                    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
                         sidebar.classList.remove('mobile-open');
                     }
                 });
@@ -143,17 +142,15 @@
     <script src="push.js"></script>
 <script>document.dispatchEvent(new Event('app:init'));</script>
 
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-            <i class="fa-solid fa-plus"></i> New Chat
-        </a>
-        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-            <i class="fa-regular fa-user"></i>
-        </a>
+    <!-- Floating navigation -->
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
+        </div>
     </nav>
 
 

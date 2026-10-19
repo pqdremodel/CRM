@@ -1,0 +1,103 @@
+/* Home dashboard: the existing CRM content in a mobile-first activity layout. */
+html:has(body.home-page), body.home-page {
+    height: auto !important;
+    overflow-y: auto !important;
+}
+.home-page {
+    background: #000;
+    color: #303030;
+    -webkit-font-smoothing: antialiased;
+    animation: none;
+}
+
+.home-page a { color: inherit; text-decoration: none; }
+.home-page a:focus-visible { outline: 3px solid #47bff0; outline-offset: 5px; }
+.home-dashboard { min-height: 100svh; }
+.home-overview { max-width: 1040px; margin: 0 auto; padding: 40px 32px 26px; color: #eee; }
+.home-header { display: flex; position: relative; align-items: center; justify-content: center; min-height: 48px; margin-bottom: 32px; }
+.home-header h1 { display: flex; align-items: center; gap: 10px; font-size: 23px; font-weight: 600; letter-spacing: -.7px; }
+.home-monogram { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; background: #4bc0f1; color: #09212e; font-size: 13px; font-weight: 600; letter-spacing: -.4px; }
+.home-avatar { position: absolute; left: 0; display: grid; place-items: center; height: 44px; width: 44px; border-radius: 50%; background: #be2ac7; color: #fff !important; font-size: 21px; }
+.home-shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.home-shortcut { display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; border: 1px solid transparent; border-radius: 17px; min-width: 0; }
+.home-shortcut > span { font-size: 14px; color: #aaa; }
+.home-shortcut strong { font-size: 17px; font-weight: 500; white-space: nowrap; }
+.home-shortcut.is-highlighted { background: #202020; border-color: #333; }
+.home-dot { display: inline-block; width: 6px; height: 6px; margin: 0 0 3px 4px; border-radius: 50%; background: #35c987; }
+.home-client-summary { display: block; margin: 24px 16px; padding: 20px 0 16px; border-top: 1px solid #303030; border-bottom: 2px solid #40b9e8; }
+.home-summary-label { color: #aaa; font-size: 14px; }
+.home-client-count { display: block; font-size: 98px; line-height: 1.18; letter-spacing: -6px; font-weight: 500; }
+.home-count-dot { color: #47bff0; }
+.home-summary-footer { display: flex; justify-content: space-between; align-items: center; color: #929292; font-size: 12px; margin-top: 8px; }
+.home-summary-footer i { font-size: 14px; }
+.home-overview-actions { display: flex; justify-content: center; gap: 12px; padding-top: 4px; }
+.home-overview-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 12px 16px; background: #131313; border: 1px solid #333; border-radius: 16px; font-size: 14px; font-weight: 500; }
+.home-overview-actions i { font-size: 18px; }
+.home-activity { background: #fff; min-height: 52vh; border-radius: 32px 32px 0 0; padding: 30px 28px calc(125px + env(safe-area-inset-bottom, 0px)); }
+.home-activity-inner { max-width: 944px; margin: 0 auto; }
+.home-activity h2 { margin-bottom: 24px; font-size: 25px; font-weight: 600; line-height: 1.35; letter-spacing: -.8px; }
+.home-activity h2 > span { color: #707070; font-weight: 500; }
+.home-quick-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.home-card { background: #fff; border: 1px solid #e6e6e6; box-shadow: 0 3px 9px #00000005, 0 8px 16px #00000004; }
+.home-quick-card { position: relative; border-radius: 23px; padding: 22px 24px; min-width: 0; }
+.home-card-eyebrow { font-size: 14px; color: #6b6b6b; font-weight: 500; line-height: 1.4; }
+.home-quick-card > strong { display: block; font-size: 21px; font-weight: 600; margin-top: 4px; letter-spacing: -.5px; }
+.home-quick-description { display: block; margin-top: 7px; font-size: 12px; color: #898989; }
+.home-quick-card > i { position: absolute; right: 24px; top: 42px; color: #969696; font-size: 20px; }
+.home-detail-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.home-detail-card { display: block; border-radius: 25px; padding: 24px; }
+.home-card-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; gap: 12px; }
+.home-status { padding: 4px 9px; border-radius: 20px; background: #f1f7ef; color: #57764a; font-size: 10px; font-weight: 600; }
+.home-status-unread { background: #edf7fc; color: #46819c; }
+.home-detail-card h3 { font-size: 23px; line-height: 1.3; font-weight: 600; letter-spacing: -.7px; }
+.home-detail-card p { font-size: 17px; line-height: 1.5; margin-top: 10px; color: #777; }
+.home-detail-card p strong { font-weight: 600; }
+.home-card-action { display: inline-flex; gap: 18px; align-items: center; background: #fff; border-radius: 30px; padding: 13px 17px; margin-top: 20px; box-shadow: 0 4px 20px #0000000c; font-size: 14px; font-weight: 500; }
+.home-card-action i { color: #919191; font-size: 11px; }
+.home-floating-nav { position: fixed; z-index: 1000; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; align-items: center; gap: 9px; }
+.home-compose, .home-nav-pill { background: #ffffffed; border: 1px solid #ededed; box-shadow: 0 3px 5px #0000000a, 0 7px 30px #00000017; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.home-compose { display: grid; place-items: center; flex-shrink: 0; width: 62px; height: 62px; border-radius: 50%; color: #929292 !important; font-size: 23px; }
+.home-nav-pill { display: flex; gap: 5px; padding: 5px; border-radius: 50px; }
+.home-nav-pill a { display: grid; place-items: center; width: 53px; height: 52px; border-radius: 50%; color: #949494; font-size: 21px; }
+.home-nav-pill a.is-active { background: #f0f0f0; color: #1b1b1b; }
+@media (hover: hover) {
+    .home-card:hover { border-color: #c9c9c9; }
+    .home-shortcut:hover, .home-overview-actions a:hover { background: #252525; }
+    .home-nav-pill a:hover, .home-compose:hover { background: #f0f0f0; color: #1b1b1b !important; }
+}
+@media (max-width: 600px) {
+    .home-overview { padding: calc(24px + env(safe-area-inset-top, 0px)) 17px 22px; }
+    .home-header { min-height: 40px; margin-bottom: 26px; }
+    .home-header h1 { font-size: 19px; gap: 8px; }
+    .home-monogram { width: 31px; height: 32px; border-radius: 9px; font-size: 11px; }
+    .home-avatar { height: 35px; width: 35px; font-size: 18px; }
+    .home-shortcuts { gap: 7px; }
+    .home-shortcut { padding: 9px 8px; gap: 6px; border-radius: 14px; }
+    .home-shortcut > span { font-size: 12px; }
+    .home-shortcut strong { font-size: 14px; }
+    .home-client-summary { margin: 20px 9px 24px; padding: 15px 0; }
+    .home-client-count { font-size: 87px; }
+    .home-activity { padding: 26px 17px calc(115px + env(safe-area-inset-bottom, 0px)); border-radius: 28px 28px 0 0; }
+    .home-activity h2 { font-size: 21px; letter-spacing: -.65px; margin-bottom: 20px; }
+    .home-quick-cards { gap: 10px; margin-bottom: 18px; }
+    .home-quick-card { border-radius: 20px; padding: 16px; }
+    .home-card-eyebrow { font-size: 13px; }
+    .home-quick-card > strong { font-size: 18px; }
+    .home-quick-description { font-size: 10px; }
+    .home-quick-card > i { right: 15px; top: 43px; font-size: 16px; }
+    .home-detail-cards { grid-template-columns: 1fr; gap: 18px; }
+    .home-detail-card { padding: 20px; border-radius: 23px; }
+    .home-detail-card h3 { font-size: 21px; }
+    .home-detail-card p { font-size: 16px; }
+}
+@media (max-width: 360px) {
+    .home-header h1 { font-size: 17px; }
+    .home-shortcuts { gap: 2px; }
+    .home-shortcut { padding-inline: 6px; }
+    .home-shortcut strong { font-size: 12px; }
+    .home-activity h2 { font-size: 19px; }
+    .home-quick-card { padding: 13px; }
+    .home-quick-card > i { display: none; }
+    .home-nav-pill a { width: 47px; }
+    .home-compose { width: 57px; height: 57px; }
+}

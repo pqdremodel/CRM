@@ -1,7 +1,8 @@
-<!DOCTYP
-            </div>E html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,13 +28,15 @@
             }, false);
         }
     </script>
-    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+    <link rel="stylesheet" href="home.css?v=1">
+    <link rel="stylesheet" href="app-theme.css?v=2">
+    <meta name="theme-color" content="#000000">
 </head>
-<body style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--bg-color);">
+<body class="crm-page page-login" style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--bg-color);">
     
     <div class="card" style="width: 400px; padding: 32px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         <div class="logo" style="justify-content: center; margin-bottom: 32px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="32" height="32" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+            <span class="home-monogram" aria-hidden="true">PQD</span>
             <span class="logo-text" style="font-size: 24px;">PQD Remodels</span>
         </div>
         
@@ -81,17 +84,15 @@
     <script src="push.js"></script>
 <script>document.dispatchEvent(new Event('app:init'));</script>
 
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-            <i class="fa-solid fa-plus"></i> New Chat
-        </a>
-        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-            <i class="fa-regular fa-user"></i>
-        </a>
+    <!-- Floating navigation -->
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
+        </div>
     </nav>
 
 

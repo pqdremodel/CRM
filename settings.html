@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,29 +27,26 @@
             }, false);
         }
     </script>
-    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+    <link rel="stylesheet" href="home.css?v=1">
+    <link rel="stylesheet" href="app-theme.css?v=2">
+    <meta name="theme-color" content="#000000">
 </head>
-<body>
+<body class="crm-page page-settings">
     <div class="dashboard-container">
         
         <!-- Mobile Header -->
-        <div class="mobile-header">
-            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
-                <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
-            </div>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <i class="fa-regular fa-bell" style="font-size: 22px; color: var(--primary-color);"></i>
-                <button id="mobile-menu-btn"  style="background: none; border: none; font-size: 24px; color: var(--primary-color); cursor: pointer;"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
+        <header class="mobile-header crm-header">
+            <button id="global-back-btn" aria-label="Go back" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <a class="logo" href="index.html" aria-label="PQD Remodels home"><span class="home-monogram" aria-hidden="true">PQD</span><span class="logo-text">PQD Remodels</span></a>
+            <button id="mobile-menu-btn" aria-label="Open navigation" title="Navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+        </header>
+        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1>Settings</h1></div>
     
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="home-monogram" aria-hidden="true">PQD</span>
                     <span class="logo-text">PQD Remodels</span>
                     <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
                 </div>
@@ -113,79 +112,42 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <header class="top-bar">
-                <div style="font-size: 20px; font-weight: 600; color: var(--text-main);">Settings</div>
-            </header>
-
-            <div style="padding: 24px; max-width: 600px;">
-                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                    <style>
-                        #avatar-container:hover #avatar-overlay { opacity: 1 !important; }
-                    </style>
-                    <h2 style="margin-bottom: 24px; font-size: 18px; color: var(--text-main);">User Profile</h2>
-                    
+            <div class="screen-section-heading"><h2>Make yourself at home</h2><p>Your profile, preferences, and account.</p></div>
+            <div class="settings-panels">
+                <section class="settings-card settings-profile-card" aria-labelledby="profile-title">
+                    <div class="settings-card-heading"><span class="settings-card-icon"><i class="fa-regular fa-user" aria-hidden="true"></i></span><div><h2 id="profile-title">Your profile</h2><p>A familiar face for your team.</p></div></div>
                     <form id="settings-form">
-                        <div style="display: flex; gap: 24px; align-items: flex-start; margin-bottom: 24px;">
-                            <div style="text-align: center;">
-                                <div id="avatar-container" style="width: 100px; height: 100px; border-radius: 50%; background: #e0e0e0; overflow: hidden; margin-bottom: 12px; position: relative;">
-                                    <img id="settings-avatar-preview" src="" style="width: 100%; height: 100%; object-fit: cover;">
-                                    <div id="avatar-overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.2s;">
-                                        <i class="fa-solid fa-camera" style="color: white; font-size: 24px;"></i>
-                                    </div>
-                                    <input type="file" id="settings-avatar-input" accept="image/*" style="display: none;">
-                                </div>
-                                <div style="font-size: 12px; color: var(--text-muted);">Profile Photo</div>
+                        <div class="settings-photo-row">
+                            <div id="avatar-container" role="button" tabindex="0" aria-label="Change profile photo" onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); document.getElementById('settings-avatar-input').click(); }">
+                                <img id="settings-avatar-preview" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E">
+                                <div id="avatar-overlay"><i class="fa-solid fa-camera" aria-hidden="true"></i></div>
+                                <input type="file" id="settings-avatar-input" accept="image/*" hidden>
                             </div>
-                            
-                            <div style="flex: 1;">
-                                <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-                                    <div class="form-group" style="flex: 1;">
-                                        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted);">First Name</label>
-                                        <input type="text" id="settings-first-name" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px;">
-                                    </div>
-                                    
-                                    <div class="form-group" style="flex: 1;">
-                                        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted);">Last Name</label>
-                                        <input type="text" id="settings-last-name" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px;">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group" style="margin-bottom: 24px;">
-                                    <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted);">Email Address (Read Only)</label>
-                                    <input type="email" id="settings-email" disabled style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: #f5f5f5; color: #888;">
-                                </div>
-                            </div>
+                            <div><strong>Profile photo</strong><p>Tap to change your photo</p></div>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary" id="settings-save-btn">Save Changes</button>
+                        <div class="settings-name-fields">
+                            <div class="form-group"><label for="settings-first-name">First name</label><input type="text" id="settings-first-name" autocomplete="given-name" required></div>
+                            <div class="form-group"><label for="settings-last-name">Last name</label><input type="text" id="settings-last-name" autocomplete="family-name"></div>
+                        </div>
+                        <div class="form-group settings-email-field"><label for="settings-email">Email address <span>Read only</span></label><input type="email" id="settings-email" disabled></div>
+                        <div class="settings-save-row"><button type="submit" class="btn btn-primary" id="settings-save-btn">Save changes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
                     </form>
-                </div>
-                
-                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 24px;">
-                    <h2 style="margin-bottom: 8px; font-size: 18px; color: var(--text-main);">Push Notifications</h2>
-                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Enable notifications to receive alerts when you get new messages or lead updates.</p>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border-color);">
-                        <div>
-                            <div style="font-weight: 500; color: var(--text-main); font-size: 14px;">Allow Notifications</div>
-                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="push-status-text">Currently disabled on this device</div>
-                        </div>
-                        <button class="btn btn-primary" id="enable-push-btn">Enable</button>
-                    </div>
+                </section>
+                <div class="settings-preferences">
+                    <section class="settings-card" aria-labelledby="notifications-title">
+                        <div class="settings-card-heading"><span class="settings-card-icon"><i class="fa-regular fa-bell" aria-hidden="true"></i></span><div><h2 id="notifications-title">Notifications</h2><p>Stay in the loop.</p></div></div>
+                        <p class="settings-card-description">Get notified about new messages and lead updates.</p>
+                        <div class="settings-preference-row"><div><strong>Push notifications</strong><p id="push-status-text">Currently disabled on this device</p></div><button class="btn btn-primary" id="enable-push-btn">Enable</button></div>
+                    </section>
+                    <section class="settings-card" aria-labelledby="account-title">
+                        <div class="settings-card-heading"><span class="settings-card-icon"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i></span><div><h2 id="account-title">Your account</h2><p>Manage this session.</p></div></div>
+                        <p class="settings-card-description">Sign out of your account on this device.</p>
+                        <button class="btn btn-outline" id="settings-logout-btn">Sign out <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </section>
                 </div>
             </div>
         </main>
     </div>
-
-    
-                <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 24px;">
-                    <h2 style="margin-bottom: 8px; font-size: 18px; color: var(--text-main);">Account Management</h2>
-                    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">Sign out of your account on this device.</p>
-                    
-                    <button class="btn btn-outline" id="settings-logout-btn" style="color: #ef4444; border-color: #ef4444;">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
-                    </button>
-                </div>
 
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js"></script>
@@ -202,7 +164,7 @@
                 
                 // Close sidebar when clicking outside
                 document.addEventListener('click', (e) => {
-                    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
+                    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
                         sidebar.classList.remove('mobile-open');
                     }
                 });
@@ -212,17 +174,15 @@
     <script src="push.js"></script>
 <script>document.dispatchEvent(new Event('app:init'));</script>
 
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-            <i class="fa-solid fa-plus"></i> New Chat
-        </a>
-        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-            <i class="fa-regular fa-user"></i>
-        </a>
+    <!-- Floating navigation -->
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" class="is-active" aria-current="page" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
+        </div>
     </nav>
 
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,29 +27,26 @@
             }, false);
         }
     </script>
-    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+    <link rel="stylesheet" href="home.css?v=1">
+    <link rel="stylesheet" href="app-theme.css?v=2">
+    <meta name="theme-color" content="#000000">
 </head>
-<body>
+<body class="crm-page page-clients">
     <div class="dashboard-container">
         
         <!-- Mobile Header -->
-        <div class="mobile-header">
-            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
-                <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
-            </div>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <i class="fa-regular fa-bell" style="font-size: 22px; color: var(--primary-color);"></i>
-                <button id="mobile-menu-btn"  style="background: none; border: none; font-size: 24px; color: var(--primary-color); cursor: pointer;"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
+        <header class="mobile-header crm-header">
+            <button id="global-back-btn" aria-label="Go back" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <a class="logo" href="index.html" aria-label="PQD Remodels home"><span class="home-monogram" aria-hidden="true">PQD</span><span class="logo-text">PQD Remodels</span></a>
+            <button id="mobile-menu-btn" aria-label="Open navigation" title="Navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+        </header>
+        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1>Clients</h1></div>
     
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="home-monogram" aria-hidden="true">PQD</span>
                     <span class="logo-text">PQD Remodels</span>
                     <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
                 </div>
@@ -113,7 +112,8 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <header class="top-bar">
+            <div class="screen-section-heading"><h2>Your clients</h2><p>People, projects, and the details that matter.</p></div>
+            <header class="top-bar clients-toolbar">
                 <div class="search-bar">
                     <i class="fa-solid fa-magnifying-glass icon"></i>
                     <input type="text" placeholder="Search..">
@@ -121,13 +121,13 @@
                 <div class="actions">
                     <button class="btn btn-outline"><i class="fa-solid fa-rotate-right"></i> Update</button>
                     <button class="btn btn-outline"><i class="fa-solid fa-bars-staggered"></i> Filter</button>
-                    <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-arrow-down"></i> Sort</button>
+                    <button class="btn btn-outline"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort</button>
                     <button class="btn btn-primary" id="btn-add-client"><i class="fa-solid fa-plus"></i> Add Client</button>
                 </div>
             </header>
 
             <div class="table-container">
-                <table class="clients-table">
+                <table class="clients-table client-card-list" aria-label="Clients">
                     <thead>
                         <tr>
                             <th class="col-checkbox"><input type="checkbox"></th>
@@ -145,6 +145,8 @@
                 </table>
             </div>
             
+            <div id="clients-empty" class="clients-empty" hidden><span class="empty-state-icon"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span><h3>No clients yet</h3><p>Use Add Client to start your first project.</p></div>
+
             <div class="pagination">
                 <div class="page-controls">
                     <button><i class="fa-solid fa-chevron-left"></i></button>
@@ -210,7 +212,7 @@
 
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
 
     <script>
         document.addEventListener('app:init', () => {
@@ -223,7 +225,7 @@
                 
                 // Close sidebar when clicking outside
                 document.addEventListener('click', (e) => {
-                    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
+                    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
                         sidebar.classList.remove('mobile-open');
                     }
                 });
@@ -233,17 +235,15 @@
     <script src="push.js"></script>
 <script>document.dispatchEvent(new Event('app:init'));</script>
 
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-            <i class="fa-solid fa-plus"></i> New Chat
-        </a>
-        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-            <i class="fa-regular fa-user"></i>
-        </a>
+    <!-- Floating navigation -->
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" class="is-active" aria-current="page" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
+        </div>
     </nav>
 
 

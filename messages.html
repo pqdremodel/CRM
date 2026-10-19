@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,29 +28,26 @@
             }, false);
         }
     </script>
-    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+    <link rel="stylesheet" href="home.css?v=1">
+    <link rel="stylesheet" href="app-theme.css?v=2">
+    <meta name="theme-color" content="#000000">
 </head>
-<body>
+<body class="crm-page page-messages">
     <div class="dashboard-container">
         
         <!-- Mobile Header -->
-        <div class="mobile-header">
-            <button id="global-back-btn" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
-                <span class="logo-text" style="color: var(--primary-color);">PQD Remodels</span>
-            </div>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <i class="fa-regular fa-bell" style="font-size: 22px; color: var(--primary-color);"></i>
-                <button id="mobile-menu-btn"  style="background: none; border: none; font-size: 24px; color: var(--primary-color); cursor: pointer;"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
+        <header class="mobile-header crm-header">
+            <button id="global-back-btn" aria-label="Go back" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <a class="logo" href="index.html" aria-label="PQD Remodels home"><span class="home-monogram" aria-hidden="true">PQD</span><span class="logo-text">PQD Remodels</span></a>
+            <button id="mobile-menu-btn" aria-label="Open navigation" title="Navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+        </header>
+        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1>Messages</h1></div>
     
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Flame_icon.svg" alt="Flame" class="logo-icon" width="24" height="24" style="filter: invert(65%) sepia(85%) saturate(1915%) hue-rotate(345deg) brightness(102%) contrast(105%);">
+                    <span class="home-monogram" aria-hidden="true">PQD</span>
                     <span class="logo-text">PQD Remodels</span>
                     <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
                 </div>
@@ -117,53 +116,18 @@
             
             <!-- Chat Sidebar (Contacts) -->
             <div class="chat-sidebar">
-                <!-- Mobile specific App Header -->
-                <div class="app-title-mobile" style="padding: 16px 8px 0;">
-                    Mengobrol
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                <div class="inbox-heading">
+                    <span class="section-kicker">YOUR INBOX</span>
+                    <h2>Conversations</h2>
+                    <p>Keep every conversation close.</p>
                 </div>
-                
-                <!-- Stories Container -->
-                <div class="stories-container" style="padding: 0 8px;">
-                    <div class="story-item">
-                        <div class="story-add">
-                            <i class="fa-solid fa-plus"></i>
-                        </div>
-                        <div class="story-name">Add story</div>
-                    </div>
-                    <!-- Mock stories, can be dynamic later -->
-                    <div class="story-item">
-                        <img src="https://ui-avatars.com/api/?name=Tom&background=random&color=fff" class="story-avatar">
-                        <div class="story-name">Tom</div>
-                    </div>
-                    <div class="story-item">
-                        <img src="https://ui-avatars.com/api/?name=Jennifer&background=random&color=fff" class="story-avatar">
-                        <div class="story-name">Jennifer</div>
-                    </div>
-                    <div class="story-item">
-                        <img src="https://ui-avatars.com/api/?name=David&background=random&color=fff" class="story-avatar">
-                        <div class="story-name">David</div>
-                    </div>
-                    <div class="story-item">
-                        <img src="https://ui-avatars.com/api/?name=John&background=random&color=fff" class="story-avatar">
-                        <div class="story-name">John</div>
-                    </div>
-                </div>
+                <div class="contact-list" id="contact-list"></div>
+            </div>
 
-                <div class="section-header-mobile" style="padding: 0 8px;">
-                    Chats
-                    <i class="fa-solid fa-ellipsis"></i>
-                </div>
-
-                <div class="contact-list" id="contact-list" style="padding: 0 8px;">
-                    <!-- Dynamic contacts will be populated here -->
-                </div>
-</div>
-            
             <!-- Chat Window -->
             <div class="chat-window" style="position: relative;">
                 <div class="chat-header">
-                    <button id="mobile-back-btn" class="btn-icon-small" style="display: none; margin-right: 12px; flex-shrink: 0;"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button id="mobile-back-btn" aria-label="Back to conversations" class="btn-icon-small" style="display: none; margin-right: 12px; flex-shrink: 0;"><i class="fa-solid fa-arrow-left"></i></button>
                     <div class="chat-header-user">
                         <img src="https://ui-avatars.com/api/?name=Select+Client&background=e0e0e0&color=333" id="active-chat-avatar" alt="Avatar">
                         <div>
@@ -179,8 +143,10 @@
                 </div>
                 
                 <div class="chat-history" id="chat-history">
-                    <div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--text-muted);">
-                        Select a client to start messaging
+                    <div class="conversation-empty" style="height:100%">
+                        <span class="empty-state-icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span>
+                        <h2>A space to stay in touch</h2>
+                        <p>Select a conversation to view your messages.</p>
                     </div>
                 </div>
                 
@@ -204,9 +170,9 @@
 
                 <div class="chat-input-area" style="position: relative; align-items: flex-end;">
                     <input type="file" id="file-upload-input" style="display: none;">
-                    <button class="btn-icon-small" id="attach-btn" style="border: none; margin-bottom: 4px;"><i class="fa-solid fa-paperclip"></i></button>
+                    <button class="btn-icon-small" id="attach-btn" aria-label="Attach a file" style="border: none; margin-bottom: 4px;"><i class="fa-solid fa-paperclip"></i></button>
                     <textarea id="message-input" rows="1" placeholder="Type a message..."></textarea>
-                    <button class="btn btn-primary" id="send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; flex-shrink: 0;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
+                    <button class="btn btn-primary" id="send-btn" aria-label="Send message" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; flex-shrink: 0;"><i class="fa-solid fa-paper-plane" style="margin-right: 2px;"></i></button>
                 </div>
             </div>
             
@@ -216,7 +182,7 @@
     <!-- Auth Check & Core Scripts -->
     <script src="supabase.js?v=2"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
-    <script src="messages.js?v=8"></script>
+    <script src="messages.js?v=9"></script>
 
     <script>
         document.addEventListener('app:init', () => {
@@ -229,7 +195,7 @@
                 
                 // Close sidebar when clicking outside
                 document.addEventListener('click', (e) => {
-                    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
+                    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
                         sidebar.classList.remove('mobile-open');
                     }
                 });
@@ -239,17 +205,15 @@
     <script src="push.js"></script>
 <script>document.dispatchEvent(new Event('app:init'));</script>
 
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-            <i class="fa-solid fa-plus"></i> New Chat
-        </a>
-        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-            <i class="fa-regular fa-user"></i>
-        </a>
+    <!-- Floating navigation -->
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn is-active" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
+        </div>
     </nav>
 
 

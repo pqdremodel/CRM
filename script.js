@@ -32,6 +32,7 @@ async function fetchClients() {
 
 function renderClients() {
     tbody.innerHTML = '';
+    document.getElementById('clients-empty').hidden = clients.length > 0;
     
     const startIndex = (currentClientPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -43,20 +44,20 @@ function renderClients() {
         const statusClass = client.status.toLowerCase() === 'ongoing' ? 'status-ongoing' : 'status-complete';
         
         tr.innerHTML = `
-            <td class="col-checkbox"><input type="checkbox"></td>
-            <td>
+            <td class="col-checkbox"><input type="checkbox" aria-label="Select client"></td>
+            <td class="client-card-name">
                 <div class="client-name" style="cursor: pointer;">
                     <div class="client-icon">
-                        <img src="https://ui-avatars.com/api/?name=${client.name.replace(' ', '+')}&background=random&size=18&font-size=0.4" width="18" height="18">
+                        <img src="https://ui-avatars.com/api/?name=${client.name.replace(' ', '+')}&background=edf7fc&color=46819c&size=64&font-size=0.4" width="44" height="44" alt="">
                     </div>
                     <span>${client.name}</span>
                 </div>
             </td>
-            <td style="cursor: pointer;">${client.type}</td>
-            <td style="cursor: pointer;">${client.location}</td>
-            <td style="cursor: pointer;">${client.price}</td>
-            <td style="cursor: pointer;"><span class="status-badge ${statusClass}">${client.status}</span></td>
-            <td class="col-actions"><i class="fa-solid fa-trash more-action delete-btn" data-id="${client.id}" style="color: #ff4d4f;"></i></td>
+            <td class="client-card-type" data-label="Project" style="cursor: pointer;">${client.type}</td>
+            <td class="client-card-location" data-label="Location" style="cursor: pointer;">${client.location}</td>
+            <td class="client-card-price" data-label="Project value" style="cursor: pointer;">${client.price}</td>
+            <td class="client-card-status" style="cursor: pointer;"><span class="status-badge ${statusClass}">${client.status}</span></td>
+            <td class="col-actions"><button type="button" class="client-delete delete-btn" data-id="${client.id}" aria-label="Delete client"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button></td>
         `;
         
         // Add click listener to row cells except checkbox and actions

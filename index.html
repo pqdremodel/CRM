@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,138 +14,81 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
-    <style>
-        .dashboard-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 24px;
-        }
-        .dash-card {
-            background: white;
-            border-radius: 24px;
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            text-decoration: none;
-            color: #000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-            border: 1px solid #f0f0f0;
-            text-align: left;
-        }
-        .dash-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
-        .dash-card .icon-wrapper {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .dash-card i {
-            font-size: 24px;
-            color: #000;
-        }
-        .dash-card .info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            overflow: hidden;
-        }
-        .dash-card span.title {
-            font-weight: 700;
-            font-size: 16px;
-        }
-        .dash-card span.subtitle {
-            font-weight: 400;
-            font-size: 14px;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .dash-card .badge {
-            background: #fff9e6;
-            color: #e6a23c;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="home.css?v=1">
+    <meta name="theme-color" content="#000000">
 </head>
-<body>
-    <div class="dashboard-container" style="flex-direction: column; overflow-y: auto;">
-        
+<body class="home-page">
+    <main class="home-dashboard">
+        <section class="home-overview" aria-label="Dashboard overview">
+            <header class="home-header">
+                <a href="settings.html" class="home-avatar" aria-label="Account settings"><i class="fa-solid fa-user" aria-hidden="true"></i></a>
+                <h1><span class="home-monogram" aria-hidden="true">PQD</span> PQD Remodels</h1>
+            </header>
 
+            <nav class="home-shortcuts" aria-label="Overview shortcuts">
+                <a href="clients.html" class="home-shortcut is-highlighted"><span>Clients</span><strong>883</strong></a>
+                <a href="leads.html" class="home-shortcut"><span>Leads</span><strong>New <span class="home-dot" aria-hidden="true"></span></strong></a>
+                <a href="messages.html" class="home-shortcut"><span>Messages</span><strong>Unread</strong></a>
+                <a href="calendar.html" class="home-shortcut"><span>Up next</span><strong>10:00 AM</strong></a>
+            </nav>
 
-        <div class="dashboard-grid">
-            <a href="clients.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
-                <div class="icon-wrapper"><i class="fa-solid fa-building"></i></div>
-                <div class="info">
-                    <span class="title">Active Clients</span>
-                    <span class="subtitle">Total 883 Active Clients</span>
-                </div>
-            </a>
-            
-            <a href="leads.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('leads.html') : window.location.href='leads.html'">
-                <div class="icon-wrapper"><i class="fa-solid fa-user-plus"></i></div>
-                <div class="info">
-                    <span class="title">Recent Lead</span>
-                    <span class="subtitle">Sarah Jenkins ($450k Kitchen)</span>
-                </div>
-                <div class="badge">New</div>
+            <a href="clients.html" class="home-client-summary" aria-label="View all 883 active clients">
+                <span class="home-summary-label">Active clients</span>
+                <span class="home-client-count">883<span class="home-count-dot">.</span></span>
+                <span class="home-summary-footer">Total active clients <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
             </a>
 
-            <a href="messages.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-                <div class="icon-wrapper"><i class="fa-regular fa-message"></i></div>
-                <div class="info">
-                    <span class="title">Recent Message</span>
-                    <span class="subtitle">David: "Approve blueprint revisions..."</span>
-                </div>
-                <div class="badge" style="background: #ffc9c9; color: #ff6b6b;">Unread</div>
-            </a>
+            <div class="home-overview-actions">
+                <a href="calendar.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Calendar</a>
+                <a href="clients.html"><i class="fa-regular fa-folder-open" aria-hidden="true"></i> View clients</a>
+            </div>
+        </section>
 
-            <a href="calendar.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('calendar.html') : window.location.href='calendar.html'">
-                <div class="icon-wrapper"><i class="fa-regular fa-calendar"></i></div>
-                <div class="info">
-                    <span class="title">Up Next</span>
-                    <span class="subtitle">Blueprint Review (10:00 AM)</span>
+        <section class="home-activity" aria-labelledby="home-activity-title">
+            <div class="home-activity-inner">
+                <h2 id="home-activity-title"><span>Welcome back!</span> Here's your activity</h2>
+                <div class="home-quick-cards">
+                    <a href="calendar.html" class="home-card home-quick-card">
+                        <span class="home-card-eyebrow">Up next</span>
+                        <strong>10:00 AM</strong>
+                        <span class="home-quick-description">Blueprint Review</span>
+                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                    </a>
+                    <a href="settings.html" class="home-card home-quick-card">
+                        <span class="home-card-eyebrow">Your account</span>
+                        <strong>Settings</strong>
+                        <span class="home-quick-description">Account management</span>
+                        <i class="fa-regular fa-user" aria-hidden="true"></i>
+                    </a>
                 </div>
-            </a>
-            
-            <a href="settings.html" class="dash-card" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-                <div class="icon-wrapper"><i class="fa-solid fa-gear"></i></div>
-                <div class="info">
-                    <span class="title">Settings</span>
-                    <span class="subtitle">Account management</span>
+                <div class="home-detail-cards">
+                    <a href="leads.html" class="home-card home-detail-card">
+                        <div class="home-card-heading"><span class="home-card-eyebrow">Recent lead</span><span class="home-status">New</span></div>
+                        <h3>Sarah Jenkins</h3>
+                        <p><strong>$450k</strong> Kitchen</p>
+                        <span class="home-card-action">View lead <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
+                    <a href="messages.html" class="home-card home-detail-card">
+                        <div class="home-card-heading"><span class="home-card-eyebrow">Recent message</span><span class="home-status home-status-unread">Unread</span></div>
+                        <h3>A message from David</h3>
+                        <p>“Approve blueprint revisions...”</p>
+                        <span class="home-card-action">View message <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
                 </div>
-            </a>
+            </div>
+        </section>
+    </main>
+
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" class="is-active" aria-current="page" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
         </div>
-    </div>
-
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('index.html') : window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <a href="messages.html" class="nav-item new-chat-btn" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
-            <i class="fa-solid fa-plus"></i> New Chat
-        </a>
-        <a href="settings.html" class="nav-item" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
-            <i class="fa-regular fa-user"></i>
-        </a>
     </nav>
-    
+
     <!-- Bottom Nav Modal -->
     <div id="new-chat-modal" class="bottom-sheet-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:2000; flex-direction:column; justify-content:flex-end;">
         <div class="bottom-sheet-content" style="background:transparent; padding:16px; border-radius:24px 24px 0 0; animation: slideUp 0.3s ease-out; margin-bottom: 24px;">

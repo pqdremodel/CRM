@@ -1,0 +1,300 @@
+/* Shared presentation for the CRM screens; home.css supplies the floating nav. */
+html:has(body.crm-page), body.crm-page { height: auto !important; overflow-y: auto !important; }
+.crm-page {
+    --bg-color: #000;
+    --primary-color: #47bff0;
+    --text-main: #303030;
+    --text-muted: #777;
+    --border-color: #e8e8e8;
+    background: #000;
+    color: #303030;
+    animation: none;
+    -webkit-font-smoothing: antialiased;
+}
+.crm-page a { text-decoration: none; }
+.crm-page :is(a, button, input, select, textarea):focus-visible { outline: 3px solid #47bff0; outline-offset: 3px; }
+.crm-page .dashboard-container { display: flex; flex-direction: column; height: auto; min-height: 100svh; overflow: visible; padding: 0; }
+.crm-page .crm-header { display: flex !important; width: 100%; max-width: 1120px; margin: 0 auto; padding: 30px 28px 20px; min-height: 88px; background: #000; border: 0; color: #eee; }
+.crm-page .crm-header .logo { position: static; transform: none; gap: 10px; color: #eee; font-size: 21px; font-weight: 600; letter-spacing: -.6px; }
+.crm-page .crm-header .logo-text { display: inline !important; }
+.crm-page .crm-header button { display: grid !important; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: #202020 !important; color: #eee !important; font-size: 17px !important; cursor: pointer; }
+.crm-page-intro { width: 100%; max-width: 1120px; margin: 0 auto; padding: 14px 28px 30px; color: #eee; }
+.crm-page-intro > span { color: #47bff0; font-size: 10px; font-weight: 600; letter-spacing: 1.8px; }
+.crm-page-intro h1 { font-size: 36px; font-weight: 500; letter-spacing: -1.4px; margin-top: 8px; }
+.crm-page .main-content { flex: 1; width: 100%; max-width: none; min-width: 0; height: auto; margin: 0 !important; padding: 28px max(28px, calc((100% - 1064px) / 2)) 130px !important; border: 0 !important; border-radius: 32px 32px 0 0 !important; background: #fff !important; box-shadow: none; overflow: visible !important; }
+.crm-page .top-bar { padding: 0 0 24px; gap: 18px; flex-wrap: wrap; align-items: center; }
+.crm-page .search-bar { border: 1px solid #e8e8e8 !important; background: #fafafa !important; padding: 13px 17px !important; width: 260px; max-width: 100%; }
+.crm-page .search-bar input { min-width: 0; width: 100%; }
+.crm-page .actions { gap: 8px; }
+.crm-page .btn { min-height: 40px; font-weight: 500 !important; padding: 11px 17px !important; white-space: nowrap; }
+.crm-page .btn-primary, .crm-page .btn-dark { background: #202020 !important; color: #fff !important; border: 1px solid #202020 !important; box-shadow: none !important; }
+.crm-page .btn-outline { border: 1px solid #e6e6e6 !important; box-shadow: 0 3px 10px #00000004; color: #444; }
+.crm-page .btn-icon { width: 42px; padding: 10px !important; justify-content: center; }
+.crm-page .table-container { border: 1px solid #e8e8e8; border-radius: 24px; padding: 0 !important; background: #fff; }
+.crm-page .clients-table { min-width: 760px; }
+.crm-page .clients-table th { background: #fafafa; color: #777; font-size: 11px; font-weight: 500; padding: 18px 14px; }
+.crm-page .clients-table td { padding: 20px 14px; border-color: #eee; }
+.crm-page .clients-table tr:last-child td { border-bottom: 0; }
+.crm-page .client-name { font-weight: 600; gap: 10px; }
+.crm-page .client-icon { border-radius: 50%; background: #f1f1f1; }
+.crm-page .pagination { padding: 24px 0 0; gap: 16px; flex-wrap: wrap; }
+.crm-page .page-controls button { border-radius: 50%; width: 34px; height: 34px; }
+.crm-page .page-controls button.active { background: #202020; color: white; }
+.crm-page .status-badge { border-radius: 20px; padding: 5px 10px; font-size: 11px; }
+.crm-page .status-ongoing { background: #edf7fc; color: #46819c; }
+.crm-page .status-complete { background: #f1f7ef; color: #57764a; }
+.crm-page :is(.card, .settings-panels > div) { border: 1px solid #e6e6e6 !important; border-radius: 24px !important; box-shadow: 0 3px 9px #00000005, 0 8px 16px #00000004 !important; background: #fff; min-width: 0; }
+.crm-page .card:hover { transform: none; }
+.crm-page .card-header { padding: 21px 24px 15px; border-bottom: 1px solid #eee; gap: 12px; flex-wrap: wrap; }
+.crm-page .card-header h3 { color: #777; font-weight: 500; font-size: 11px; letter-spacing: .6px; }
+.crm-page .card-body { padding: 24px; min-width: 0; }
+.crm-page .project-header { padding: 0 0 24px !important; gap: 20px; }
+.crm-page .project-title h1 { font-size: 28px; font-weight: 600; letter-spacing: -1px; }
+.crm-page .project-title h2 { font-size: 16px; color: #777; line-height: 1.5; margin-top: 8px; }
+.crm-page .project-actions { flex-wrap: wrap; gap: 8px; }
+.crm-page .grid-layout { padding: 0 !important; gap: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.crm-page .task-title, .crm-page .price-title { letter-spacing: -.8px; }
+.crm-page .task-desc { line-height: 1.6; }
+.crm-page .card-body input:not([type=checkbox]), .crm-page .card-body select, .crm-page textarea, .crm-page .form-group input, .crm-page .form-group select, .crm-page #edit-lead-modal input, .crm-page #edit-lead-modal select { border: 1px solid #e7e7e7 !important; border-radius: 15px !important; background: #fafafa !important; padding: 12px 14px !important; font-size: 14px !important; min-width: 0; max-width: 100%; color: #303030; }
+.crm-page input:disabled { color: #888 !important; }
+.crm-page .card-body div[style*="flex: "] { min-width: 0; }
+.crm-page .modal-overlay, .crm-page #edit-lead-modal { z-index: 3000 !important; padding: 20px; backdrop-filter: blur(5px); }
+.crm-page .modal-overlay:not(.active) { visibility: hidden; }
+.crm-page .modal-content, .crm-page #edit-lead-modal > div { border-radius: 26px !important; width: min(100%, 480px) !important; max-height: calc(100dvh - 40px); overflow-y: auto; padding: 26px !important; }
+.crm-page .modal-header h2 { font-size: 22px; letter-spacing: -.7px; }
+.crm-page .modal-actions { gap: 10px; }
+.crm-page .bottom-sheet-content { max-width: 480px; width: 100%; margin-left: auto; margin-right: auto; }
+.crm-page .home-compose.is-active { background: #f0f0f0; color: #1b1b1b !important; }
+/* Preserve the existing navigation drawer at every viewport size. */
+.crm-page .sidebar { position: fixed; inset: 0 auto 0 0; width: min(320px, 88vw); height: 100dvh; background: #fff; z-index: 2000 !important; border: 0; border-radius: 0 28px 28px 0; transform: translateX(-105%); transition: transform .2s ease; overflow-y: auto; box-shadow: 10px 0 40px #00000020; }
+.crm-page .sidebar.mobile-open { transform: translateX(0); }
+.crm-page .sidebar:not(.mobile-open) { visibility: hidden; }
+.crm-page .sidebar-header { padding: 30px 22px; display: flex !important; }
+.crm-page .sidebar-header .logo { font-size: 19px; }
+.crm-page .sidebar-search { margin: 0 0 22px; padding: 0 22px; }
+.crm-page .sidebar-search input { width: 100%; border-radius: 20px; padding: 13px 14px 13px 34px; }
+.crm-page .sidebar-nav { padding: 0 14px; }
+.crm-page .section-title { margin: 0 0 12px; padding: 0 12px; }
+.crm-page .sidebar-nav li { padding: 14px; border-radius: 16px; font-size: 14px; }
+.crm-page .sidebar-nav li.active { background: #f1f1f1; box-shadow: none; color: #222; }
+.crm-page .sidebar-footer { padding: 20px 14px; }
+.crm-page .footer-nav { display: block !important; }
+.crm-page .user-profile { background: #f7f7f7; border-radius: 20px !important; }
+/* Calendar */
+.crm-page #calendar { padding: 0; }
+.crm-page .fc { --fc-border-color: #e8e8e8; --fc-today-bg-color: #edf7fc; }
+.crm-page .fc table { min-width: 0; }
+.crm-page .fc .fc-toolbar-title { font-weight: 600 !important; font-size: 23px !important; letter-spacing: -.7px; }
+.crm-page .fc .fc-button { border-radius: 20px !important; border-color: #e6e6e6 !important; background: #fff !important; color: #555 !important; padding: 9px 14px !important; }
+.crm-page .fc .fc-button-active { background: #202020 !important; color: white !important; border-color: #202020 !important; }
+.crm-page .fc .fc-button-group { gap: 5px; }
+.crm-page .fc .fc-view-harness { border-radius: 22px; box-shadow: none; border: 1px solid #e8e8e8; }
+.crm-page .fc .fc-list-day-cushion { background: #f5f5f5 !important; color: #444 !important; }
+.crm-page .fc .fc-day-today .fc-daygrid-day-number { background: #47bff0 !important; color: #142e3b !important; }
+/* Messages: retain the split pane and full-height mobile conversation. */
+.crm-page .main-content.chat-layout { padding: 0 !important; flex-direction: row; height: calc(100dvh - 294px); min-height: 420px; flex: none; overflow: hidden !important; margin-bottom: 110px !important; }
+.crm-page .chat-sidebar { width: 320px; flex-shrink: 0; background: #fff !important; padding: 24px 16px; border-right: 1px solid #eee; overflow-y: auto; }
+.crm-page .app-title-mobile { display: flex; align-items: center; justify-content: space-between; font-size: 22px; font-weight: 600; letter-spacing: -.7px; margin-bottom: 24px; }
+.crm-page .app-title-mobile i { color: #999; font-size: 18px; }
+.crm-page .stories-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 20px !important; margin-bottom: 12px; flex-shrink: 0; }
+.crm-page .story-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 51px; }
+.crm-page .story-avatar, .crm-page .story-add { width: 48px; height: 48px; border-radius: 50%; }
+.crm-page .story-add { display: grid; place-items: center; border: 1px dashed #bbb; color: #777; }
+.crm-page .story-name { font-size: 10px; color: #777; }
+.crm-page .section-header-mobile { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; margin-bottom: 15px; }
+.crm-page .contact-list { overflow-y: auto; min-height: 120px; }
+.crm-page .contact-item { border-radius: 18px; padding: 14px 8px !important; }
+.crm-page .contact-item.active { background: #f1f7fa !important; }
+.crm-page .chat-window { min-width: 0; }
+.crm-page .chat-header { padding: 20px; border-bottom: 1px solid #eee; }
+.crm-page .chat-history { background: #fafafa; padding: 24px; }
+.crm-page .sent .message-bubble { background: #242424; color: #fff; border-radius: 20px 20px 5px 20px; }
+.crm-page .received .message-bubble { border-radius: 20px 20px 20px 5px; }
+.crm-page .chat-input-area { padding: 16px; }
+.crm-page #send-btn { width: 42px !important; height: 42px !important; min-height: 42px; padding: 0 !important; border-radius: 50% !important; }
+/* Sign-in uses the same dark surround and white surface. */
+.crm-page.page-login { display: flex; align-items: center; justify-content: center; min-height: 100svh; padding: 40px 20px 120px !important; background: #000 !important; }
+.crm-page.page-login > .card { width: min(100%, 440px) !important; padding: 32px !important; }
+.crm-page.page-login .logo { gap: 10px; }
+.crm-page.page-login .logo-text { font-size: 22px !important; }
+.crm-page.page-login h2 { font-size: 25px; letter-spacing: -.8px; }
+@media (max-width: 768px) {
+    .crm-page .crm-header { padding: calc(22px + env(safe-area-inset-top, 0px)) 17px 16px; min-height: 78px; }
+    .crm-page .crm-header .logo { font-size: 18px; gap: 8px; }
+    .crm-page .crm-header .home-monogram { width: 31px; height: 32px; font-size: 11px; }
+    .crm-page .crm-header button { width: 34px; height: 34px; font-size: 15px !important; }
+    .crm-page-intro { padding: 12px 21px 26px; }
+    .crm-page-intro h1 { font-size: 30px; }
+    .crm-page .main-content { padding: 24px 17px calc(120px + env(safe-area-inset-bottom, 0px)) !important; border-radius: 28px 28px 0 0 !important; }
+    .crm-page .top-bar { padding: 0 0 20px; gap: 14px; }
+    .crm-page .actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; overflow: visible; }
+    .crm-page .actions .btn { font-size: 12px !important; padding: 10px 12px !important; justify-content: center; }
+    .crm-page .table-container { border: 0; border-radius: 0; overflow: visible !important; }
+    .crm-page .clients-table { min-width: 0; width: 100%; }
+    .crm-page .clients-table tr { padding: 21px; border: 1px solid #e6e6e6; border-radius: 23px; box-shadow: 0 4px 12px #00000005; margin-bottom: 16px; }
+    .crm-page .clients-table td { padding: 5px 0; overflow-wrap: anywhere; }
+    .crm-page .clients-table td.col-actions { top: 21px; right: 21px; }
+    .crm-page .pagination { padding-top: 12px; }
+    .crm-page .entries-info { font-size: 11px; }
+    .crm-page .grid-layout { grid-template-columns: 1fr; gap: 18px; }
+    .crm-page .card-header { padding: 20px; }
+    .crm-page .card-body { padding: 20px; }
+    .crm-page .project-header { padding: 0 0 20px !important; }
+    .crm-page .project-title h1 { font-size: 25px; }
+    .crm-page .settings-panels > div { padding: 20px !important; }
+    .settings-profile-layout { flex-direction: column; gap: 22px; }
+    .settings-profile-layout > div { width: 100%; }
+    .crm-page #avatar-container { margin-inline: auto; }
+    .settings-name-fields { flex-direction: column; gap: 0; }
+    .crm-page .settings-panels p { line-height: 1.6; }
+    .crm-page .modal-content { padding: 22px !important; }
+    .crm-page .fc .fc-header-toolbar { gap: 12px; }
+    .crm-page .fc .fc-toolbar-title { font-size: 21px !important; }
+    .crm-page .fc .fc-button { padding: 8px 10px !important; font-size: 11px !important; }
+    .crm-page .main-content.chat-layout { min-height: calc(100dvh - 184px); height: auto; margin-bottom: 0 !important; }
+    .crm-page .chat-sidebar { width: 100%; height: auto; padding: 24px 17px 120px; }
+    .crm-page .chat-sidebar .contact-list { overflow-y: visible; }
+    .crm-page .main-content.chat-layout.chat-active { height: 100dvh !important; min-height: 0; border-radius: 0 !important; }
+    .crm-page.mobile-chat-active .crm-header { display: none !important; }
+    .crm-page.mobile-chat-active .home-floating-nav { display: none; }
+    .crm-page .chat-header { padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 14px; }
+    .crm-page .chat-header-actions { gap: 3px; }
+    .crm-page .chat-history { padding: 16px; }
+    .crm-page .chat-input-area { padding: 12px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
+    .crm-page.page-login > .card { padding: 28px 22px !important; border-radius: 28px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .crm-page *, .crm-page *::before, .crm-page *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+/* The content surfaces use the same card hierarchy as the home activity feed. */
+.screen-section-heading { margin-bottom: 25px; }
+.screen-section-heading h2 { font-size: 24px; font-weight: 600; letter-spacing: -.8px; color: #303030; }
+.screen-section-heading p { font-size: 14px; line-height: 1.6; color: #858585; margin-top: 7px; }
+/* Clients become readable project cards at every screen size. */
+.page-clients .clients-toolbar { align-items: center; padding-bottom: 24px; }
+.page-clients .table-container { border: 0; overflow: visible !important; flex: none; }
+.page-clients .client-card-list { display: block; width: 100%; min-width: 0; border: 0; }
+.page-clients .client-card-list thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.page-clients .client-card-list tbody { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.page-clients .client-card-list tr { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 14px; position: relative; padding: 24px; margin: 0; border: 1px solid #e6e6e6; border-radius: 25px; background: #fff; box-shadow: 0 5px 18px #00000005; }
+.page-clients .client-card-list td { display: block; padding: 0; border: 0; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+.page-clients .client-card-list td.col-checkbox { display: block; position: absolute; top: 34px; left: 20px; }
+.page-clients .client-card-list td.client-card-name { grid-column: 1 / -1; padding: 0 30px 15px 24px; margin: 0; border-bottom: 1px solid #eee; }
+.page-clients .client-name { color: #303030; font-weight: 600; font-size: 18px; gap: 12px; letter-spacing: -.4px; }
+.page-clients .client-icon { width: 44px; height: 44px; flex-shrink: 0; border: 0; background: #edf7fc; overflow: hidden; }
+.page-clients .client-icon img { width: 44px; height: 44px; }
+.page-clients td[data-label]::before { content: attr(data-label); display: block; color: #8a8a8a; font-size: 11px; font-weight: 400; margin-bottom: 7px; }
+.page-clients .client-card-list td.client-card-price { font-size: 22px; font-weight: 600; letter-spacing: -.6px; padding-top: 2px; }
+.page-clients .client-card-list td.client-card-price::before { letter-spacing: 0; }
+.page-clients .client-card-list td.client-card-status { align-self: end; justify-self: end; padding-bottom: 3px; margin: 0; }
+.page-clients .client-card-list td.col-actions { position: absolute; top: 27px; right: 20px; }
+.client-delete { width: 32px; height: 32px; border: 0; border-radius: 50%; background: #f7f7f7; color: #969696; display: grid; place-items: center; cursor: pointer; }
+.client-delete:hover { background: #fff0f0; color: #b34848; }
+.page-clients .pagination { padding-top: 26px; margin-top: 0; }
+/* Settings use one profile card and two supporting preference cards. */
+.crm-page .settings-panels { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; gap: 22px; max-width: none; }
+.crm-page .settings-panels > .settings-preferences { display: flex; flex-direction: column; gap: 22px; margin: 0 !important; padding: 0 !important; border: 0 !important; background: none; box-shadow: none !important; }
+.crm-page .settings-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 25px; padding: 26px; box-shadow: 0 5px 18px #00000005; min-width: 0; }
+.settings-card-heading { display: flex; align-items: center; gap: 13px; margin-bottom: 25px; }
+.settings-card-icon { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; background: #f4f4f4; color: #898989; font-size: 18px; }
+.settings-card-heading h2 { font-size: 19px; font-weight: 600; letter-spacing: -.6px; }
+.settings-card-heading p { font-size: 12px; color: #888; margin-top: 4px; }
+.settings-photo-row { display: flex; align-items: center; gap: 16px; padding: 19px 0 24px; border-top: 1px solid #eee; }
+.settings-photo-row strong { font-size: 14px; font-weight: 500; }
+.settings-photo-row p { margin-top: 5px; font-size: 12px; color: #888; }
+.crm-page #avatar-container { position: relative; flex-shrink: 0; width: 70px; height: 70px; border-radius: 50%; background: #f5e7f7 !important; overflow: hidden; cursor: pointer; margin: 0; }
+.crm-page #avatar-container::before { content: '\f007'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; inset: 0; display: grid; place-items: center; font-size: 29px; color: #be2ac7; }
+.crm-page #settings-avatar-preview { position: relative; width: 100%; height: 100%; object-fit: cover; }
+.crm-page #avatar-overlay { position: absolute; inset: 0; z-index: 1; background: #0006; color: #fff; display: grid; place-items: center; opacity: 0; transition: opacity .2s; }
+.crm-page #avatar-container:hover #avatar-overlay, .crm-page #avatar-container:focus-visible #avatar-overlay { opacity: 1; }
+.crm-page .settings-name-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0; }
+.crm-page .settings-name-fields > div { min-width: 0; }
+.crm-page .settings-card .form-group { margin-bottom: 20px; }
+.crm-page .settings-card label { display: flex; align-items: center; justify-content: space-between; color: #777; font-size: 12px; font-weight: 400; margin-bottom: 9px; }
+.crm-page .settings-card label span { font-size: 10px; color: #999; }
+.crm-page .settings-card .form-group input { width: 100%; min-height: 45px; border-radius: 14px !important; }
+.settings-save-row { display: flex; justify-content: flex-end; padding-top: 3px; }
+.crm-page .settings-save-row .btn { gap: 16px; }
+.settings-card-description { color: #777; font-size: 14px; line-height: 1.65; margin-bottom: 23px; }
+.settings-preference-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; border-top: 1px solid #eee; padding-top: 22px; }
+.settings-preference-row strong { font-size: 13px; font-weight: 500; }
+.settings-preference-row p { font-size: 11px; color: #888; line-height: 1.6; margin-top: 5px; }
+.crm-page #settings-logout-btn { color: #b34848 !important; gap: 22px; }
+/* Messages: inset conversation cards instead of the old social feed. */
+.crm-page.page-messages .main-content.chat-layout { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 20px; padding: 24px max(24px, calc((100% - 1120px) / 2)) 110px !important; height: calc(100dvh - 201px); min-height: 510px; margin-bottom: 0 !important; background: #fff !important; }
+.crm-page.page-messages .chat-sidebar { width: auto; height: 100%; min-height: 0; padding: 0; background: #fff !important; border: 0; display: flex; flex-direction: column; overflow: hidden; }
+.inbox-heading { padding: 7px 4px 22px; }
+.section-kicker { color: #929292; font-size: 10px; font-weight: 500; letter-spacing: 1.3px; }
+.inbox-heading h2 { font-size: 24px; font-weight: 600; letter-spacing: -.8px; margin-top: 6px; }
+.inbox-heading p { font-size: 12px; color: #888; margin-top: 8px; }
+.crm-page.page-messages .contact-list { min-height: 0; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding: 1px 4px 12px; }
+.crm-page.page-messages .contact-item { display: flex; align-items: center; gap: 13px; border: 1px solid #e7e7e7 !important; background: #fff !important; border-radius: 22px; padding: 19px 17px !important; margin: 0 !important; box-shadow: 0 3px 10px #00000004; min-width: 0; }
+.crm-page.page-messages .contact-item.active { background: #f7fbfd !important; border-color: #b9e2f1 !important; }
+.crm-page.page-messages .contact-avatar { flex-shrink: 0; }
+.crm-page.page-messages .contact-avatar img { width: 46px !important; height: 46px !important; border-radius: 50% !important; }
+.crm-page.page-messages .contact-info { flex: 1; min-width: 0; }
+.crm-page.page-messages .contact-top, .crm-page.page-messages .contact-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.crm-page.page-messages .contact-top h4 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px !important; font-weight: 600 !important; letter-spacing: -.3px; margin: 0 !important; }
+.crm-page.page-messages .contact-top .time { color: #999 !important; font-size: 10px !important; flex-shrink: 0; }
+.crm-page.page-messages .contact-bottom { margin-top: 7px; }
+.crm-page.page-messages .contact-bottom p { font-size: 12px !important; font-family: inherit !important; color: #888 !important; min-width: 0; max-width: none; flex: 1; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; margin: 0 !important; }
+.crm-page.page-messages .unread-badge { display: grid; place-items: center; flex-shrink: 0; border-radius: 50% !important; background: #202020 !important; color: #fff; width: 20px; height: 20px !important; font-size: 10px !important; padding: 0 !important; }
+.crm-page.page-messages .chat-window { border: 1px solid #e6e6e6; border-radius: 25px; overflow: hidden; background: #fff; min-height: 0; }
+.crm-page.page-messages .chat-header { padding: 19px 21px; }
+.crm-page.page-messages .chat-header-user { min-width: 0; }
+.crm-page.page-messages .chat-header-user h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+.crm-page.page-messages .chat-header-actions .btn-icon-small { border: 0; border-radius: 50%; background: #f7f7f7; color: #999; }
+.crm-page.page-messages .chat-history { background: #fcfcfc; gap: 18px; min-height: 0; }
+.conversation-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; color: #888; }
+.empty-state-icon { width: 68px; height: 68px; background: #f1f1f1; color: #8c8c8c; display: grid; place-items: center; border-radius: 50%; font-size: 28px; margin-bottom: 20px; }
+.conversation-empty h2 { font-size: 20px; font-weight: 500; letter-spacing: -.5px; color: #444; }
+.conversation-empty p { font-size: 13px; line-height: 1.7; margin-top: 8px; }
+.crm-page.page-messages .message-row { max-width: 85%; }
+.crm-page.page-messages .message-bubble { box-shadow: 0 2px 6px #00000003; }
+.crm-page.page-messages .chat-input-area { padding: 14px 16px; gap: 9px; }
+.crm-page.page-messages #message-input { border-radius: 23px !important; background: #f7f7f7 !important; max-height: 130px; }
+@media (max-width: 900px) and (min-width: 769px) {
+    .crm-page.page-messages .main-content.chat-layout { grid-template-columns: 300px minmax(0, 1fr); gap: 15px; }
+    .crm-page .settings-panels { grid-template-columns: 1fr; }
+    .crm-page .settings-panels > .settings-preferences { display: grid; grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+    .screen-section-heading { margin-bottom: 21px; }
+    .screen-section-heading h2 { font-size: 22px; }
+    .screen-section-heading p { font-size: 12px; }
+    .page-clients .client-card-list tbody { grid-template-columns: 1fr; gap: 17px; }
+    .page-clients .client-card-list tr { padding: 20px; }
+    .page-clients .client-card-list td.col-checkbox { top: 31px; left: 16px; }
+    .page-clients .client-card-list td.col-actions { top: 23px; right: 16px; }
+    .page-clients .client-name { font-size: 17px; }
+    .crm-page .settings-panels { grid-template-columns: 1fr; gap: 18px; }
+    .crm-page .settings-panels > .settings-preferences { gap: 18px; }
+    .crm-page .settings-card { padding: 22px 20px; }
+    .settings-card-heading { margin-bottom: 22px; }
+    .crm-page .settings-name-fields { gap: 12px; }
+    .crm-page .settings-save-row .btn { width: 100%; justify-content: center; }
+    .crm-page.page-messages .main-content.chat-layout { display: block; height: auto; min-height: calc(100dvh - 176px); padding: 25px 17px 115px !important; }
+    .crm-page.page-messages .chat-sidebar { height: auto; overflow: visible; }
+    .crm-page.page-messages .contact-list { overflow: visible; }
+    .inbox-heading { padding: 0 4px 23px; }
+    .crm-page.page-messages .main-content.chat-layout.chat-active { display: flex; height: 100dvh !important; min-height: 0; padding: 0 !important; }
+    .crm-page.page-messages .chat-layout.chat-active .chat-window { border: 0; border-radius: 0; height: 100%; }
+    .crm-page.page-messages .chat-header { padding: calc(16px + env(safe-area-inset-top, 0px)) 14px 16px; }
+    .crm-page.page-messages .chat-header-user img { width: 36px; height: 36px; }
+    .crm-page.page-messages .chat-header-user h3 { max-width: 130px; font-size: 14px; }
+    .crm-page.page-messages .chat-header-actions { gap: 3px; }
+    .crm-page.page-messages .chat-header-actions .btn-icon-small { width: 27px; height: 27px; font-size: 11px; padding: 0; }
+    .crm-page.page-messages .chat-input-area { padding: 12px 10px calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 360px) {
+    .crm-page .settings-name-fields { grid-template-columns: 1fr; gap: 0; }
+    .page-clients .client-name { font-size: 15px; gap: 8px; }
+    .page-clients .client-icon, .page-clients .client-icon img { width: 36px; height: 36px; }
+    .crm-page.page-messages .contact-item { gap: 10px; padding: 17px 13px !important; }
+    .crm-page.page-messages .contact-top h4 { font-size: 13px !important; }
+}
+
+.clients-empty:not([hidden]), .inbox-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; border: 1px solid #e6e6e6; border-radius: 25px; text-align: center; background: #fff; }
+.clients-empty h3, .inbox-empty h3 { font-size: 18px; font-weight: 500; letter-spacing: -.5px; }
+.clients-empty p, .inbox-empty p { font-size: 13px; color: #888; line-height: 1.7; margin-top: 8px; }

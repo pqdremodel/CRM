@@ -90,7 +90,7 @@ document.addEventListener('app:init', async () => {
         contactList.innerHTML = '';
         
         if (users.length === 0) {
-            contactList.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted); font-size:14px;">No other users found in the system yet.</div>';
+            contactList.innerHTML = '<div class="inbox-empty"><span class="empty-state-icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span><h3>No conversations yet</h3><p>Your team will appear here when they join.</p></div>';
             return;
         }
 
@@ -111,16 +111,16 @@ document.addEventListener('app:init', async () => {
             
             item.innerHTML = `
                 <div class="contact-avatar">
-                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff" alt="${displayName}">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f3e8f6&color=8a5094" alt="${displayName}">
                     <div class="status-dot ${statusClass}" style="display:none;"></div>
                 </div>
-                <div class="contact-info" style="flex:1; min-width:0;">
-                    <div class="contact-top" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                        <h4 style="font-size:16px; font-weight:600; color:#000; margin:0;">${displayName}</h4>
-                        <span class="time" style="font-size:12px; color:#aaa;">${user.lastMessageTime || '02:11'}</span>
+                <div class="contact-info">
+                    <div class="contact-top">
+                        <h4>${displayName}</h4>
+                        <span class="time">${user.lastMessageTime}</span>
                     </div>
-                    <div class="contact-bottom" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:4px;">
-                        <p style="font-size:14px; color:#888; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80%; margin:0;">${user.lastMessageText}</p>
+                    <div class="contact-bottom">
+                        <p>${user.lastMessageText}</p>
                         ${badgeHtml}
                     </div>
                 </div>
@@ -148,7 +148,7 @@ document.addEventListener('app:init', async () => {
     async function setActiveChat(user, displayName, isOnline) {
         activeUser = user;
         document.getElementById('active-chat-name').textContent = displayName;
-        document.getElementById('active-chat-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random&color=fff`;
+        document.getElementById('active-chat-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f3e8f6&color=8a5094`;
         document.getElementById('active-chat-status').textContent = isOnline ? 'Online' : 'Offline';
         document.getElementById('active-chat-status').style.color = isOnline ? '#4caf50' : '#9e9e9e';
         
@@ -261,7 +261,7 @@ document.addEventListener('app:init', async () => {
         } else {
             const activeName = document.getElementById('active-chat-name').textContent;
             row.innerHTML = `
-                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(activeName)}&background=random&color=fff" class="message-avatar">
+                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(activeName)}&background=f3e8f6&color=8a5094" class="message-avatar">
                 <div class="message-bubble">
                     <p>${msg.content}</p>
                     ${attachmentHtml}
