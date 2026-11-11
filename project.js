@@ -1,5 +1,6 @@
 document.addEventListener('app:init', async () => {
     const currentUser = await requireAuth();
+    if (!currentUser) return;
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.getDisplayName();
         document.getElementById('profile-avatar').src = currentUser.getAvatarUrl();
@@ -20,9 +21,11 @@ document.addEventListener('app:init', async () => {
             .single();
 
         if (client && !error) {
+            window.loadProjectChecklist(client);
             // Update the DOM with client data
-            document.getElementById('client-name-display').textContent = client.name;
-            document.getElementById('client-type-display').textContent = `Project Type: ${client.type}`;
+            document.getElementById('client-name-display').textContent = client.project_name || client.name;
+            document.getElementById('project-client-display').textContent = `Client: ${client.client_name || client.name}`;
+            document.getElementById('client-type-display').textContent = client.type ? `Project Type: ${client.type}` : 'Project type not specified';
             
             const statusDisplay = document.getElementById('client-status-display');
             if (statusDisplay) {
@@ -52,6 +55,8 @@ document.addEventListener('app:init', async () => {
                 const streetEl = document.getElementById('client-address-street');
                 if (streetEl) streetEl.value = addrObj.street || client.address || '';
                 
+                const unitEl = document.getElementById('client-address-unit');
+                if (unitEl) unitEl.value = addrObj.unit || '';
                 const cityEl = document.getElementById('client-address-city');
                 if (cityEl) cityEl.value = addrObj.city || '';
                 
@@ -68,10 +73,10 @@ document.addEventListener('app:init', async () => {
             const notesInput = document.getElementById('client-notes');
             if (notesInput) notesInput.value = client.notes || '';
 
-            document.title = `${client.name} - CRM Dashboard`;
+            document.title = `${client.project_name || client.name} - CRM Dashboard`;
         } else {
             console.error("Error fetching client details:", error);
-            document.getElementById('client-name-display').textContent = "Client Not Found";
+            document.getElementById('client-name-display').textContent = "Project Not Found";
         }
 
         // Auto-save logic with debounce
@@ -85,6 +90,7 @@ document.addEventListener('app:init', async () => {
 
             const updatedAddress = JSON.stringify({
                 street: document.getElementById('client-address-street') ? document.getElementById('client-address-street').value : '',
+                unit: document.getElementById('client-address-unit')?.value.trim() || '',
                 city: document.getElementById('client-address-city') ? document.getElementById('client-address-city').value : '',
                 state: document.getElementById('client-address-state') ? document.getElementById('client-address-state').value : '',
                 zip: document.getElementById('client-address-zip') ? document.getElementById('client-address-zip').value : ''
@@ -93,7 +99,7 @@ document.addEventListener('app:init', async () => {
 
             const { error: updateError } = await supabaseClient
                 .from('clients')
-                .update({ address: updatedAddress, notes: updatedNotes })
+                .update({ address: updatedAddress, location: Object.values(JSON.parse(updatedAddress)).filter(Boolean).join(', '), notes: updatedNotes })
                 .eq('id', clientId);
                 
             if (!updateError) {
@@ -117,6 +123,7 @@ document.addEventListener('app:init', async () => {
         }
 
         const addrStreetEl = document.getElementById('client-address-street');
+        const addrUnitEl = document.getElementById('client-address-unit');
         const addrCityEl = document.getElementById('client-address-city');
         const addrStateEl = document.getElementById('client-address-state');
         const addrZipEl = document.getElementById('client-address-zip');
@@ -130,7 +137,7 @@ document.addEventListener('app:init', async () => {
                 const state = addrStateEl ? addrStateEl.value.trim() : '';
                 const zip = addrZipEl ? addrZipEl.value.trim() : '';
                 
-                const fullAddress = [street, city, state, zip].filter(Boolean).join(', ');
+                const fullAddress = [street, addrUnitEl?.value.trim(), city, state, zip].filter(Boolean).join(', ');
                 if (fullAddress) {
                     const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
                     window.open(url, '_blank');
@@ -213,6 +220,7 @@ document.addEventListener('app:init', async () => {
             });
         }
         
+        if (addrUnitEl) addrUnitEl.addEventListener('input', handleInput);
         if (addrCityEl) addrCityEl.addEventListener('input', handleInput);
         if (addrStateEl) addrStateEl.addEventListener('input', handleInput);
         if (addrZipEl) addrZipEl.addEventListener('input', handleInput);

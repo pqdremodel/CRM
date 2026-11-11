@@ -32,6 +32,13 @@ document.addEventListener('app:init', async () => {
 
 
     
+    if (window.crmLocal) {
+        document.getElementById('push-status-text').textContent = 'Not available in the local workspace';
+        document.getElementById('enable-push-btn').disabled = true;
+        document.getElementById('settings-logout-btn').textContent = 'Leave local workspace';
+        document.getElementById('settings-avatar-input').disabled = true;
+        return;
+    }
     // Check Notification Status
     if (Notification.permission === 'granted') {
         document.getElementById('push-status-text').textContent = 'Enabled';

@@ -1,0 +1,33 @@
+.crm-page #add-client-modal .modal-content { width:min(100%, 660px) !important; padding:24px 28px !important; }
+#add-client-modal .modal-header { margin-bottom:20px; }
+#add-client-modal .modal-header h2 { font-size:24px; }
+#add-client-form .form-group { margin:0; min-width:0; }
+#add-client-form label { font-size:13px; margin-bottom:6px; }
+#add-client-form label span { font-weight:400; color:#81878b; }
+#add-client-form input, #add-client-form select { width:100%; min-width:0; padding:10px 12px; min-height:42px; border-radius:9px; font-size:14px; }
+#add-client-form > .form-group:first-child input { font-size:17px; font-weight:500; }
+#add-client-form fieldset { min-width:0; }
+#add-client-form .project-address-section { border:0; margin:20px 0; padding:0; }
+#add-client-form legend { font-size:13px; font-weight:600; margin-bottom:10px; padding:0; }
+.project-address-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; }
+.address-street { grid-column:1 / 3; }
+.address-unit { grid-column:3; }
+#add-client-form .project-client-section { margin:0 0 18px; padding:16px; border:1px solid #dce5eb; background:#f5f9fb; border-radius:12px; }
+#add-client-form .project-client-section legend { padding:0 6px; margin:0; }
+#new-client-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+#new-client-fields > :first-child { grid-column:1 / -1; }
+#new-client-fields[hidden] { display:none; }
+.project-additional { border-top:1px solid #e7ebee; padding:14px 0; }
+.project-additional summary { cursor:pointer; font-size:14px; font-weight:500; }
+.project-additional summary span { display:inline-block; margin-left:10px; font-size:12px; color:#7a8287; font-weight:400; }
+.project-additional-fields { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; padding-top:16px; }
+#add-client-form .modal-actions { position:sticky; bottom:-24px; background:white; padding:16px 0 4px; margin:0; border-top:1px solid #e7ebee; z-index:1; }
+@media(max-width:520px) {
+ .crm-page #add-client-modal .modal-content { padding:20px !important; }
+ .project-address-grid { grid-template-columns:1fr 1fr; }
+ .address-street, .address-city { grid-column:1 / -1; }
+ .address-unit { grid-column:1 / -1; }
+ .project-additional-fields, #new-client-fields { grid-template-columns:1fr; }
+ .project-additional summary span { display:block; margin:6px 0 0 16px; }
+ #add-client-form .modal-actions { bottom:-20px; }
+}

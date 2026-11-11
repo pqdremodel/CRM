@@ -9,7 +9,7 @@ document.addEventListener('app:init', async () => {
     try {
         const { data } = await supabaseClient.auth.getSession();
         if (data.session) {
-            window.Turbo ? window.Turbo.visit('index.html') : window.location.href = 'index.html';
+            window.Turbo ? window.Turbo.visit('clients.html') : window.location.href = 'clients.html';
             return;
         }
     } catch(e) {}
@@ -20,6 +20,14 @@ document.addEventListener('app:init', async () => {
     const passwordInput = document.getElementById('password');
     const errorMsg = document.getElementById('error-message');
     const successMsg = document.getElementById('success-message');
+
+    if (window.crmLocal) {
+        document.querySelector('label[for="email"]').textContent = 'Username';
+        emailInput.type = 'text'; emailInput.placeholder = 'ADMIN'; emailInput.autocomplete = 'username';
+        passwordInput.autocomplete = 'current-password';
+        signupBtn.hidden = true;
+        signupBtn.style.display = 'none';
+    }
 
     // Handle Login
     loginForm.addEventListener('submit', async (e) => {
@@ -39,7 +47,7 @@ document.addEventListener('app:init', async () => {
             errorMsg.textContent = error.message;
             errorMsg.style.display = 'block';
         } else {
-            window.Turbo ? window.Turbo.visit('index.html') : window.location.href = 'index.html';
+            window.Turbo ? window.Turbo.visit('clients.html') : window.location.href = 'clients.html';
         }
     });
 

@@ -29,6 +29,7 @@
     </script>
     <link rel="stylesheet" href="home.css?v=1">
     <link rel="stylesheet" href="app-theme.css?v=2">
+    <style>#local-backup-card[hidden] { display:none !important; }</style>
     <meta name="theme-color" content="#000000">
 </head>
 <body class="crm-page page-settings">
@@ -66,7 +67,7 @@
                     <ul>
                         <li onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
                             <i class="fa-solid fa-building icon"></i>
-                            <span>Clients</span>
+                            <span>Projects</span>
                         </li>
                         <li onclick="window.Turbo ? window.Turbo.visit('leads.html') : window.location.href='leads.html'">
                             <i class="fa-solid fa-user-plus icon"></i>
@@ -134,6 +135,17 @@
                     </form>
                 </section>
                 <div class="settings-preferences">
+<section class="settings-card"><div class="settings-card-heading"><span class="settings-card-icon"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span><div><h2>Project Procedure</h2><p>A consistent checklist for every new project.</p></div></div><p class="settings-card-description">Manage default steps and tasks for your team.</p><a class="btn btn-outline" href="project-defaults.html">Manage Project Procedure →</a></section>
+                    <section class="settings-card" id="local-backup-card" hidden aria-labelledby="backup-title">
+                        <div class="settings-card-heading"><span class="settings-card-icon"><i class="fa-solid fa-download" aria-hidden="true"></i></span><div><h2 id="backup-title">Back up your workspace</h2><p>Keep a copy of your local work.</p></div></div>
+                        <p class="settings-card-description">Download your projects, clients, procedures, and task progress. Choose SQL for a file you can run directly in Supabase’s SQL Editor.</p>
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                            <button type="button" class="btn btn-outline" id="download-local-backup">Download backup</button>
+                            <button type="button" class="btn btn-primary" id="download-local-sql">Download Supabase SQL</button>
+                        </div>
+                        <p style="font-size:13px;color:#777;margin-top:16px;">The SQL saves a separate copy in Supabase. It does not connect this app or change existing server data.</p>
+                        <p id="local-backup-status" role="status" style="font-size:13px;margin-top:12px;"></p>
+                    </section>
                     <section class="settings-card" aria-labelledby="notifications-title">
                         <div class="settings-card-heading"><span class="settings-card-icon"><i class="fa-regular fa-bell" aria-hidden="true"></i></span><div><h2 id="notifications-title">Notifications</h2><p>Stay in the loop.</p></div></div>
                         <p class="settings-card-description">Get notified about new messages and lead updates.</p>
@@ -150,8 +162,10 @@
     </div>
 
     <!-- Auth Check & Core Scripts -->
-    <script src="supabase.js"></script>
-    <script src="settings.js"></script>
+    <script src="project-template.js?v=1"></script>
+    <script src="supabase.js?v=20261111-live-1"></script>
+    <script src="settings.js?v=local-1"></script>
+    <script src="workspace-backup.js?v=1"></script>
 
     <script>
         document.addEventListener('app:init', () => {
@@ -179,7 +193,7 @@
         <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
         <div class="home-nav-pill">
             <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
-            <a href="clients.html" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Projects" title="Projects"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
             <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
             <a href="settings.html" class="is-active" aria-current="page" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
         </div>

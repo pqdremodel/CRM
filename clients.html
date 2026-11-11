@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PQD CRM">
-    <title>PQD Remodels</title>
+    <title>Projects - PQD Remodels</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css?v=7">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,6 +29,8 @@
     </script>
     <link rel="stylesheet" href="home.css?v=1">
     <link rel="stylesheet" href="app-theme.css?v=2">
+    <style>.project-client-section { border:1px solid #dce3e8; border-radius:14px; padding:18px; margin:8px 0 20px; background:#f6fafc; } .project-client-section legend { padding:0 8px; font-weight:600; } #new-client-fields[hidden] { display:none; }</style>
+    <link rel="stylesheet" href="project-create.css?v=1">
     <meta name="theme-color" content="#000000">
 </head>
 <body class="crm-page page-clients">
@@ -40,7 +42,7 @@
             <a class="logo" href="index.html" aria-label="PQD Remodels home"><span class="home-monogram" aria-hidden="true">PQD</span><span class="logo-text">PQD Remodels</span></a>
             <button id="mobile-menu-btn" aria-label="Open navigation" title="Navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
         </header>
-        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1>Clients</h1></div>
+        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1>Projects</h1></div>
     
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -66,7 +68,7 @@
                     <ul>
                         <li class="active" onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
                             <i class="fa-solid fa-building icon"></i>
-                            <span>Clients</span>
+                            <span>Projects</span>
                         </li>
                         <li onclick="window.Turbo ? window.Turbo.visit('leads.html') : window.location.href='leads.html'">
                             <i class="fa-solid fa-user-plus icon"></i>
@@ -112,7 +114,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="screen-section-heading"><h2>Your clients</h2><p>People, projects, and the details that matter.</p></div>
+            <div class="screen-section-heading"><h2>Your projects</h2><p>Project details, clients, and progress in one place.</p></div>
             <header class="top-bar clients-toolbar">
                 <div class="search-bar">
                     <i class="fa-solid fa-magnifying-glass icon"></i>
@@ -122,18 +124,18 @@
                     <button class="btn btn-outline"><i class="fa-solid fa-rotate-right"></i> Update</button>
                     <button class="btn btn-outline"><i class="fa-solid fa-bars-staggered"></i> Filter</button>
                     <button class="btn btn-outline"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort</button>
-                    <button class="btn btn-primary" id="btn-add-client"><i class="fa-solid fa-plus"></i> Add Client</button>
+                    <button class="btn btn-primary" id="btn-add-client"><i class="fa-solid fa-plus"></i> Add Project</button>
                 </div>
             </header>
 
             <div class="table-container">
-                <table class="clients-table client-card-list" aria-label="Clients">
+                <table class="clients-table client-card-list" aria-label="Projects">
                     <thead>
                         <tr>
                             <th class="col-checkbox"><input type="checkbox"></th>
-                            <th><i class="fa-regular fa-user"></i> Client Name <i class="fa-solid fa-sort sort-icon"></i></th>
-                            <th><i class="fa-solid fa-building"></i> Project Type <i class="fa-solid fa-sort sort-icon"></i></th>
-                            <th><i class="fa-solid fa-location-dot"></i> Location <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-regular fa-user"></i> Project Name <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-building"></i> Client <i class="fa-solid fa-sort sort-icon"></i></th>
+                            <th><i class="fa-solid fa-location-dot"></i> Address <i class="fa-solid fa-sort sort-icon"></i></th>
                             <th><i class="fa-solid fa-dollar-sign"></i> Project Price <i class="fa-solid fa-sort sort-icon"></i></th>
                             <th><i class="fa-regular fa-sun"></i> Status <i class="fa-solid fa-sort sort-icon"></i></th>
                             <th class="col-actions"></th>
@@ -145,7 +147,7 @@
                 </table>
             </div>
             
-            <div id="clients-empty" class="clients-empty" hidden><span class="empty-state-icon"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span><h3>No clients yet</h3><p>Use Add Client to start your first project.</p></div>
+            <div id="clients-empty" class="clients-empty" hidden><span class="empty-state-icon"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span><h3>No projects yet</h3><p>Use Add Project to start your first project.</p></div>
 
             <div class="pagination">
                 <div class="page-controls">
@@ -165,54 +167,80 @@
         </main>
     </div>
 
-    <!-- Add Client Modal -->
+    <!-- Add Project Modal -->
     <div id="add-client-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add New Client</h2>
-                <button id="close-modal" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                <h2>New project</h2>
+                <button id="close-modal" class="close-btn" aria-label="Close new project"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="add-client-form">
                 <div class="form-group">
-                    <label>Client Name</label>
-                    <input type="text" id="client-name" required>
+                    <label for="project-name">Project name</label>
+                    <input type="text" id="project-name" placeholder="e.g. Kitchen remodel" maxlength="200" required>
                 </div>
+                <fieldset class="project-address-section">
+                    <legend>Project address</legend>
+                    <div class="project-address-grid">
+                        <div class="form-group address-street"><label for="project-address-street">Street address</label><input type="text" id="project-address-street" autocomplete="address-line1" placeholder="123 Main St" required></div>
+                        <div class="form-group address-unit"><label for="project-address-unit">Unit / Suite <span>(optional)</span></label><input type="text" id="project-address-unit" autocomplete="address-line2" placeholder="Unit or suite"></div>
+                        <div class="form-group address-city"><label for="project-address-city">City</label><input type="text" id="project-address-city" autocomplete="address-level2" required></div>
+                        <div class="form-group address-state"><label for="project-address-state">State</label><input type="text" id="project-address-state" autocomplete="address-level1" required></div>
+                        <div class="form-group address-zip"><label for="project-address-zip">ZIP code</label><input type="text" id="project-address-zip" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" title="Enter a 5-digit ZIP code or ZIP+4 (12345-6789)" required></div>
+                    </div>
+                </fieldset>
+                <fieldset class="project-client-section">
+                    <legend>Client</legend>
+                    <div class="form-group">
+                        <label for="client-choice">Who is this project for?</label>
+                        <select id="client-choice" required><option value="">Choose an existing client</option><option value="new">+ Create new client</option></select>
+                    </div>
+                    <div id="new-client-fields" hidden>
+                        <div class="form-group"><label for="client-name">Client name</label><input id="client-name" type="text" maxlength="200" autocomplete="name" disabled></div>
+                        <div class="form-group"><label for="client-email">Email (optional)</label><input id="client-email" type="email" autocomplete="email" disabled></div>
+                        <div class="form-group"><label for="client-phone">Phone (optional)</label><input id="client-phone" type="tel" autocomplete="tel" disabled></div>
+                    </div>
+                </fieldset>
+                <details id="project-additional" class="project-additional">
+                    <summary>Additional details <span>Price, project type &amp; status</span></summary>
+                    <div class="project-additional-fields">
+                        <div class="form-group"><label for="project-price">Project price ($) <span>(optional)</span></label><input type="number" id="project-price" min="0" step="0.01" placeholder="Not set"></div>
                 <div class="form-group">
-                    <label>Project Type</label>
-                    <select id="project-type" required>
-                        <option value="Residential">Residential</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Industrial">Industrial</option>
-                        <option value="Hospitality">Hospitality</option>
-                        <option value="Retail">Retail</option>
+                    <label for="project-type">Project type (optional)</label>
+                    <select id="project-type">
+                        <option value="">Select project type</option>
+                        <option>Kitchen</option>
+                        <option>Bathroom</option>
+                        <option>Addition</option>
+                        <option>Full-home</option>
+                        <option>Basement</option>
+                        <option>Deck/patio</option>
+                        <option>Roof</option>
+                        <option>Exterior</option>
+                        <option>Shed</option>
+                        <option>Handyman work</option>
+                        <option>Miscellaneous</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Location</label>
-                    <input type="text" id="client-location" required>
+                    <label for="project-status">Status</label>
+                    <select id="project-status"><option>Ongoing</option><option>Complete</option></select>
                 </div>
-                <div class="form-group">
-                    <label>Project Price</label>
-                    <input type="text" id="project-price" placeholder="$0" required>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="project-status" required>
-                        <option value="Ongoing">Ongoing</option>
-                        <option value="Complete">Complete</option>
-                    </select>
-                </div>
+                    </div>
+                </details>
+                <p id="project-form-error" role="alert" style="color:#b42318" hidden></p>
                 <div class="modal-actions">
                     <button type="button" id="cancel-modal" class="btn btn-outline">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Client</button>
+                    <button type="submit" class="btn btn-primary">Create project</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Auth Check & Core Scripts -->
-    <script src="supabase.js"></script>
-    <script src="script.js?v=2"></script>
+    <script src="project-template.js?v=1"></script>
+    <script src="supabase.js?v=20261111-live-1"></script>
+    <script src="script.js?v=20261111-live-1"></script>
 
     <script>
         document.addEventListener('app:init', () => {
@@ -240,7 +268,7 @@
         <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
         <div class="home-nav-pill">
             <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
-            <a href="clients.html" class="is-active" aria-current="page" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="clients.html" class="is-active" aria-current="page" aria-label="Projects" title="Projects"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
             <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
             <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
         </div>

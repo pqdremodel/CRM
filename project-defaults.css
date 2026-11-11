@@ -1,0 +1,128 @@
+.workflow-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin:24px 0; }
+.workflow-toolbar p { color:#777; font-size:14px; }
+.workflow-step { border:1px solid #e8e8e8; border-radius:20px; padding:24px; margin:16px 0; background:#fff; }
+.workflow-step header { display:flex; align-items:center; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+.workflow-number { margin:0; color:#303030; font-size:22px; font-weight:600; flex:1; }
+.workflow-step-name { display:block; width:100%; margin-bottom:20px; }
+.workflow-task-label { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
+.workflow-task-label > span { font-weight:600; flex-shrink:0; }
+.workflow-step input[type=text] { flex:1; min-width:100px; padding:12px; border:1px solid #ddd; border-radius:10px; font:inherit; background:#fafafa; }
+.workflow-task { display:flex; gap:8px; align-items:center; margin:10px 0; }
+.workflow-tools { display:flex; gap:4px; }
+.workflow-tools button { border:1px solid #ddd; border-radius:8px; background:white; padding:8px; cursor:pointer; }
+.workflow-tools button:disabled { opacity:.35; cursor:default; }
+.workflow-message { padding:12px 0; line-height:1.6; }
+.workflow-message[data-error=true] { color:#b42318; }
+.workflow-empty { padding:24px; color:#777; border:1px dashed #ddd; border-radius:16px; }
+.project-checklist { padding:20px 24px; }
+.project-checklist h4 { margin:18px 0 8px; }
+.project-checklist label { display:flex; gap:10px; align-items:flex-start; padding:9px 0; }
+.project-checklist input { margin-top:3px; flex-shrink:0; }
+.project-checklist input:checked + span { color:#777; text-decoration:line-through; }
+@media(max-width:600px) { .workflow-step { padding:16px; } .workflow-task { flex-wrap:wrap; } .workflow-task-label { flex-basis:100%; } .workflow-task .workflow-tools { margin-left:46px; } }
+
+.workflow-task-block { padding:16px 0 22px; border-top:1px solid #eee; }
+.workflow-text-field { display:block; margin:12px 0; }
+.workflow-text-field > span { display:block; font-size:12px; color:#666; margin-bottom:8px; }
+.workflow-text-field textarea { width:100%; min-height:110px; padding:14px; border:1px solid #ddd; border-radius:12px; font:inherit; font-size:14px; line-height:1.6; resize:vertical; background:#fafafa; color:#303030; }
+.workflow-template summary, .project-task-details summary { cursor:pointer; font-size:13px; font-weight:600; padding:10px 0; }
+.project-task-details { margin:0 0 16px 24px; }
+.project-task-details p, .project-task-details pre { font:inherit; font-size:13px; line-height:1.7; white-space:pre-wrap; overflow-wrap:anywhere; margin:12px 0; }
+.project-task-details pre { padding:14px; background:#f5f7f8; border-radius:12px; }
+
+/* Strong step headers with compact task disclosures below. */
+.workflow-step { padding:0 0 22px; margin:32px 0 44px; background:#f3f6f8; border:1px solid #d8e1e7; border-radius:22px; overflow:hidden; box-shadow:0 5px 18px #172b3a08; }
+.workflow-step header { margin:0 0 22px; padding:24px; background:#203745; color:white; gap:14px; border-bottom:5px solid #47bff0; }
+.workflow-number { color:#7cd5fc; text-transform:uppercase; font-size:15px; letter-spacing:1.5px; }
+.workflow-step input.workflow-step-name { flex-basis:100%; width:100%; margin:0; padding:4px 0; background:transparent; color:white; border:1px solid transparent; border-radius:5px; font-size:23px; font-weight:600; }
+.workflow-step input.workflow-step-name:hover, .workflow-step input.workflow-step-name:focus { border-color:#66808f; }
+.workflow-step header .workflow-tools button { background:#ffffff10; border-color:#ffffff30; color:white; }
+.workflow-step > .btn { margin:8px 24px 0; }
+.workflow-task-block { margin:10px 24px; padding:0; border:1px solid #dce3e8; border-radius:12px; background:white; overflow:hidden; }
+.workflow-task-summary { display:flex; align-items:center; gap:16px; padding:18px 20px; cursor:pointer; list-style:none; }
+.workflow-task-summary::-webkit-details-marker { display:none; }
+.workflow-task-summary:hover { background:#f6fbfe; }
+.workflow-task-summary:focus-visible { outline:3px solid #47bff0; outline-offset:-3px; }
+.workflow-task-number { flex-shrink:0; color:#66808f; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.7px; }
+.workflow-task-title { flex:1; min-width:0; font-size:15px; font-weight:600; line-height:1.5; }
+.workflow-task-arrow { color:#386479; font-size:22px; transition:transform .15s; }
+.workflow-task-block[open] > summary { background:#eaf6fc; border-bottom:1px solid #dce3e8; }
+.workflow-task-block[open] > summary .workflow-task-arrow { transform:rotate(45deg); }
+.workflow-task-body { padding:8px 20px 22px; }
+@media(max-width:600px) {
+    .workflow-step header { padding:20px 16px; }
+    .workflow-step input.workflow-step-name { font-size:19px; }
+    .workflow-task-block { margin:10px 12px; }
+    .workflow-task-summary { padding:16px 12px; gap:10px; }
+    .workflow-task-body { padding:8px 12px 18px; }
+    .workflow-task-number { font-size:10px; }
+    .workflow-step > .btn { margin-left:12px; }
+}
+.workflow-edit-actions { display:flex; gap:10px; align-items:center; }
+.workflow-step p.workflow-step-name { flex-basis:100%; margin:0; color:white; font-size:23px; font-weight:600; line-height:1.4; }
+.workflow-read-text { white-space:pre-wrap; overflow-wrap:anywhere; font-size:14px; line-height:1.7; }
+.workflow-tools[hidden], .workflow-task[hidden], .workflow-step > .btn[hidden], .workflow-template[hidden], .workflow-edit-actions > [hidden], #workflow-add[hidden] { display:none !important; }
+
+/* Keep the step number beside its name in both viewing and editing modes. */
+.workflow-step header { display:grid; grid-template-columns:auto minmax(0, 1fr) auto; column-gap:10px; }
+.workflow-step header .workflow-number { grid-column:1; grid-row:1; font-size:23px; letter-spacing:0; color:white; align-self:start; line-height:1.4; padding:4px 0; }
+.workflow-step header .workflow-step-name { grid-column:2; grid-row:1; min-width:0; }
+.workflow-step header p.workflow-step-name { padding:4px 0; }
+.workflow-step header .workflow-tools { grid-column:3; grid-row:1; }
+@media(max-width:600px) {
+    .workflow-step header .workflow-number, .workflow-step header p.workflow-step-name { font-size:19px; }
+    .workflow-step header .workflow-tools { grid-column:2; grid-row:2; }
+}
+.workflow-drag-handle { border:1px solid #ccdbe3; border-radius:7px; background:#f3f7fa; color:#426478; font-size:24px; line-height:1; padding:6px 10px; cursor:grab; flex-shrink:0; }
+.workflow-drag-handle:active { cursor:grabbing; }
+.workflow-drop-zone { height:0; margin:0 24px; position:relative; pointer-events:none; }
+.workflow-drop-zone.is-over::after { content:''; position:absolute; left:0; right:0; top:-2px; height:3px; background:#1383b6; border-radius:3px; }
+@media(max-width:600px) { .workflow-drop-zone { margin:0 12px; } }
+
+.workflow-drag-handle { touch-action:none; user-select:none; }
+
+.workflow-task-block.is-drag-source { position:fixed; visibility:hidden; pointer-events:none; margin:0; }
+.workflow-task-block.workflow-drag-ghost { position:fixed; z-index:10000; margin:0; pointer-events:none; box-shadow:0 18px 40px #172b3a40; border-color:#47bff0; transform:rotate(1deg); opacity:.96; max-height:80vh; overflow:hidden; }
+.workflow-drag-placeholder { margin:10px 24px; border-radius:12px; background:#e1edf3; border:1px solid #bfd4e0; pointer-events:auto; }
+#workflow-steps[data-dragging=true] { cursor:grabbing; user-select:none; }
+@media(max-width:600px) { .workflow-drag-placeholder { margin:10px 12px; } }
+
+/* Edit task names in place, in the task header. */
+.workflow-step input.workflow-task-title { min-width:0; width:100%; padding:3px 5px; margin:-4px -6px; border-color:transparent; background:transparent; font-size:15px; font-weight:600; line-height:1.5; border-radius:5px; color:inherit; }
+.workflow-step input.workflow-task-title:hover { border-color:#ccdbe3; }
+.workflow-step input.workflow-task-title:focus { background:white; border-color:#47bff0; outline:2px solid #47bff0; outline-offset:1px; }
+.workflow-task { justify-content:flex-end; }
+
+.workflow-task-block:not([open]) > summary input.workflow-task-title { display:none; }
+.workflow-task-block[open] > summary .workflow-task-title-preview { display:none; }
+.workflow-task-block[open] > summary input.workflow-task-title { border-color:#ccdbe3; background:white; }
+
+.project-step-progress { color:#647681; font-size:13px; margin:0 0 10px; }
+.project-next-step { margin-top:18px; }
+.project-procedure-complete { margin-top:20px; padding:14px 16px; background:#edf8f1; color:#246544; border-radius:10px; }
+
+/* Project progress uses the same step and task hierarchy as the procedure editor. */
+#apply-project-defaults[hidden], #project-task-message:empty { display:none !important; }
+.project-procedure-step { background:#f3f6f8; border:1px solid #d8e1e7; border-radius:18px; overflow:hidden; padding-bottom:14px; }
+.project-procedure-header { padding:20px 22px; background:#203745; border-bottom:4px solid #47bff0; margin-bottom:18px; }
+.project-procedure-header .project-step-progress { color:#b5d7e8; font-size:12px; margin:0 0 8px; }
+.project-checklist .project-procedure-header h4 { color:#fff; font-size:20px; line-height:1.4; font-weight:600; margin:0; }
+.project-procedure-task { margin:10px 18px; }
+.project-procedure-task .workflow-task-summary { padding:16px 18px; gap:12px; }
+.project-procedure-task input[type=checkbox] { width:18px; height:18px; margin:0; accent-color:#228ab6; cursor:pointer; }
+.project-procedure-task[data-completed=true] .workflow-task-title { color:#71818b; text-decoration:line-through; }
+.project-procedure-task-body { padding:4px 18px 16px 48px; font-size:14px; line-height:1.7; }
+.project-procedure-task-body > p { white-space:pre-wrap; overflow-wrap:anywhere; }
+.project-procedure-task-body .project-task-details { margin:8px 0 0; }
+.project-procedure-settings { margin:18px 0 0; padding-top:14px; border-top:1px solid #e5ebef; font-size:13px; }
+.project-procedure-settings a { color:#527386; text-decoration:none; }
+.project-procedure-settings a:hover { text-decoration:underline; }
+#project-task-count { font-size:13px; color:#647681; }
+#project-task-message { font-size:13px; color:#647681; }
+@media(max-width:600px) { .project-checklist { padding:16px; } .project-procedure-header { padding:18px 16px; } .project-checklist .project-procedure-header h4 { font-size:17px; } .project-procedure-task { margin:10px; } .project-procedure-task .workflow-task-summary { padding:14px 12px; } .project-procedure-task-body { padding-left:42px; padding-right:12px; } }
+
+#procedure-back[hidden], #edit-project-procedure[hidden] { display:none !important; }
+
+.project-step-navigation { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; margin-top:18px; }
+.project-step-navigation:empty { display:none; }
+.project-step-navigation .project-next-step { margin:0 0 0 auto; }

@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="home.css?v=1">
     <link rel="stylesheet" href="app-theme.css?v=2">
     <meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="project-defaults.css?v=20261111-previous-step-1">
 </head>
 <body class="crm-page page-project">
     <div class="dashboard-container">
@@ -66,7 +67,7 @@
                     <ul>
                         <li onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
                             <i class="fa-solid fa-building icon"></i>
-                            <span>Clients</span>
+                            <span>Projects</span>
                         </li>
                         <li onclick="window.Turbo ? window.Turbo.visit('leads.html') : window.location.href='leads.html'">
                             <i class="fa-solid fa-user-plus icon"></i>
@@ -119,7 +120,7 @@
             
             <div class="project-header">
                 <div class="project-title">
-                    <h1 id="client-name-display">Kim & Alex Park.</h1>
+                    <h1 id="client-name-display">Project</h1><p id="project-client-display"></p>
                     <h2 id="client-type-display">Hot buyers, touring since June.</h2>
                 </div>
                 <div class="project-actions">
@@ -289,49 +290,7 @@
                     </div>
                 </div>
 
-                <!-- Bottom Right: Tasks List -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>PROJECT TASKS</h3>
-                        <span style="color: #4caf50; font-size: 13px;">3 open</span>
-                    </div>
-                    <div class="card-body no-padding">
-                        <div class="task-list">
-                            <label class="task-row">
-                                <input type="checkbox">
-                                <div class="task-info">
-                                    <h4>Order custom windows</h4>
-                                    <span style="color: #ff6b6b; font-size: 11px;">DUE TOMORROW</span>
-                                </div>
-                                <span class="task-time" style="color: var(--text-muted); font-size: 11px;">9:00 AM</span>
-                            </label>
-                            
-                            <label class="task-row">
-                                <input type="checkbox">
-                                <div class="task-info">
-                                    <h4>Pay framing sub-contractor</h4>
-                                    <span style="color: var(--text-muted); font-size: 11px;">Invoice #402</span>
-                                </div>
-                                <span class="task-time" style="color: var(--text-muted); font-size: 11px;">Today</span>
-                            </label>
-                            
-                            <label class="task-row">
-                                <input type="checkbox">
-                                <div class="task-info">
-                                    <h4>Finalize paint colors</h4>
-                                    <span style="color: var(--text-muted); font-size: 11px;">Follow up with Kim</span>
-                                </div>
-                                <span class="task-time" style="color: var(--text-muted); font-size: 11px;">Oct 12</span>
-                            </label>
-                        </div>
-                        <div class="task-actions-footer" style="padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; align-items: center;">
-                            <div class="avatar-sm">
-                                <img src="https://ui-avatars.com/api/?name=Brilliyand+Noval&background=random" style="width: 24px; border-radius: 50%;">
-                            </div>
-                            <span style="color: var(--text-muted); font-size: 12px; margin-left: 8px;">Assigned to Brilliyand</span>
-                        </div>
-                    </div>
-                </div>
+                <section class="card"><div class="card-header"><h3>PROJECT PROCEDURE</h3><span id="project-task-count"></span></div><div class="project-checklist"><p id="project-task-message" role="status">Loading tasks…</p><div id="project-task-list"></div><button type="button" class="btn btn-outline" id="apply-project-defaults" hidden>Apply current defaults</button><p class="project-procedure-settings"><a id="edit-project-procedure" class="btn btn-outline" hidden>Edit procedure</a></p></div></section>
 
                 <!-- Client Address -->
                 <div class="card" style="grid-column: 1 / -1;">
@@ -345,6 +304,10 @@
                                 <label style="display: block; margin-bottom: 4px; font-size: 12px; color: var(--text-muted);">Street Address</label>
                                 <input type="text" id="client-address-street" placeholder="123 Main St" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;" autocomplete="off">
                                 <div id="address-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                            </div>
+                            <div>
+                                <label for="client-address-unit" style="display:block;margin-bottom:4px;font-size:12px;color:var(--text-muted);">Unit / Suite (optional)</label>
+                                <input type="text" id="client-address-unit" autocomplete="address-line2" placeholder="Unit, suite, or apartment" style="width:100%;padding:12px;border:1px solid var(--border-color);border-radius:8px;">
                             </div>
                             <div style="display: flex; gap: 12px;">
                                 <div style="flex: 2;">
@@ -378,8 +341,10 @@
         </main>
     </div>
     <!-- Auth Check & Core Scripts -->
-    <script src="supabase.js"></script>
-    <script src="project.js"></script>
+    <script src="project-template.js?v=1"></script>
+    <script src="supabase.js?v=20261111-live-1"></script>
+    <script src="project-checklist.js?v=20261111-previous-step-1"></script>
+    <script src="project.js?v=local-3"></script>
 
     <script>
         document.addEventListener('app:init', () => {
@@ -407,7 +372,7 @@
         <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
         <div class="home-nav-pill">
             <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
-            <a href="clients.html" class="is-active" aria-current="page" aria-label="Clients" title="Clients"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="clients.html" class="is-active" aria-current="page" aria-label="Projects" title="Projects"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
             <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
             <a href="settings.html" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
         </div>

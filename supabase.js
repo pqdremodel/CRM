@@ -5,8 +5,14 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 let supabaseClient = null;
 
 try {
-    if (typeof supabase !== 'undefined') {
+    if (window.crmLocal) {
+        supabaseClient = window.crmLocal;
+    } else if (typeof supabase !== 'undefined') {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Keep legacy pages working while using the imported live workspace for projects.
+        const from = supabaseClient.from.bind(supabaseClient);
+        const workspaceTables = { clients: 'crm_projects', client_contacts: 'crm_contacts', project_defaults: 'crm_procedure_defaults' };
+        supabaseClient.from = table => from(workspaceTables[table] || table);
     } else {
         console.error("Supabase CDN not loaded properly.");
     }
@@ -19,6 +25,7 @@ try {
 // Auth check function for protected pages
 async function requireAuth() {
     try {
+        if (window.crmLocal) return window.crmLocal.user();
         if (!supabaseClient) {
             window.Turbo ? window.Turbo.visit('login.html') : window.location.href = 'login.html';
             return null;

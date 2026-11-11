@@ -1,3 +1,4 @@
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 let clients = [];
 let currentClientPage = 1;
 const itemsPerPage = 10;
@@ -9,6 +10,7 @@ document.addEventListener('app:init', async () => {
     if (currentUser) {
         document.getElementById('profile-email').textContent = currentUser.getDisplayName();
         document.getElementById('profile-avatar').src = currentUser.getAvatarUrl();
+        await fetchClients();
     }
 
 
@@ -27,6 +29,9 @@ async function fetchClients() {
         renderClients();
     } else {
         console.error("Error fetching clients:", error);
+        const empty = document.getElementById('clients-empty');
+        empty.hidden = false;
+        empty.textContent = 'Projects could not be loaded. Please refresh to try again.';
     }
 }
 
@@ -41,23 +46,23 @@ function renderClients() {
     paginatedClients.forEach((client) => {
         const tr = document.createElement('tr');
         
-        const statusClass = client.status.toLowerCase() === 'ongoing' ? 'status-ongoing' : 'status-complete';
+        const statusClass = (client.status || 'Ongoing').toLowerCase() === 'ongoing' ? 'status-ongoing' : 'status-complete';
         
         tr.innerHTML = `
-            <td class="col-checkbox"><input type="checkbox" aria-label="Select client"></td>
+            <td class="col-checkbox"><input type="checkbox" aria-label="Select project"></td>
             <td class="client-card-name">
                 <div class="client-name" style="cursor: pointer;">
                     <div class="client-icon">
-                        <img src="https://ui-avatars.com/api/?name=${client.name.replace(' ', '+')}&background=edf7fc&color=46819c&size=64&font-size=0.4" width="44" height="44" alt="">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(client.project_name || client.name || 'Project')}&background=edf7fc&color=46819c&size=64&font-size=0.4" width="44" height="44" alt="">
                     </div>
-                    <span>${client.name}</span>
+                    <span>${escapeHTML(client.project_name || client.name)}</span>
                 </div>
             </td>
-            <td class="client-card-type" data-label="Project" style="cursor: pointer;">${client.type}</td>
-            <td class="client-card-location" data-label="Location" style="cursor: pointer;">${client.location}</td>
-            <td class="client-card-price" data-label="Project value" style="cursor: pointer;">${client.price}</td>
-            <td class="client-card-status" style="cursor: pointer;"><span class="status-badge ${statusClass}">${client.status}</span></td>
-            <td class="col-actions"><button type="button" class="client-delete delete-btn" data-id="${client.id}" aria-label="Delete client"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button></td>
+            <td class="client-card-type" data-label="Client" style="cursor: pointer;">${escapeHTML(client.client_name || client.name)}</td>
+            <td class="client-card-location" data-label="Address" style="cursor: pointer;">${escapeHTML(client.location)}</td>
+            <td class="client-card-price" data-label="Project value" style="cursor: pointer;">${escapeHTML(client.price || 'Not set')}</td>
+            <td class="client-card-status" style="cursor: pointer;"><span class="status-badge ${statusClass}">${escapeHTML(client.status)}</span></td>
+            <td class="col-actions"><button type="button" class="client-delete delete-btn" data-id="${client.id}" aria-label="Delete project"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button></td>
         `;
         
         // Add click listener to row cells except checkbox and actions
@@ -81,7 +86,7 @@ function renderClients() {
                 renderClients();
             } else {
                 console.error("Delete error:", error);
-                alert("Failed to delete client.");
+                alert("Failed to delete project.");
             }
         });
     });
@@ -154,8 +159,7 @@ function renderPagination(totalItems, currentPage, perPage) {
     }
 }
 
-// Initial fetch
-fetchClients();
+// Load projects after the authenticated session is available.
 
 // Modal Logic
 const modal = document.getElementById('add-client-modal');
@@ -166,11 +170,16 @@ const addClientForm = document.getElementById('add-client-form');
 
 function openModal() {
     modal.classList.add('active');
+    loadClientChoices();
+    document.getElementById('project-name').focus();
 }
 
 function closeModal() {
     modal.classList.remove('active');
     addClientForm.reset();
+    document.getElementById('project-additional').open = false;
+    toggleNewClient();
+    formError.hidden = true;
 }
 
 btnAddClient.addEventListener('click', openModal);
@@ -184,38 +193,78 @@ modal.addEventListener('click', (e) => {
     }
 });
 
-// Form Submission
+const clientChoice = document.getElementById('client-choice');
+const newClientFields = document.getElementById('new-client-fields');
+const formError = document.getElementById('project-form-error');
+let contactsReady = false;
+function toggleNewClient() {
+    const creating = clientChoice.value === 'new';
+    newClientFields.hidden = !creating;
+    newClientFields.querySelectorAll('input').forEach(field => field.disabled = !creating);
+    document.getElementById('client-name').required = creating;
+}
+clientChoice.addEventListener('change', toggleNewClient);
+async function loadClientChoices() {
+    contactsReady = false;
+    clientChoice.disabled = true;
+    formError.hidden = true;
+    const { data, error } = await supabaseClient.from('client_contacts').select('*').order('name', { ascending: true });
+    clientChoice.disabled = false;
+    if (error) {
+        formError.textContent = 'Clients could not be loaded. Close this form and try again.';
+        formError.hidden = false;
+        return;
+    }
+    clientChoice.replaceChildren(new Option(data.length ? 'Choose an existing client' : 'No clients yet — create one below', ''), new Option('+ Create new client', 'new'));
+    data.forEach(contact => clientChoice.append(new Option(contact.name + (contact.email ? ` — ${contact.email}` : ''), contact.id)));
+    contactsReady = true;
+    toggleNewClient();
+}
+
 addClientForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    // Disable button to prevent double submit
+    if (!contactsReady || !addClientForm.reportValidity()) return;
     const btn = e.target.querySelector('button[type="submit"]');
+    if (btn.disabled) return;
     const originalText = btn.textContent;
-    btn.textContent = 'Saving...';
-    btn.disabled = true;
-    
-    const newClient = {
-        name: document.getElementById('client-name').value,
-        type: document.getElementById('project-type').value,
-        location: document.getElementById('client-location').value,
-        price: document.getElementById('project-price').value,
-        status: document.getElementById('project-status').value
-    };
-    
-    const { data, error } = await supabaseClient
-        .from('clients')
-        .insert([newClient])
-        .select();
-        
-    btn.textContent = originalText;
-    btn.disabled = false;
-    
-    if (!error && data) {
-        clients.unshift(data[0]); // Add to the top of the list
-        renderClients();
-        closeModal();
-    } else {
-        console.error("Error adding client:", error);
-        alert("Failed to add client. Did you create the clients table?");
+    formError.hidden = true;
+    const name = document.getElementById('project-name').value.trim();
+    const address = Object.fromEntries(['street', 'unit', 'city', 'state', 'zip'].map(part => [part, document.getElementById(`project-address-${part}`).value.trim()]));
+    const clientName = document.getElementById('client-name').value.trim();
+    if (!name || ['street', 'city', 'state', 'zip'].some(part => !address[part]) || (clientChoice.value === 'new' && !clientName)) {
+        formError.textContent = 'Enter a project name, address, and client name.';
+        formError.hidden = false;
+        return;
     }
+    btn.textContent = 'Saving...'; btn.disabled = true;
+    // A new client and its first project are committed together by the local adapter.
+    const project = {
+        name, project_name: name,
+        type: document.getElementById('project-type').value,
+        location: [address.street, address.unit, address.city, `${address.state} ${address.zip}`].filter(Boolean).join(', '),
+        address: JSON.stringify(address),
+        price: document.getElementById('project-price').value === '' ? '' : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(document.getElementById('project-price').value)),
+        status: document.getElementById('project-status').value,
+        ...(clientChoice.value === 'new' ? { new_client: {
+            name: clientName,
+            email: document.getElementById('client-email').value.trim(),
+            phone: document.getElementById('client-phone').value.trim()
+        } } : { client_id: clientChoice.value })
+    };
+    try {
+        const { data, error } = window.crmLocal
+            ? await supabaseClient.from('clients').insert([project]).select()
+            : await supabaseClient.rpc('crm_create_project', { project });
+        if (error || !data?.length) throw new Error(error?.message || 'The project could not be saved.');
+        clients.unshift(data[0]); currentClientPage = 1;
+        renderClients(); closeModal();
+    } catch (error) {
+        formError.textContent = 'Could not save the project. ' + error.message;
+        formError.hidden = false;
+    } finally { btn.textContent = originalText; btn.disabled = false; }
 });
+
+// Reveal an optional field if its entered value needs correction.
+addClientForm.addEventListener('invalid', event => {
+    if (event.target.closest('#project-additional')) document.getElementById('project-additional').open = true;
+}, true);

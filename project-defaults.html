@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="turbo-visit-control" content="reload">
+    <meta name="turbo-cache-control" content="no-cache">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PQD CRM">
+    <title>Project Procedure - PQD Remodels</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css?v=7">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- iOS PWA Link Fix -->
+    <script>
+        if (("standalone" in window.navigator) && window.navigator.standalone) {
+            document.addEventListener('click', function(e) {
+                var a = e.target.closest('a');
+                if (a && a.href && !a.hasAttribute('download') && a.target !== '_blank') {
+                    e.preventDefault();
+                    window.location = a.href;
+                }
+            }, false);
+        }
+    </script>
+    <link rel="stylesheet" href="home.css?v=1">
+    <link rel="stylesheet" href="app-theme.css?v=2">
+    <meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="project-defaults.css?v=20261111-job-edit-1">
+</head>
+<body class="crm-page page-settings">
+    <div class="dashboard-container">
+
+        <!-- Mobile Header -->
+        <header class="mobile-header crm-header">
+            <button id="global-back-btn" aria-label="Go back" onclick="history.length > 1 ? history.back() : (window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html')" style="background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer;"><i class="fa-solid fa-arrow-left"></i></button>
+            <a class="logo" href="index.html" aria-label="PQD Remodels home"><span class="home-monogram" aria-hidden="true">PQD</span><span class="logo-text">PQD Remodels</span></a>
+            <button id="mobile-menu-btn" aria-label="Open navigation" title="Navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+        </header>
+        <div class="crm-page-intro"><span>PQD WORKSPACE</span><h1 id="procedure-page-title">Project Procedure</h1></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="home-monogram" aria-hidden="true">PQD</span>
+                    <span class="logo-text">PQD Remodels</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square logo-arrow"></i>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search Anything">
+                <span class="shortcut">⌘ K</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-caret-down"></i> General
+                    </div>
+                    <ul>
+                        <li onclick="window.Turbo ? window.Turbo.visit('clients.html') : window.location.href='clients.html'">
+                            <i class="fa-solid fa-building icon"></i>
+                            <span>Projects</span>
+                        </li>
+                        <li onclick="window.Turbo ? window.Turbo.visit('leads.html') : window.location.href='leads.html'">
+                            <i class="fa-solid fa-user-plus icon"></i>
+                            <span>Leads</span>
+                        </li>
+                        <li onclick="window.Turbo ? window.Turbo.visit('calendar.html') : window.location.href='calendar.html'">
+                            <i class="fa-regular fa-calendar icon"></i>
+                            <span>Calendar</span>
+                        </li>
+                        <li onclick="window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'">
+                            <i class="fa-regular fa-message icon"></i>
+                            <span>Messages</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="footer-nav">
+                    <ul>
+                        <li class="active" onclick="window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'">
+                            <i class="fa-solid fa-gear icon"></i>
+                            <span>Settings</span>
+                        </li>
+                        <li>
+                            <i class="fa-regular fa-bell icon"></i>
+                            <span>Notifications</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">
+                        <img src="https://ui-avatars.com/api/?name=User&background=e0e0e0&color=333" id="profile-avatar" alt="Profile">
+                    </div>
+                    <div class="user-info">
+                        <span class="name">Team Member</span>
+                        <span class="email" id="profile-email">Loading...</span>
+                    </div>
+                    <i class="fa-solid fa-gear more-opts" id="sidebar-settings-btn" title="Settings" onclick="window.Turbo ? window.Turbo.visit('settings.html') : window.location.href='settings.html'"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="screen-section-heading"><h2 id="procedure-heading">A consistent start for every project</h2><p id="procedure-description">Organize the steps and tasks automatically copied to each new project. Existing project checklists stay unchanged.</p></div>
+            <a id="procedure-back" class="btn btn-outline" hidden>← Back to project</a>
+            <p id="workflow-message" class="workflow-message" role="status">Loading Project Procedure…</p>
+            <form id="workflow-form" hidden>
+                <div class="workflow-toolbar"><p id="workflow-count"></p><div class="workflow-edit-actions">
+                    <button type="button" id="workflow-edit" class="btn btn-outline">Edit steps & tasks</button>
+                    <button type="button" class="btn btn-outline" id="workflow-cancel" hidden>Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="workflow-save" hidden>Save changes</button>
+                </div></div>
+                <div id="workflow-steps"></div>
+                <div class="workflow-toolbar"><button type="button" class="btn btn-outline" id="workflow-add" hidden>+ Add step</button><span id="workflow-dirty" role="status"></span></div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Auth Check & Core Scripts -->
+    <script src="project-template.js?v=1"></script>
+    <script src="supabase.js?v=20261111-live-1"></script>
+    <script src="project-defaults.js?v=20261111-job-edit-1"></script>
+
+    <script>
+        document.addEventListener('app:init', () => {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.querySelector('.sidebar');
+            if (menuBtn && sidebar) {
+                menuBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('mobile-open');
+                });
+
+                // Close sidebar when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target) && sidebar.classList.contains('mobile-open')) {
+                        sidebar.classList.remove('mobile-open');
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="push.js"></script>
+<script>document.dispatchEvent(new Event('app:init'));</script>
+
+    <!-- Floating navigation -->
+    <nav class="home-floating-nav" aria-label="Main navigation">
+        <a href="messages.html" class="home-compose new-chat-btn" aria-label="New Chat" title="New Chat" onclick="event.preventDefault(); window.Turbo ? window.Turbo.visit('messages.html') : window.location.href='messages.html'"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></a>
+        <div class="home-nav-pill">
+            <a href="index.html" aria-label="Home" title="Home"><i class="fa-solid fa-house" aria-hidden="true"></i></a>
+            <a href="clients.html" aria-label="Projects" title="Projects"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></a>
+            <a href="leads.html" aria-label="Leads" title="Leads"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></a>
+            <a href="settings.html" class="is-active" aria-current="page" aria-label="Settings" title="Settings"><i class="fa-solid fa-bars" aria-hidden="true"></i></a>
+        </div>
+    </nav>
+
+
+    <!-- Bottom Nav Modal -->
+    <div id="new-chat-modal" class="bottom-sheet-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:2000; flex-direction:column; justify-content:flex-end;">
+        <div class="bottom-sheet-content" style="background:transparent; padding:16px; border-radius:24px 24px 0 0; animation: slideUp 0.3s ease-out; margin-bottom: 24px;">
+            <div style="background:white; border-radius:24px; padding:8px 0; margin-bottom:16px;">
+                <div class="sheet-action" style="display:flex; align-items:center; gap:16px; padding:16px 24px; border-bottom:1px solid #f0f0f0;">
+                    <i class="fa-regular fa-message" style="font-size:20px; color:#333;"></i>
+                    <div>
+                        <div style="font-weight:600; color:#000; font-size:16px;">New Chat</div>
+                        <div style="font-size:12px; color:#888;">Send a message to your contact</div>
+                    </div>
+                </div>
+                <div class="sheet-action" style="display:flex; align-items:center; gap:16px; padding:16px 24px; border-bottom:1px solid #f0f0f0;">
+                    <i class="fa-solid fa-address-book" style="font-size:20px; color:#333;"></i>
+                    <div>
+                        <div style="font-weight:600; color:#000; font-size:16px;">New Contact</div>
+                        <div style="font-size:12px; color:#888;">Add a contact to be able to send messages</div>
+                    </div>
+                </div>
+                <div class="sheet-action" style="display:flex; align-items:center; gap:16px; padding:16px 24px;">
+                    <i class="fa-solid fa-user-group" style="font-size:20px; color:#333;"></i>
+                    <div>
+                        <div style="font-weight:600; color:#000; font-size:16px;">New Community</div>
+                        <div style="font-size:12px; color:#888;">Join the community around you</div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="close-modal-btn" style="width:100%; background:white; border:none; padding:16px; border-radius:30px; font-size:16px; font-weight:600; color:#000;">Cancel</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('app:init', () => {
+            const newChatBtns = document.querySelectorAll('.new-chat-btn');
+            const modal = document.getElementById('new-chat-modal');
+            const closeBtn = document.getElementById('close-modal-btn');
+
+            if (modal) {
+                newChatBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        modal.style.display = 'flex';
+                    });
+                });
+
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                }
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
